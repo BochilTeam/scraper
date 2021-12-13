@@ -1,0 +1,31 @@
+{
+  "name": "scraper",
+  "version": "0.0.1",
+  "description": "scraper module",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "test": "npm run test",
+    "prepack": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BochilTeam/scraper.git"
+  },
+  "author": "BochilTeam",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/BochilTeam/scraper/issues"
+  },
+  "homepage": "https://github.com/BochilTeam/scraper#readme",
+  "devDependencies": {
+    "@types/node": "^16.11.12"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "cheerio": "^1.0.0-rc.10",
+    "form-data": "^4.0.0",
+    "node-fetch": "^2.6.6",
+    "typescript": "^4.5.3"
+  }
+}
