@@ -191,4 +191,6 @@ export async function tiktokstalk(name: string) {
 }
 
 // export async function tiktoksearch(query: string) {
+//     const { data } = await axios.get(`https://www.tiktok.com/search?q=${query}&t=${+new Date()}`)
+//     const $ = cheerio.load(data)
 // }

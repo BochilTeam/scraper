@@ -1,6 +1,6 @@
 import axios from "axios"
 
-export default async function nomorhoki(nomer: number): Promise<{
+export default async function nomorhoki(nomer: number | string): Promise<{
     nomer: number | string,
     angka_bagua_shuzi: number,
     positif: { kekayaan: number, kesehatan: number, cinta: number, kestabilan: number, positif: number },
