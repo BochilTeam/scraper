@@ -26,6 +26,7 @@ describe('Social media', () => {
 
         it('tiktokstalk', function (done) {
             tiktokstalk('Tiktok').then(function (res) {
+                console.log(res)
                 expect(res).to.be.an('object')
                 expect(res.username).to.be.a('string')
                 expect(res.profile).to.be.a('string')
