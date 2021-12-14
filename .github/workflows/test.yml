@@ -27,7 +27,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         # cache: 'npm'
     - name: 'Install package'
-      run: npm install chai --prefer-offline --no-audit --progress=false && npm i -g typescript mocha
+      run: npm install
     - name: 'Convert ts to js'
       run: tsc
     - run: npm run test
