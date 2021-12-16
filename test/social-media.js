@@ -55,7 +55,6 @@ describe('Social media', () => {
         })
 
         // it('Instagram Story', function (done) {
-        //     this.timeout(20 * 1000)
         //     instagramStory('freefirebgid').then(res => {
         //         expect(res).to.be.an('array')
         //         res.forEach(({ thumbnail, isVideo, url }) => {
@@ -70,7 +69,6 @@ describe('Social media', () => {
     })
 
     describe('Facebook (Metaverse :V)', function () {
-        this.timeout(20 * 1000)
         it('Facebook Downloader', done => {
             facebookdl('https://fb.watch/9WktuN9j-z/').then(res => {
                 expect(res).to.be.an('object')
