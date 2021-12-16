@@ -2,7 +2,8 @@ import FormData from "form-data"
 import axios from "axios"
 import cheerio from "cheerio"
 
-export async function instagramdl(url: string): Promise<{ thumbnail: Buffer, result: string }> {
+export async function instagramdl(url: string): Promise<{ thumbnail: Buffer, url: string }[]> {
+    if (!/https?:\/\/www\.instagram\.com\/(reel|tv|p)\//i.test(url)) throw 'Invalid url!!'
     let form = new FormData()
     form.append('url', url)
     form.append('action', 'post')
@@ -17,12 +18,33 @@ export async function instagramdl(url: string): Promise<{ thumbnail: Buffer, res
         }
     })
     const $ = cheerio.load(data)
-    const thumbnail: Buffer = Buffer.from($('div.download-items__thumb > img').attr('src')?.split(';base64,')[1], 'base64')
-    let result: string = $('div.download-items__btn > a').attr('href')?.trim()
-    if (!/https?:\/\/snapinsta\.app/.test(result)) result = encodeURI('https://snapinsta.app' + result)
-    return { thumbnail, result }
+    let results = []
+    $('.row.download-box > div').each(function () {
+        const thumbnail = Buffer.from($(this).find('.download-items__thumb > img[src]').attr('src')?.split(';base64,')[1], 'base64')
+        let url = $(this).find('.download-items__btn > a[href]').attr('href')
+        if (!/https?:\/\//i.test(url)) url = encodeURI('https://snapinsta.app' + url)
+        results.push({ thumbnail, url })
+    })
+    return results
 }
 
-// export async function instagramstalk() {
-
-// }
+export async function instagramStory(name: string): Promise<{
+    thumbnail: string,
+    isVideo: boolean,
+    url: string,
+}[]> {
+    const { data } = await axios.get(`https://www.insta-stories.net/data.php?username=${name}&t=${+new Date()}`)
+    const $ = cheerio.load(data)
+    let results = []
+    $('center').each(function () {
+        let thumbnail: string, isVideo: boolean = false, link = $(this).find('img')
+        if (link.length) thumbnail = link.attr('src')
+        else {
+            isVideo = true
+            thumbnail = $(this).find('video > source').attr('src')
+        }
+        const url: string = $(this).find('a.download-btn').attr('href')
+        if (url) results.push({ thumbnail, isVideo, url })
+    })
+    return results
+}

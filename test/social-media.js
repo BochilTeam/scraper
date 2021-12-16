@@ -1,7 +1,7 @@
 const expect = require('chai').expect
 
 describe('Social media', () => {
-    const { tiktokdl, tiktokfyp, tiktokstalk, instagramdl } = require('../lib/social-media')
+    const { tiktokdl, tiktokfyp, tiktokstalk, instagramdl, instagramStory, facebookdl, twitterdl } = require('../lib/social-media')
     describe('Tiktok scraper', function () {
         it('tiktokdl', function (done) {
             tiktokdl('https://www.tiktok.com/@omagadsus/video/7025456384175017243?is_from_webapp=1&sender_device=pc&web_id6982004129280116226').then(function (res) {
@@ -43,11 +43,62 @@ describe('Social media', () => {
 
     describe('Instagram', () => {
         it('Instagram Downloader', done => {
-            instagramdl('https://www.instagram.com/p/CXTPwOuqziD/?utm_source=ig_web_copy_link').then(res => {
-                expect(res).to.be.an('object')
-                expect(res.thumbnail).instanceof(Buffer)
-                expect(res.result).to.be.a('string')
+            instagramdl('https://www.instagram.com/reel/CXK49yFLtJ_/?utm_source=ig_web_copy_link').then(res => {
+                expect(res).to.be.an('array')
+                res.forEach(({ thumbnail, url }) => {
+                    expect(thumbnail).instanceof(Buffer)
+                    expect(url).to.be.a('string')
+                })
 
+                return done()
+            }).catch(done)
+        })
+
+        // it('Instagram Story', function (done) {
+        //     this.timeout(20 * 1000)
+        //     instagramStory('freefirebgid').then(res => {
+        //         expect(res).to.be.an('array')
+        //         res.forEach(({ thumbnail, isVideo, url }) => {
+        //             expect(thumbnail).to.be.a('string')
+        //             expect(isVideo).to.be.a('boolean')  
+        //             expect(url).to.be.a('string')
+        //         })
+
+        //         return done()
+        //     }).catch(done)
+        // })
+    })
+
+    describe('Facebook (Metaverse :V)', () => {
+        it('Facebook Downloader', done => {
+            facebookdl('https://fb.watch/9WktuN9j-z/').then(res => {
+                expect(res).to.be.an('object')
+                expect(res.id).to.be.a('string')
+                expect(res.thumbnail).to.be.a('string')
+                expect(res.duration).to.be.a('number')
+                res.result.forEach(({ ext, url, isVideo, isAudio }) => {
+                    expect(ext).to.be.a('string')
+                    expect(url).to.be.a('string')
+                    expect(isVideo).to.be.a('boolean')
+                    expect(isAudio).to.be.a('boolean')
+                })
+
+                return done()
+            }).catch(done)
+        })
+    })
+
+    describe('Twitter', () => {
+        it('Twitter Downloader', done => {
+            twitterdl('https://twitter.com/jen_degen/status/1458167531869458440?s=20').then(res => {
+                expect(res).to.be.an('array')
+                res.forEach(({ quality, type, url, isVideo }) => {
+                    expect(quality).to.be.a('string')
+                    expect(type).to.be.a('string')
+                    expect(url).to.be.a('string')
+                    expect(isVideo).to.be.a('boolean')
+                })
+                
                 return done()
             }).catch(done)
         })
