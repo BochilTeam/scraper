@@ -11,8 +11,7 @@ export default async function wallpaper(query: string): Promise<string[]> {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36'
         }
     })
-    let results: string[] = []
     const $ = cheerio.load(data)
-    console.log([...new Set([...$.html().matchAll(/https?:\/\/(image|www)\.shutterstock\.com\/([^"]+)/gmi)].map(v => v[0]).filter(v => /.*\.jpe?g|png$/gi.test(v)))])
+    let results: string[] = [...new Set([...$.html().matchAll(/https?:\/\/(image|www)\.shutterstock\.com\/([^"]+)/gmi)].map(v => v[0]).filter(v => /.*\.jpe?g|png$/gi.test(v)))]
     return results
 }
