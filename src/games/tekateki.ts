@@ -11,5 +11,5 @@ export default async function tekateki(): Promise<tekatekiresult> {
         let res = await fetch('https://raw.githubusercontent.com/BochilTeam/database/master/games/tekateki.json')
         tekatekijson = await res.json()
     }
-    return tekatekijson[Math.floor(Math.random() * tekatekijson.length)]
+    return tekatekijson[Math.floor(Math.random() * tekatekijson.length)] as tekatekiresult
 }

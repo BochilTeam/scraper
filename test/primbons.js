@@ -1,7 +1,7 @@
 const { expect } = require('chai')
 
 describe('Primbon', () => {
-    const { artimimpi, artinama, nomorhoki } = require('../')
+    const { artimimpi, artinama, nomorhoki, getZodiac } = require('../')
     it('ArtiMimpi', done => {
         artimimpi('Jalan').then(res => {
             expect(res).to.be.an('array')
@@ -36,5 +36,16 @@ describe('Primbon', () => {
 
             return done()
         }).catch(done)
+    })
+
+    it('Zodiac', done => {
+        try {
+            const res = getZodiac(1, 1)
+            expect(res).equal('capricorn')
+
+            return done()
+        } catch (e) {
+            return done()
+        }
     })
 })

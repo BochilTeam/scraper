@@ -12,5 +12,5 @@ export default async function asahotak(): Promise<asahotakresult> {
         let res = await fetch('https://raw.githubusercontent.com/BochilTeam/database/master/games/asahotak.json')
         asahotakjson = await res.json()
     }
-    return asahotakjson[Math.floor(Math.random() * asahotakjson.length)]
+    return asahotakjson[Math.floor(Math.random() * asahotakjson.length)] as asahotakresult
 }

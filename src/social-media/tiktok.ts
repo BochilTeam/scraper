@@ -1,7 +1,7 @@
 import axios from "axios"
 import cheerio from "cheerio"
 
-export async function tiktokdl(url: string): Promise<{
+interface IresTTdl {
     author: {
         unique_id: string,
         nickname: string,
@@ -14,8 +14,9 @@ export async function tiktokdl(url: string): Promise<{
         no_watermark_raw: string
     },
     music: string
-} | {}> {
-    let results = {}
+}
+
+export async function tiktokdl(url: string): Promise<IresTTdl| {}> {
     if (/v[tm]\.tiktok\.com/g.test(url)) {
         let res = await axios.get(url)
         url = res.request.res.responseUrl
@@ -26,7 +27,7 @@ export async function tiktokdl(url: string): Promise<{
     let res2 = await axios.get(`https://api.snaptik.site/video-details-by-key?key=${key.data.key}`)
     let data = JSON.parse(JSON.stringify(res2.data, null, 2))
     if (data.status !== 'success') throw data
-    results = {
+    const results: IresTTdl = {
         author: { ...data.data.author },
         description: data.data.description,
         video: {
@@ -38,8 +39,7 @@ export async function tiktokdl(url: string): Promise<{
     }
     return results
 }
-
-export async function tiktokfyp(): Promise<{
+interface IresTTfyp {
     id: string,
     desc: string,
     createdTime: Date,
@@ -154,12 +154,23 @@ export async function tiktokfyp(): Promise<{
     isAd: boolean,
     duetDisplay: number,
     stitchDisplay: number
-}[] | []> {
-    const { data } = await axios.get(`https://t.tiktok.com/api/recommend/item_list/?aid=1988&app_name=tiktok_web&device_platform=web_pc&device_id=6982004129280116226&region=ID&priority_region=&os=windows&referer=&cookie_enabled=true&screen_width=1920&screen_height=1080&browser_language=en-US&browser_platform=Win32&browser_name=Mozilla&browser_version=5.0+(Windows+NT+10.0%3B+Win64%3B+x64)+AppleWebKit%2F537.36+(KHTML,+like+Gecko)+Chrome%2F96.0.4664.93+Safari%2F537.36&browser_online=true&verifyFp=verify_kx30laei_YkR2lQiI_UBWz_4MZK_ACKV_loiPDs4PyDtw&app_language=en&timezone_name=Asia%2FJakarta&is_page_visible=true&focus_state=true&is_fullscreen=false&history_len=2&battery_info=%7B%7D&count=30&itemID=1&language=en&from_page=fyp&insertedItemID=&versions=70232694,70338434,70001178,70138197,70156809&msToken=Wi63JD_P7xxD_7pFmaF_UcHM6oJwSKjR9wnfsMUaDdz51KLZ3J8tazDrcY2gh_t3PyG_5926qyw8g7DhrgFa3mbDmxLhzmLs_3l_sOk4zf6TdMqfAT51s_n8ZPG8vovv76h1kCkR&X-Bogus=DFSzswVOAxxANJf/SEhC1eM/W7oh&_signature=`)
-    return data.itemList || []
 }
 
-export async function tiktokstalk(name: string) {
+export async function tiktokfyp(): Promise<IresTTfyp[] | []> {
+    const { data } = await axios.get(`https://t.tiktok.com/api/recommend/item_list/?aid=1988&app_name=tiktok_web&device_platform=web_pc&device_id=6982004129280116226&region=ID&priority_region=&os=windows&referer=&cookie_enabled=true&screen_width=1920&screen_height=1080&browser_language=en-US&browser_platform=Win32&browser_name=Mozilla&browser_version=5.0+(Windows+NT+10.0%3B+Win64%3B+x64)+AppleWebKit%2F537.36+(KHTML,+like+Gecko)+Chrome%2F96.0.4664.93+Safari%2F537.36&browser_online=true&verifyFp=verify_kx30laei_YkR2lQiI_UBWz_4MZK_ACKV_loiPDs4PyDtw&app_language=en&timezone_name=Asia%2FJakarta&is_page_visible=true&focus_state=true&is_fullscreen=false&history_len=2&battery_info=%7B%7D&count=30&itemID=1&language=en&from_page=fyp&insertedItemID=&versions=70232694,70338434,70001178,70138197,70156809&msToken=Wi63JD_P7xxD_7pFmaF_UcHM6oJwSKjR9wnfsMUaDdz51KLZ3J8tazDrcY2gh_t3PyG_5926qyw8g7DhrgFa3mbDmxLhzmLs_3l_sOk4zf6TdMqfAT51s_n8ZPG8vovv76h1kCkR&X-Bogus=DFSzswVOAxxANJf/SEhC1eM/W7oh&_signature=`)
+    return (data.itemList as IresTTfyp[]) || []
+}
+
+export async function tiktokstalk(name: string): Promise<{
+    username: string;
+    profile: string;
+    avatar: string;
+    verified: boolean;
+    following: string;
+    followers: string;
+    likes: string;
+    description: string;
+}> {
     const { data } = await axios.get(`https://www.tiktok.com/@${name}?lang=en`, {
         headers: {
             accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',

@@ -2,7 +2,9 @@ import FormData from "form-data"
 import axios from "axios"
 import cheerio from "cheerio"
 
-export async function instagramdl(url: string): Promise<{ thumbnail: Buffer, url: string }[]> {
+interface Iigdl { thumbnail: Buffer, url: string }
+
+export async function instagramdl(url: string): Promise<Iigdl[]> {
     if (!/https?:\/\/www\.instagram\.com\/(reel|tv|p)\//i.test(url)) throw 'Invalid url!!'
     let form = new FormData()
     form.append('url', url)
@@ -18,7 +20,7 @@ export async function instagramdl(url: string): Promise<{ thumbnail: Buffer, url
         }
     })
     const $ = cheerio.load(data)
-    let results = []
+    let results: Iigdl[] = []
     $('.row.download-box > div').each(function () {
         const thumbnail = Buffer.from($(this).find('.download-items__thumb > img[src]').attr('src')?.split(';base64,')[1], 'base64')
         let url = $(this).find('.download-items__btn > a[href]').attr('href')
@@ -28,14 +30,16 @@ export async function instagramdl(url: string): Promise<{ thumbnail: Buffer, url
     return results
 }
 
-export async function instagramStory(name: string): Promise<{
+interface Iigstory {
     thumbnail: string,
     isVideo: boolean,
     url: string,
-}[]> {
+}
+
+export async function instagramStory(name: string): Promise<Iigstory[]> {
     const { data } = await axios.get(`https://www.insta-stories.net/data.php?username=${name}&t=${+new Date()}`)
     const $ = cheerio.load(data)
-    let results = []
+    let results: Iigstory[] = []
     $('center').each(function () {
         let thumbnail: string, isVideo: boolean = false, link = $(this).find('img')
         if (link.length) thumbnail = link.attr('src')

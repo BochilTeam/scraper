@@ -1,20 +1,22 @@
 import axios from "axios";
 import cheerio from "cheerio";
 
-export async function stickerTelegram(query: string, page?: number): Promise<{
+interface IstickerTele {
     title: string,
     icon: string,
     link: string,
     stickers: string[],
-}[]> {
+}
+
+export async function stickerTelegram(query: string, page?: number): Promise<IstickerTele[]> {
     const { data } = await axios.get(`https://combot.org/telegram/stickers?q=${encodeURI(query)}&page=${page || 1}`)
     const $ = cheerio.load(data)
-    let results = []
+    let results: IstickerTele[] = []
     $('body > div > main > div.page > div > div.stickers-catalogue > div.tab-content > div > div').each(function () {
         const title = $(this).find('.sticker-pack__title').text()?.trim()
         const icon = $(this).find('.sticker-pack__sticker > div.sticker-pack__sticker-inner > div.sticker-pack__sticker-img').attr('data-src')
         const link = $(this).find('.sticker-pack__header > a.sticker-pack__btn').attr('href')
-        let stickers = []
+        let stickers: string[] = []
         $(this).find('.sticker-pack__list > div.sticker-pack__sticker').each(function () {
             const sticker = $(this).find('.sticker-pack__sticker-inner > div.sticker-pack__sticker-img').attr('data-src')
             stickers.push(sticker)
@@ -41,7 +43,9 @@ export async function stickerLine(query: string): Promise<{
     authorName: string
 }[]> {
     const { data } = await axios.get(`https://store.line.me/api/search/sticker?query=${query}&offset=0&limit=36&type=ALL&includeFacets=true`)
-    return data.items.map(({ title, productUrl, id, description, payloadForProduct: { staticUrl, animationUrl, soundUrl }, authorId, authorName }) => {
+    return data.items.map(({ title, productUrl, id, description, payloadForProduct: { staticUrl, animationUrl, soundUrl }, authorId, authorName }:
+        { title: string, productUrl: string, id: string, description?: string, payloadForProduct: { staticUrl: string, animationUrl?: string, soundUrl?: string }, authorId: string, authorName: string }
+    ) => {
         return {
             id,
             title,

@@ -1,14 +1,17 @@
 import cheerio from "cheerio";
 import fetch from "node-fetch";
 
-export async function twitterdl(url: string): Promise<{
+
+interface Irestwitdl {
     quality: string,
     type: string,
     url: string,
     isVideo: boolean
-}[] | []> {
+}
+
+export async function twitterdl(url: string): Promise<Irestwitdl[] | []> {
     if (!/https:\/\/twitter\.com\//i.test(url)) throw 'URL invalid!'
-    const payload = {
+    const payload: { url: string, submit: string } = {
         url,
         submit: ''
     }
@@ -24,7 +27,7 @@ export async function twitterdl(url: string): Promise<{
         }
     })
     const $ = cheerio.load(await res.text())
-    let results = []
+    let results: Irestwitdl[] = []
     $('table.table > tbody > tr').each(function () {
         const quality = $(this).find('td').eq(2).find('strong').text()
         const type = $(this).find('td').eq(1).find('strong').text()

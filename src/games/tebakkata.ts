@@ -12,5 +12,5 @@ export default async function tebakkata(): Promise<tebakkataresults> {
         let res = await fetch('https://raw.githubusercontent.com/BochilTeam/database/master/games/tebakkata.json')
         tebakkatajson = await res.json()
     }
-    return tebakkatajson[Math.floor(Math.random() * tebakkatajson.length)]
+    return tebakkatajson[Math.floor(Math.random() * tebakkatajson.length)] as tebakkataresults
 }

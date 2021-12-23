@@ -13,5 +13,5 @@ export default async function caklontong(): Promise<caklontongresult> {
         let res = await fetch('https://raw.githubusercontent.com/BochilTeam/database/master/games/caklontong.json')
         caklontongjson = await res.json()
     }
-    return caklontongjson[Math.floor(Math.random() * caklontongjson.length)]
+    return caklontongjson[Math.floor(Math.random() * caklontongjson.length)] as caklontongresult
 }

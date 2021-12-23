@@ -4,16 +4,17 @@ interface Options {
   space?: boolean,
   number?: boolean,
   cecak?: boolean,
-  mode?: 'ketik' | 'kopas'
+  mode?: 'ketik' | 'kopas',
+  HVokal?: boolean,
 }
 
-export function latinToAksara(str: string, options: Options = { mode: 'ketik', space: true }) {
+export function latinToAksara(str: string, options: Options = { mode: 'ketik', space: true }): string {
   const aksara = new Aksara(str, options)
   return aksara.toAksara()
 }
 
-export function aksaraToLatin(str: string) {
-  const aksara = new Aksara(str)
+export function aksaraToLatin(str: string, options: Partial<Options> = { HVokal:  false }): string {
+  const aksara = new Aksara(str, options)
   return aksara.toLatin()
 }
 
@@ -21,7 +22,7 @@ export function aksaraToLatin(str: string) {
 // https://bennylin.github.io/transliterasijawa/
 // https://jv.wikipedia.org/w/index.php?title=Panganggo:Bennylin/trans.js&action=raw&ctype=text/javascript
 const SuperTrim = (str: string) => str.replace(/^\s*|\s*$/g, '').replace(/\s+/g, ' ') // trim string, menemukan karakter di dalam string
-const findstr = (str: string, find: string) => {
+const findstr = (str: string, find: string): boolean => {
   for (var i = 0; i < str.length; i++) if (str[i] == find) return true
   return false
 }
@@ -40,6 +41,7 @@ const GetSpecialSound = (str: string) => {
 }
 
 class Aksara {
+  public str = ''
   private str2: string = ''
   private spasi: string = ''
   private vowelFlag: boolean
@@ -50,16 +52,19 @@ class Aksara {
   private modeSpasi: boolean
   private murda: boolean
   private mode: Options['mode']
+  private isHVokal: boolean
   constructor(
-    public str: string = '',
-    public opts: Options = { mode: 'ketik', space: true }
+    str: string,
+    public opts: Options = { mode: 'ketik', space: true, HVokal: true }
   ) {
+    this.str = str.toString()
     this.angkaFlag = opts.number
     this.cecakFlag = opts.cecak
     this.diftong = opts.diftong
     this.modeSpasi = opts.space
     this.murda = opts.murda
     this.mode = opts.mode
+    this.isHVokal = opts.HVokal
   }
   toAksara(): string {
     var i = 0;
@@ -215,7 +220,7 @@ class Aksara {
     if (pi < i) {
       ret += this.GetSound(this.str.substring(pi, i));
     }
-    return SuperTrim(ret)
+    return SuperTrim(ret).toString()
   }
   private GetMatra(str: string) {
     var i = 0;
@@ -974,7 +979,7 @@ class Aksara {
     const ganti2 = (index: number, character: string, str: string) => str.substr(0, index - 1) + character
     const ganti3 = (index: number, character: string, str: string) => str.substr(0, index - 2) + character
     const capitalize = (index: number, character: string, str: string) => str.charAt(0).toUpperCase() + str.slice(1)
-    var trans = this.str
+    var trans: string = this.str
     var regexp_file = this.aksara2Latin()
     for (var i = 0, j = 0; i < this.str.length; i++) {
       if (!regexp_file[this.str[i]]) { //not Aksara Jawa
@@ -1370,11 +1375,10 @@ class Aksara {
           trans = ganti(j, regexp_file[this.str[i]], trans)
           j++
         }
-
       }
     }
-    if (!isVowel(trans.charAt(0)) || !isConsonant(trans.charAt(0))) trans = trans.slice(1)
-    return trans
+    trans = trans.split(' ').map((v: string) => v.startsWith('_') ? v.replace('_', this.isHVokal ? '' : 'h') : v).join(' ')
+    return trans.toString()
   }
   private aksara2Latin() {
     return {
