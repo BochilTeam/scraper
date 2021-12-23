@@ -1,6 +1,14 @@
 import crypto from 'crypto'
+import fetch from 'node-fetch'
 
-export function randomUUID(opts: { disableEntropyCache: boolean }) {
+export function randomUUID(opts: { disableEntropyCache: boolean }): Promise<string>| string {
+    let ver: string[] = process.version.split('.')
+    if (!(parseInt(ver[0].replace('v', '')) >= 14 && parseInt(ver[1]) >= 17)) {
+        return new Promise<string>(async (resolve) =>{
+            const json: string[] = await (await fetch('https://www.uuidtools.com/api/generate/v4/count/1')).json()
+            return resolve(json[0])
+        })
+    }
     return crypto.randomUUID(opts)
 }
 
