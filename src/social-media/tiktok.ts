@@ -161,45 +161,45 @@ export async function tiktokfyp(): Promise<IresTTfyp[] | []> {
     return (data.itemList as IresTTfyp[]) || []
 }
 
-export async function tiktokstalk(name: string): Promise<{
-    username: string;
-    profile: string;
-    avatar: string;
-    verified: boolean;
-    following: string;
-    followers: string;
-    likes: string;
-    description: string;
-}> {
-    const { data } = await axios.get(`https://www.tiktok.com/@${name}?lang=en`, {
-        headers: {
-            accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-            cookie: 'tt_csrf_token=hlVsM4KILUl4mGcUkB6w6FJR; s_v_web_id=verify_kx30laei_YkR2lQiI_UBWz_4MZK_ACKV_loiPDs4PyDtw; ttwid=1%7CY1AOcjfoIgvlYizkFtt8slCK0i4qZqApyt2VHzQW2jY%7C1639301134%7C43c115b2541a4ae28ba3b0f194641f223a4a3b18a3fcf83212c133eaf4518b04; msToken=9Ac544Pz7Cc_nUXjNNhx8MBVx96CEeL0mgtWiPUQ5Ef3XxRI81YIpRNDkWa3TM5mqAFr-rhaNE1HWEXop_kpLp4BTCqhLQdu3ppGSbLHhUnqEKmzpF86bWvmur5xyKDCVmE63Q==',
-            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36'
-        }
-    })
-    const $ = cheerio.load(data)
-    let container = $('div.share-title-container > h2')
-    let username = container.text()?.trim()
-    let avatar = $('span.tiktok-avatar.tiktok-avatar-circle.avatar > img').attr('src')
-    let verified = /verified$/.test(container.attr('class'))
-    let profile = $('h1.share-sub-title > span.profile').text()?.trim()
-    let stats = $('h2.count-infos > div.number')
-    let following = stats.eq(0).find('strong').text()?.trim()
-    let followers = stats.eq(1).find('strong').text()?.trim()
-    let likes = stats.eq(2).find('strong').text()?.trim()
-    let description = $('h2.share-desc').text()?.trim()
-    return {
-        username,
-        profile,
-        avatar,
-        verified,
-        following,
-        followers,
-        likes,
-        description
-    }
-}
+// export async function tiktokstalk(name: string): Promise<{
+//     username: string;
+//     profile: string;
+//     avatar: string;
+//     verified: boolean;
+//     following: string;
+//     followers: string;
+//     likes: string;
+//     description: string;
+// }> {
+//     const { data } = await axios.get(`https://www.tiktok.com/@${name}?lang=en`, {
+//         headers: {
+//             accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+//             cookie: 'tt_csrf_token=hlVsM4KILUl4mGcUkB6w6FJR; s_v_web_id=verify_kx30laei_YkR2lQiI_UBWz_4MZK_ACKV_loiPDs4PyDtw; ttwid=1%7CY1AOcjfoIgvlYizkFtt8slCK0i4qZqApyt2VHzQW2jY%7C1639301134%7C43c115b2541a4ae28ba3b0f194641f223a4a3b18a3fcf83212c133eaf4518b04; msToken=9Ac544Pz7Cc_nUXjNNhx8MBVx96CEeL0mgtWiPUQ5Ef3XxRI81YIpRNDkWa3TM5mqAFr-rhaNE1HWEXop_kpLp4BTCqhLQdu3ppGSbLHhUnqEKmzpF86bWvmur5xyKDCVmE63Q==',
+//             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36'
+//         }
+//     })
+//     const $ = cheerio.load(data)
+//     let container = $('div.share-title-container > h2')
+//     let username = container.text()?.trim()
+//     let avatar = $('span.tiktok-avatar.tiktok-avatar-circle.avatar > img').attr('src')
+//     let verified = /verified$/.test(container.attr('class'))
+//     let profile = $('h1.share-sub-title > span.profile').text()?.trim()
+//     let stats = $('h2.count-infos > div.number')
+//     let following = stats.eq(0).find('strong').text()?.trim()
+//     let followers = stats.eq(1).find('strong').text()?.trim()
+//     let likes = stats.eq(2).find('strong').text()?.trim()
+//     let description = $('h2.share-desc').text()?.trim()
+//     return {
+//         username,
+//         profile,
+//         avatar,
+//         verified,
+//         following,
+//         followers,
+//         likes,
+//         description
+//     }
+// }
 
 // export async function tiktoksearch(query: string) {
 //     const { data } = await axios.get(`https://www.tiktok.com/search?q=${query}&t=${+new Date()}`)
