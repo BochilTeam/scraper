@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios, { AxiosResponse } from "axios"
 import cheerio from "cheerio"
 
 interface IresTTdl {
@@ -16,12 +16,12 @@ interface IresTTdl {
     music: string
 }
 
-export async function tiktokdl(url: string): Promise<IresTTdl| {}> {
+export async function tiktokdl(url: string): Promise<IresTTdl | {}> {
     if (/v[tm]\.tiktok\.com/g.test(url)) {
-        let res = await axios.get(url)
+        let res = await axios.get<string>(url)
         url = res.request.res.responseUrl
     }
-    let res = await axios.get(`https://api.snaptik.site/video-key?video_url=${url}`)
+    let res = await axios.get<string>(`https://api.snaptik.site/video-key?video_url=${url}`)
     let key = JSON.parse(JSON.stringify(res.data, null, 2))
     if (key.status !== 'success') throw key
     let res2 = await axios.get(`https://api.snaptik.site/video-details-by-key?key=${key.data.key}`)
@@ -38,6 +38,46 @@ export async function tiktokdl(url: string): Promise<IresTTdl| {}> {
         music: `https://api.snaptik.site/download?key=${data.data.music}&type=music`
     }
     return results
+}
+
+
+type IresTTdlv2 = IresTTdl | { description?: void, video: { no_watermark: string, no_watermark_hd: string }, music?: void }
+
+export async function tiktokdlv2(url: string): Promise<IresTTdlv2> {
+    const params = new URLSearchParams()
+    params.append('url', url)
+    const { data } = await axios.post<{
+        author_avatar: string,
+        author_id: string,
+        author_name: string,
+        comment_count: number,
+        create_time: string,
+        id: string,
+        like_count: number,
+        share_count: number,
+        success: boolean,
+        token: string
+    }>('https://api.tikmate.app/api/lookup', params, {
+        headers: {
+            accept: '*/*',
+            'accept-language': 'en-US,en;q=0.9',
+            'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            origin: 'https://tikmate.app',
+            referer: 'https://tikmate.app/',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36'
+        }
+    })
+    return {
+        author: {
+            unique_id: data.author_id,
+            nickname: data.author_name,
+            avatar: data.author_avatar
+        },
+        video: {
+            no_watermark: `https://tikmate.app/download/${data.token}/${data.id}.mp4`,
+            no_watermark_hd: `https://tikmate.app/download/${data.token}/${data.id}.mp4?hd=1`
+        }
+    }
 }
 interface IresTTfyp {
     id: string,
@@ -157,7 +197,7 @@ interface IresTTfyp {
 }
 
 export async function tiktokfyp(): Promise<IresTTfyp[] | []> {
-    const { data } = await axios.get(`https://t.tiktok.com/api/recommend/item_list/?aid=1988&app_name=tiktok_web&device_platform=web_pc&device_id=6982004129280116226&region=ID&priority_region=&os=windows&referer=&cookie_enabled=true&screen_width=1920&screen_height=1080&browser_language=en-US&browser_platform=Win32&browser_name=Mozilla&browser_version=5.0+(Windows+NT+10.0%3B+Win64%3B+x64)+AppleWebKit%2F537.36+(KHTML,+like+Gecko)+Chrome%2F96.0.4664.93+Safari%2F537.36&browser_online=true&verifyFp=verify_kx30laei_YkR2lQiI_UBWz_4MZK_ACKV_loiPDs4PyDtw&app_language=en&timezone_name=Asia%2FJakarta&is_page_visible=true&focus_state=true&is_fullscreen=false&history_len=2&battery_info=%7B%7D&count=30&itemID=1&language=en&from_page=fyp&insertedItemID=&versions=70232694,70338434,70001178,70138197,70156809&msToken=Wi63JD_P7xxD_7pFmaF_UcHM6oJwSKjR9wnfsMUaDdz51KLZ3J8tazDrcY2gh_t3PyG_5926qyw8g7DhrgFa3mbDmxLhzmLs_3l_sOk4zf6TdMqfAT51s_n8ZPG8vovv76h1kCkR&X-Bogus=DFSzswVOAxxANJf/SEhC1eM/W7oh&_signature=`)
+    const { data } = await axios.get<{ itemList: IresTTfyp[] }>(`https://t.tiktok.com/api/recommend/item_list/?aid=1988&app_name=tiktok_web&device_platform=web_pc&device_id=6982004129280116226&region=ID&priority_region=&os=windows&referer=&cookie_enabled=true&screen_width=1920&screen_height=1080&browser_language=en-US&browser_platform=Win32&browser_name=Mozilla&browser_version=5.0+(Windows+NT+10.0%3B+Win64%3B+x64)+AppleWebKit%2F537.36+(KHTML,+like+Gecko)+Chrome%2F96.0.4664.93+Safari%2F537.36&browser_online=true&verifyFp=verify_kx30laei_YkR2lQiI_UBWz_4MZK_ACKV_loiPDs4PyDtw&app_language=en&timezone_name=Asia%2FJakarta&is_page_visible=true&focus_state=true&is_fullscreen=false&history_len=2&battery_info=%7B%7D&count=30&itemID=1&language=en&from_page=fyp&insertedItemID=&versions=70232694,70338434,70001178,70138197,70156809&msToken=Wi63JD_P7xxD_7pFmaF_UcHM6oJwSKjR9wnfsMUaDdz51KLZ3J8tazDrcY2gh_t3PyG_5926qyw8g7DhrgFa3mbDmxLhzmLs_3l_sOk4zf6TdMqfAT51s_n8ZPG8vovv76h1kCkR&X-Bogus=DFSzswVOAxxANJf/SEhC1eM/W7oh&_signature=`)
     return (data.itemList as IresTTfyp[]) || []
 }
 

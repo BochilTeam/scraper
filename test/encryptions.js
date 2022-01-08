@@ -32,10 +32,8 @@ describe('Encryptions', () => {
         it('randomUUID', done => {
             try {
                 const res = randomUUID()
-                if (res instanceof Promise) res.then(res => expect(res).to.be.a('string'))
-                else expect(res).to.be.a('string')
-
-                return done()
+                if (res instanceof Promise) res.then(res => (expect(res).to.be.a('string'), done()))
+                else (expect(res).to.be.a('string'), done())
             } catch (e) {
                 return done(e)
             }

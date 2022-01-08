@@ -9,7 +9,7 @@ interface IstickerTele {
 }
 
 export async function stickerTelegram(query: string, page?: number): Promise<IstickerTele[]> {
-    const { data } = await axios.get(`https://combot.org/telegram/stickers?q=${encodeURI(query)}&page=${page || 1}`)
+    const { data } = await axios.get<string>(`https://combot.org/telegram/stickers?q=${encodeURI(query)}&page=${page || 1}`)
     const $ = cheerio.load(data)
     let results: IstickerTele[] = []
     $('body > div > main > div.page > div > div.stickers-catalogue > div.tab-content > div > div').each(function () {
@@ -31,6 +31,19 @@ export async function stickerTelegram(query: string, page?: number): Promise<Ist
     return results
 }
 
+interface IresAxiosStickerLine {
+    title: string,
+    productUrl: string,
+    id: string,
+    description?: string,
+    payloadForProduct: {
+        staticUrl: string,
+        animationUrl?: string,
+        soundUrl?: string
+    },
+    authorId: string,
+    authorName: string
+}
 export async function stickerLine(query: string): Promise<{
     id: string,
     title: string,
@@ -42,9 +55,8 @@ export async function stickerLine(query: string): Promise<{
     authorId: string,
     authorName: string
 }[]> {
-    const { data } = await axios.get(`https://store.line.me/api/search/sticker?query=${query}&offset=0&limit=36&type=ALL&includeFacets=true`)
-    return data.items.map(({ title, productUrl, id, description, payloadForProduct: { staticUrl, animationUrl, soundUrl }, authorId, authorName }:
-        { title: string, productUrl: string, id: string, description?: string, payloadForProduct: { staticUrl: string, animationUrl?: string, soundUrl?: string }, authorId: string, authorName: string }
+    const { data } = await axios.get<{ items: IresAxiosStickerLine[] }>(`https://store.line.me/api/search/sticker?query=${query}&offset=0&limit=36&type=ALL&includeFacets=true`)
+    return data.items.map(({ title, productUrl, id, description, payloadForProduct: { staticUrl, animationUrl, soundUrl }, authorId, authorName }: IresAxiosStickerLine
     ) => {
         return {
             id,

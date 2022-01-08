@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios, { AxiosResponse } from "axios"
 
 export default async function nomorhoki(nomer: number | string): Promise<{
     nomer: number | string,
@@ -16,7 +16,7 @@ export default async function nomorhoki(nomer: number | string): Promise<{
         nomer: encodeURIComponent(nomer),
         'submit': '+Submit!+'
     }
-    const { data } = await axios('https://www.primbon.com/no_hoki_bagua_shuzi.php', {
+    const { data }: AxiosResponse<string> = await axios('https://www.primbon.com/no_hoki_bagua_shuzi.php', {
         method: 'POST',
         headers: {
             'content-type': 'application/x-www-form-urlencoded'

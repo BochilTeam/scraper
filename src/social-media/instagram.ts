@@ -1,5 +1,5 @@
 import FormData from "form-data"
-import axios from "axios"
+import axios, { AxiosResponse } from "axios"
 import cheerio from "cheerio"
 
 interface Iigdl { thumbnail: Buffer, url: string }
@@ -9,7 +9,7 @@ export async function instagramdl(url: string): Promise<Iigdl[]> {
     let form = new FormData()
     form.append('url', url)
     form.append('action', 'post')
-    const { data } = await axios({
+    const { data }: AxiosResponse<string> = await axios({
         url: 'https://snapinsta.app/action.php',
         method: 'POST',
         data: form,
@@ -28,8 +28,59 @@ export async function instagramdl(url: string): Promise<Iigdl[]> {
         results.push({ thumbnail, url })
     })
     return results
+
 }
 
+type Iigdlv2 = Iigdl | { thumbnail: string, sourceUrl?: string }
+
+export async function instagramdlv2(url: string): Promise<Iigdlv2[]> {
+    if (!/https?:\/\/www\.instagram\.com\/(reel|tv|p)\//i.test(url)) throw 'Invalid url!!'
+    const payload = {
+        url,
+        submit: ''
+    }
+    const { data }: AxiosResponse<string> = await axios({
+        url: 'https://downloadgram.org/',
+        method: 'POST',
+        data: new URLSearchParams(Object.entries(payload)),
+        headers: {
+            'content-type': 'application/x-www-form-urlencoded',
+            cookie: '_ga=GA1.2.181197110.1640306988; _gid=GA1.2.1601935026.1640306988; __gads=ID=0e10c818b9622a98-2215e80586cf00a7:T=1640306988:RT=1640306988:S=ALNI_MbOGm-63H2TuFkIpAR6a8k0SfA6og; __atssc=google%3B2; _gat_gtag_UA_142480840_1=1; __atuvc=11%7C51; __atuvs=61c5192bc5d9e62100a',
+            origin: 'https://downloadgram.org',
+            referer: 'https://downloadgram.org/',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36'
+        }
+    })
+    const $ = cheerio.load(data)
+    let results: Iigdlv2[] = []
+    if ($('#downloadBox > a').length) {
+        let temp: { thumbnail?: string, sourceUrl?: string, index: number, url?: string }[] = []
+        $('#downloadBox > video').each(function (i) {
+            const thumbnail = $(this).attr('poster')
+            const sourceUrl = $(this).find('source[src]').attr('src')
+            if (thumbnail) temp.push({
+                thumbnail,
+                sourceUrl,
+                index: i
+            })
+        })
+
+        $('#downloadBox > img').each(function (i) {
+            const j = temp.findIndex(({ index }) => index === i)
+            const thumbnail = $(this).attr('src')
+            if (thumbnail) if (j !== -1) temp[j].thumbnail = thumbnail
+            else temp.push({ thumbnail, index: i })
+        })
+        $('#downloadBox > a').each(function (i) {
+            const j = temp.findIndex(({ index }) => index === i)
+            const url = $(this).attr('href')
+            if (j !== -1) temp[j].url = url
+            else temp.push({ url, index: i })
+        })
+        results = temp.map(({ thumbnail, sourceUrl, url }) => ({ thumbnail, sourceUrl, url }))
+    }
+    return results
+}
 interface Iigstory {
     thumbnail: string,
     isVideo: boolean,
@@ -37,7 +88,7 @@ interface Iigstory {
 }
 
 export async function instagramStory(name: string): Promise<Iigstory[]> {
-    const { data } = await axios.get(`https://www.insta-stories.net/data.php?username=${name}&t=${+new Date()}`)
+    const { data } = await axios.get<string>(`https://www.insta-stories.net/data.php?username=${name}&t=${+new Date()}`)
     const $ = cheerio.load(data)
     let results: Iigstory[] = []
     $('center').each(function () {

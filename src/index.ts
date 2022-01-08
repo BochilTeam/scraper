@@ -5,3 +5,4 @@ export * from "./primbons";
 export * from "./texts";
 export * from "./others";
 export * from "./encryptions";
+export * from "./religions";
