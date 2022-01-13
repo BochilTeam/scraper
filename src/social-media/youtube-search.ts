@@ -70,7 +70,7 @@ export default function youtubeSearch(query: string): Promise<IresyoutubeSearch>
                     title: result.title.runs.pop().text,
                     description: result.detailedMetadataSnippets?.pop().snippetText.runs?.pop().text || '',
                     publishedTime: result.publishedTimeText?.simpleText,
-                    durationH: result.lengthText.accessibility.accessibilityData.label,
+                    durationH: result.lengthText?.accessibility.accessibilityData.label,
                     duration: result.lengthText.simpleText,
                     viewH: result.viewCountText.simpleText,
                     view: result.viewCountText.simpleText.split('x')[0].trim(),
