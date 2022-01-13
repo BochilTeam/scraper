@@ -1,7 +1,22 @@
 const expect = require('chai').expect
 
 describe('Social media', () => {
-    const { tiktokdl, tiktokdlv2, tiktokfyp, tiktokstalk, instagramdl, instagramStory, facebookdl, twitterdl, instagramdlv2, twitterdlv2, facebookdlv2 } = require('../lib/social-media')
+    const {
+        tiktokdl,
+        tiktokdlv2,
+        tiktokfyp,
+        instagramdl,
+        //instagramStory,
+        facebookdl,
+        twitterdl,
+        instagramdlv2,
+        twitterdlv2,
+        facebookdlv2,
+        youtubedl,
+        youtubedlv2,
+        googleIt,
+        youtubeSearch
+    } = require('../lib/social-media')
     describe('Tiktok scraper', function () {
         it('tiktokdl', function (done) {
             tiktokdl('https://www.tiktok.com/@omagadsus/video/7025456384175017243?is_from_webapp=1&sender_device=pc&web_id6982004129280116226').then(function (res) {
@@ -154,5 +169,54 @@ describe('Social media', () => {
                 return done()
             }).catch(done)
         })
+    })
+
+    describe('Youtube', function () {
+        this.timeout(3e4)
+        it('Youtube Downloader', done => {
+            youtubedl('https://youtu.be/iik25wqIuFo').then(res => {
+                expect(res).to.be.an('object')
+                expect(res.thumbnail).to.be.a('string')
+                expect(res.title).to.be.a('string')
+                expect(res.video).to.be.an('object')
+                expect(res.audio).to.be.an('object')
+
+                return done()
+            }).catch(done)
+        })
+
+        it('Youtube Downloader v2', done => {
+            youtubedlv2('https://youtu.be/nETHrCFb17I').then(res => {
+                expect(res).to.be.an('object')
+                expect(res.thumbnail).to.be.a('string')
+                expect(res.title).to.be.a('string')
+                expect(res.video).to.be.an('object')
+                expect(res.audio).to.be.an('object')
+
+                return done()
+            }).catch(done)
+        })
+
+        it('Youtube Search', done => {
+            youtubeSearch('Minecraft').then(res => {
+                expect(res).to.be.an('object')
+                expect(res.video).to.be.an('array')
+                expect(res.channel).to.be.an('array')
+                expect(res.playlist).to.be.an('array')
+
+                return done()
+            }).catch(done)
+        })
+    })
+
+    it('Google It', done => {
+        googleIt('Minecraft').then(res => {
+            expect(res).to.be.an('object')
+            expect(res.info).to.be.an('object')
+            expect(res.articles).to.be.an('array')
+            expect(res.articles).to.have.lengthOf.at.least(5)
+
+            return done()
+        }).catch(done)
     })
 })

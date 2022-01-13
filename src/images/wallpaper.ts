@@ -1,7 +1,7 @@
 import axios from 'axios'
 import cheerio from 'cheerio'
 
-export default async function wallpaper(query: string): Promise<string[]> {
+export async function wallpaper(query: string): Promise<string[]> {
     const { data } = await axios.get<string>(`https://www.shutterstock.com/search/${query}`, {
         headers: {
             accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
@@ -13,5 +13,18 @@ export default async function wallpaper(query: string): Promise<string[]> {
     })
     const $ = cheerio.load(data)
     let results: string[] = [...new Set([...$.html().matchAll(/https?:\/\/(image|www)\.shutterstock\.com\/([^"]+)/gmi)].map(v => v[0]).filter(v => /.*\.jpe?g|png$/gi.test(v)))]
+    return results
+}
+
+type Ioptionsv2 = { page: number, is4K?: boolean }
+export async function wallpaperv2(query: string, { page, is4K }: Ioptionsv2 = { page: 1 }): Promise<string[]> {
+    page = page < 2 ? 2 : page
+    const { data } = await axios.get<string>(`https://wall.alphacoders.com/by_category.php?id=3&name=${encodeURIComponent(query).replace(/%20/g, '+')}&quickload=50&page=${page}${is4K ? '&filter=4K+Ultra+HD' : ''}`)
+    const $ = cheerio.load(data)
+    const results: string[] = []
+    $('div.thumb-container-big').each(function () {
+        const img = $(this).find('picture > img').attr('src')
+        if (img) results.push(img)
+    })
     return results
 }
