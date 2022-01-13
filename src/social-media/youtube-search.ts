@@ -63,6 +63,9 @@ export default function youtubeSearch(query: string): Promise<IresyoutubeSearch>
                 const isChannel = typeName === 'channelRenderer'
                 const isVideo = typeName == 'videoRenderer'
                 const isMix = typeName === 'radioRenderer'
+                console.log()
+                console.log(JSON.stringify(result, null, 4))
+                console.log()
                 if (isVideo) results.video.push({
                     authorName: result.ownerText.runs[0].text,
                     videoId: result.videoId,
@@ -71,9 +74,9 @@ export default function youtubeSearch(query: string): Promise<IresyoutubeSearch>
                     description: result.detailedMetadataSnippets?.pop().snippetText.runs?.pop().text || '',
                     publishedTime: result.publishedTimeText?.simpleText,
                     durationH: result.lengthText?.accessibility.accessibilityData.label,
-                    duration: result.lengthText.simpleText,
-                    viewH: result.viewCountText.simpleText,
-                    view: result.viewCountText.simpleText.split('x')[0].trim(),
+                    duration: result.lengthText?.simpleText,
+                    viewH: result.viewCountText?.simpleText,
+                    view: result.viewCountText?.simpleText.split('x')[0].trim(),
                     type: typeName.replace(/Renderer/i, '') as 'video'
                 })
 
