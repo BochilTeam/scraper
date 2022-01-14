@@ -29,15 +29,15 @@ describe('Social media', () => {
                 return done()
             }).catch(done)
         })
-        it('tiktokdl v2', function (done) {
-            tiktokdlv2('https://www.tiktok.com/@omagadsus/video/7025456384175017243?is_from_webapp=1&sender_device=pc&web_id6982004129280116226').then(function (res) {
-                expect(res).to.be.an('object')
-                expect(res.author).to.be.an('object')
-                expect(res.video).to.be.an('object')
+        // it('tiktokdl v2', function (done) {
+        //     tiktokdlv2('https://www.tiktok.com/@omagadsus/video/7025456384175017243?is_from_webapp=1&sender_device=pc&web_id6982004129280116226').then(function (res) {
+        //         expect(res).to.be.an('object')
+        //         expect(res.author).to.be.an('object')
+        //         expect(res.video).to.be.an('object')
 
-                return done()
-            }).catch(done)
-        })
+        //         return done()
+        //     }).catch(done)
+        // })
 
         it('tiktokfyp', function (done) {
             tiktokfyp().then(function (res) {
