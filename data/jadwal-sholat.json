@@ -1,0 +1,1266 @@
+[
+  {
+    "value": "1",
+    "kota": "ambarawa"
+  },
+  {
+    "value": "2",
+    "kota": "ambon"
+  },
+  {
+    "value": "3",
+    "kota": "amlapura"
+  },
+  {
+    "value": "4",
+    "kota": "amuntai"
+  },
+  {
+    "value": "5",
+    "kota": "argamakmur"
+  },
+  {
+    "value": "6",
+    "kota": "atambua"
+  },
+  {
+    "value": "7",
+    "kota": "babo"
+  },
+  {
+    "value": "8",
+    "kota": "bagan siapiapi"
+  },
+  {
+    "value": "316",
+    "kota": "bahaur, kalteng"
+  },
+  {
+    "value": "9",
+    "kota": "bajawa"
+  },
+  {
+    "value": "10",
+    "kota": "balige"
+  },
+  {
+    "value": "11",
+    "kota": "balikpapan"
+  },
+  {
+    "value": "12",
+    "kota": "banda aceh"
+  },
+  {
+    "value": "13",
+    "kota": "bandarlampung"
+  },
+  {
+    "value": "14",
+    "kota": "bandung"
+  },
+  {
+    "value": "15",
+    "kota": "bangkalan"
+  },
+  {
+    "value": "16",
+    "kota": "bangkinang"
+  },
+  {
+    "value": "17",
+    "kota": "bangko"
+  },
+  {
+    "value": "18",
+    "kota": "bangli"
+  },
+  {
+    "value": "19",
+    "kota": "banjar"
+  },
+  {
+    "value": "20",
+    "kota": "banjar baru"
+  },
+  {
+    "value": "21",
+    "kota": "banjarmasin"
+  },
+  {
+    "value": "22",
+    "kota": "banjarnegara"
+  },
+  {
+    "value": "23",
+    "kota": "bantaeng"
+  },
+  {
+    "value": "24",
+    "kota": "banten"
+  },
+  {
+    "value": "25",
+    "kota": "bantul"
+  },
+  {
+    "value": "26",
+    "kota": "banyuwangi"
+  },
+  {
+    "value": "27",
+    "kota": "barabai"
+  },
+  {
+    "value": "28",
+    "kota": "barito"
+  },
+  {
+    "value": "29",
+    "kota": "barru"
+  },
+  {
+    "value": "30",
+    "kota": "batam"
+  },
+  {
+    "value": "31",
+    "kota": "batang"
+  },
+  {
+    "value": "32",
+    "kota": "batu"
+  },
+  {
+    "value": "33",
+    "kota": "baturaja"
+  },
+  {
+    "value": "34",
+    "kota": "batusangkar"
+  },
+  {
+    "value": "35",
+    "kota": "baubau"
+  },
+  {
+    "value": "36",
+    "kota": "bekasi"
+  },
+  {
+    "value": "37",
+    "kota": "bengkalis"
+  },
+  {
+    "value": "38",
+    "kota": "bengkulu"
+  },
+  {
+    "value": "39",
+    "kota": "benteng"
+  },
+  {
+    "value": "40",
+    "kota": "biak"
+  },
+  {
+    "value": "41",
+    "kota": "bima"
+  },
+  {
+    "value": "42",
+    "kota": "binjai"
+  },
+  {
+    "value": "43",
+    "kota": "bireuen"
+  },
+  {
+    "value": "44",
+    "kota": "bitung"
+  },
+  {
+    "value": "45",
+    "kota": "blitar"
+  },
+  {
+    "value": "46",
+    "kota": "blora"
+  },
+  {
+    "value": "47",
+    "kota": "bogor"
+  },
+  {
+    "value": "48",
+    "kota": "bojonegoro"
+  },
+  {
+    "value": "49",
+    "kota": "bondowoso"
+  },
+  {
+    "value": "50",
+    "kota": "bontang"
+  },
+  {
+    "value": "51",
+    "kota": "boyolali"
+  },
+  {
+    "value": "52",
+    "kota": "brebes"
+  },
+  {
+    "value": "53",
+    "kota": "bukit tinggi"
+  },
+  {
+    "value": "315",
+    "kota": "bula sbt, maluku"
+  },
+  {
+    "value": "54",
+    "kota": "bulukumba"
+  },
+  {
+    "value": "55",
+    "kota": "buntok"
+  },
+  {
+    "value": "56",
+    "kota": "cepu"
+  },
+  {
+    "value": "57",
+    "kota": "ciamis"
+  },
+  {
+    "value": "58",
+    "kota": "cianjur"
+  },
+  {
+    "value": "59",
+    "kota": "cibinong"
+  },
+  {
+    "value": "60",
+    "kota": "cilacap"
+  },
+  {
+    "value": "61",
+    "kota": "cilegon"
+  },
+  {
+    "value": "62",
+    "kota": "cimahi"
+  },
+  {
+    "value": "63",
+    "kota": "cirebon"
+  },
+  {
+    "value": "64",
+    "kota": "curup"
+  },
+  {
+    "value": "65",
+    "kota": "demak"
+  },
+  {
+    "value": "66",
+    "kota": "denpasar"
+  },
+  {
+    "value": "67",
+    "kota": "depok"
+  },
+  {
+    "value": "68",
+    "kota": "dili"
+  },
+  {
+    "value": "69",
+    "kota": "dompu"
+  },
+  {
+    "value": "70",
+    "kota": "donggala"
+  },
+  {
+    "value": "71",
+    "kota": "dumai"
+  },
+  {
+    "value": "72",
+    "kota": "ende"
+  },
+  {
+    "value": "73",
+    "kota": "enggano"
+  },
+  {
+    "value": "74",
+    "kota": "enrekang"
+  },
+  {
+    "value": "75",
+    "kota": "fakfak"
+  },
+  {
+    "value": "76",
+    "kota": "garut"
+  },
+  {
+    "value": "77",
+    "kota": "gianyar"
+  },
+  {
+    "value": "78",
+    "kota": "gombong"
+  },
+  {
+    "value": "79",
+    "kota": "gorontalo"
+  },
+  {
+    "value": "80",
+    "kota": "gresik"
+  },
+  {
+    "value": "81",
+    "kota": "gunung sitoli"
+  },
+  {
+    "value": "82",
+    "kota": "indramayu"
+  },
+  {
+    "value": "309",
+    "kota": "jakarta barat"
+  },
+  {
+    "value": "308",
+    "kota": "jakarta pusat"
+  },
+  {
+    "value": "310",
+    "kota": "jakarta selatan"
+  },
+  {
+    "value": "311",
+    "kota": "jakarta timur"
+  },
+  {
+    "value": "312",
+    "kota": "jakarta utara"
+  },
+  {
+    "value": "83",
+    "kota": "jambi"
+  },
+  {
+    "value": "84",
+    "kota": "jayapura"
+  },
+  {
+    "value": "85",
+    "kota": "jember"
+  },
+  {
+    "value": "86",
+    "kota": "jeneponto"
+  },
+  {
+    "value": "87",
+    "kota": "jepara"
+  },
+  {
+    "value": "88",
+    "kota": "jombang"
+  },
+  {
+    "value": "89",
+    "kota": "kabanjahe"
+  },
+  {
+    "value": "90",
+    "kota": "kalabahi"
+  },
+  {
+    "value": "91",
+    "kota": "kalianda"
+  },
+  {
+    "value": "92",
+    "kota": "kandangan"
+  },
+  {
+    "value": "93",
+    "kota": "karanganyar"
+  },
+  {
+    "value": "94",
+    "kota": "karawang"
+  },
+  {
+    "value": "95",
+    "kota": "kasungan"
+  },
+  {
+    "value": "96",
+    "kota": "kayuagung"
+  },
+  {
+    "value": "97",
+    "kota": "kebumen"
+  },
+  {
+    "value": "98",
+    "kota": "kediri"
+  },
+  {
+    "value": "99",
+    "kota": "kefamenanu"
+  },
+  {
+    "value": "100",
+    "kota": "kendal"
+  },
+  {
+    "value": "101",
+    "kota": "kendari"
+  },
+  {
+    "value": "102",
+    "kota": "kertosono"
+  },
+  {
+    "value": "103",
+    "kota": "ketapang"
+  },
+  {
+    "value": "104",
+    "kota": "kisaran"
+  },
+  {
+    "value": "105",
+    "kota": "klaten"
+  },
+  {
+    "value": "106",
+    "kota": "kolaka"
+  },
+  {
+    "value": "107",
+    "kota": "kota baru pulau laut"
+  },
+  {
+    "value": "108",
+    "kota": "kota bumi"
+  },
+  {
+    "value": "109",
+    "kota": "kota jantho"
+  },
+  {
+    "value": "110",
+    "kota": "kotamobagu"
+  },
+  {
+    "value": "111",
+    "kota": "kuala kapuas"
+  },
+  {
+    "value": "112",
+    "kota": "kuala kurun"
+  },
+  {
+    "value": "113",
+    "kota": "kuala pembuang"
+  },
+  {
+    "value": "114",
+    "kota": "kuala tungkal"
+  },
+  {
+    "value": "115",
+    "kota": "kudus"
+  },
+  {
+    "value": "116",
+    "kota": "kuningan"
+  },
+  {
+    "value": "117",
+    "kota": "kupang"
+  },
+  {
+    "value": "118",
+    "kota": "kutacane"
+  },
+  {
+    "value": "119",
+    "kota": "kutoarjo"
+  },
+  {
+    "value": "120",
+    "kota": "labuhan"
+  },
+  {
+    "value": "121",
+    "kota": "lahat"
+  },
+  {
+    "value": "122",
+    "kota": "lamongan"
+  },
+  {
+    "value": "123",
+    "kota": "langsa"
+  },
+  {
+    "value": "124",
+    "kota": "larantuka"
+  },
+  {
+    "value": "125",
+    "kota": "lawang"
+  },
+  {
+    "value": "126",
+    "kota": "lhoseumawe"
+  },
+  {
+    "value": "127",
+    "kota": "limboto"
+  },
+  {
+    "value": "128",
+    "kota": "lubuk basung"
+  },
+  {
+    "value": "129",
+    "kota": "lubuk linggau"
+  },
+  {
+    "value": "130",
+    "kota": "lubuk pakam"
+  },
+  {
+    "value": "131",
+    "kota": "lubuk sikaping"
+  },
+  {
+    "value": "132",
+    "kota": "lumajang"
+  },
+  {
+    "value": "133",
+    "kota": "luwuk"
+  },
+  {
+    "value": "134",
+    "kota": "madiun"
+  },
+  {
+    "value": "135",
+    "kota": "magelang"
+  },
+  {
+    "value": "136",
+    "kota": "magetan"
+  },
+  {
+    "value": "137",
+    "kota": "majalengka"
+  },
+  {
+    "value": "138",
+    "kota": "majene"
+  },
+  {
+    "value": "139",
+    "kota": "makale"
+  },
+  {
+    "value": "140",
+    "kota": "makassar"
+  },
+  {
+    "value": "141",
+    "kota": "malang"
+  },
+  {
+    "value": "142",
+    "kota": "mamuju"
+  },
+  {
+    "value": "143",
+    "kota": "manna"
+  },
+  {
+    "value": "144",
+    "kota": "manokwari"
+  },
+  {
+    "value": "145",
+    "kota": "marabahan"
+  },
+  {
+    "value": "146",
+    "kota": "maros"
+  },
+  {
+    "value": "147",
+    "kota": "martapura kalsel"
+  },
+  {
+    "value": "314",
+    "kota": "masamba, sulsel"
+  },
+  {
+    "value": "148",
+    "kota": "masohi"
+  },
+  {
+    "value": "149",
+    "kota": "mataram"
+  },
+  {
+    "value": "150",
+    "kota": "maumere"
+  },
+  {
+    "value": "151",
+    "kota": "medan"
+  },
+  {
+    "value": "152",
+    "kota": "mempawah"
+  },
+  {
+    "value": "153",
+    "kota": "menado"
+  },
+  {
+    "value": "154",
+    "kota": "mentok"
+  },
+  {
+    "value": "155",
+    "kota": "merauke"
+  },
+  {
+    "value": "156",
+    "kota": "metro"
+  },
+  {
+    "value": "157",
+    "kota": "meulaboh"
+  },
+  {
+    "value": "158",
+    "kota": "mojokerto"
+  },
+  {
+    "value": "159",
+    "kota": "muara bulian"
+  },
+  {
+    "value": "160",
+    "kota": "muara bungo"
+  },
+  {
+    "value": "161",
+    "kota": "muara enim"
+  },
+  {
+    "value": "162",
+    "kota": "muara teweh"
+  },
+  {
+    "value": "163",
+    "kota": "muaro sijunjung"
+  },
+  {
+    "value": "164",
+    "kota": "muntilan"
+  },
+  {
+    "value": "165",
+    "kota": "nabire"
+  },
+  {
+    "value": "166",
+    "kota": "negara"
+  },
+  {
+    "value": "167",
+    "kota": "nganjuk"
+  },
+  {
+    "value": "168",
+    "kota": "ngawi"
+  },
+  {
+    "value": "169",
+    "kota": "nunukan"
+  },
+  {
+    "value": "170",
+    "kota": "pacitan"
+  },
+  {
+    "value": "171",
+    "kota": "padang"
+  },
+  {
+    "value": "172",
+    "kota": "padang panjang"
+  },
+  {
+    "value": "173",
+    "kota": "padang sidempuan"
+  },
+  {
+    "value": "174",
+    "kota": "pagaralam"
+  },
+  {
+    "value": "175",
+    "kota": "painan"
+  },
+  {
+    "value": "176",
+    "kota": "palangkaraya"
+  },
+  {
+    "value": "177",
+    "kota": "palembang"
+  },
+  {
+    "value": "178",
+    "kota": "palopo"
+  },
+  {
+    "value": "179",
+    "kota": "palu"
+  },
+  {
+    "value": "180",
+    "kota": "pamekasan"
+  },
+  {
+    "value": "181",
+    "kota": "pandeglang"
+  },
+  {
+    "value": "182",
+    "kota": "pangka_"
+  },
+  {
+    "value": "183",
+    "kota": "pangkajene sidenreng"
+  },
+  {
+    "value": "184",
+    "kota": "pangkalan bun"
+  },
+  {
+    "value": "185",
+    "kota": "pangkalpinang"
+  },
+  {
+    "value": "186",
+    "kota": "panyabungan"
+  },
+  {
+    "value": "187",
+    "kota": "par_"
+  },
+  {
+    "value": "188",
+    "kota": "parepare"
+  },
+  {
+    "value": "189",
+    "kota": "pariaman"
+  },
+  {
+    "value": "190",
+    "kota": "pasuruan"
+  },
+  {
+    "value": "191",
+    "kota": "pati"
+  },
+  {
+    "value": "192",
+    "kota": "payakumbuh"
+  },
+  {
+    "value": "193",
+    "kota": "pekalongan"
+  },
+  {
+    "value": "194",
+    "kota": "pekan baru"
+  },
+  {
+    "value": "195",
+    "kota": "pemalang"
+  },
+  {
+    "value": "196",
+    "kota": "pematangsiantar"
+  },
+  {
+    "value": "197",
+    "kota": "pendopo"
+  },
+  {
+    "value": "198",
+    "kota": "pinrang"
+  },
+  {
+    "value": "199",
+    "kota": "pleihari"
+  },
+  {
+    "value": "200",
+    "kota": "polewali"
+  },
+  {
+    "value": "201",
+    "kota": "pondok gede"
+  },
+  {
+    "value": "202",
+    "kota": "ponorogo"
+  },
+  {
+    "value": "203",
+    "kota": "pontianak"
+  },
+  {
+    "value": "204",
+    "kota": "poso"
+  },
+  {
+    "value": "205",
+    "kota": "prabumulih"
+  },
+  {
+    "value": "206",
+    "kota": "praya"
+  },
+  {
+    "value": "207",
+    "kota": "probolinggo"
+  },
+  {
+    "value": "208",
+    "kota": "purbalingga"
+  },
+  {
+    "value": "209",
+    "kota": "purukcahu"
+  },
+  {
+    "value": "210",
+    "kota": "purwakarta"
+  },
+  {
+    "value": "211",
+    "kota": "purwodadigrobogan"
+  },
+  {
+    "value": "212",
+    "kota": "purwokerto"
+  },
+  {
+    "value": "213",
+    "kota": "purworejo"
+  },
+  {
+    "value": "214",
+    "kota": "putussibau"
+  },
+  {
+    "value": "215",
+    "kota": "raha"
+  },
+  {
+    "value": "216",
+    "kota": "rangkasbitung"
+  },
+  {
+    "value": "217",
+    "kota": "rantau"
+  },
+  {
+    "value": "218",
+    "kota": "rantauprapat"
+  },
+  {
+    "value": "219",
+    "kota": "rantepao"
+  },
+  {
+    "value": "220",
+    "kota": "rembang"
+  },
+  {
+    "value": "221",
+    "kota": "rengat"
+  },
+  {
+    "value": "222",
+    "kota": "ruteng"
+  },
+  {
+    "value": "223",
+    "kota": "sabang"
+  },
+  {
+    "value": "224",
+    "kota": "salatiga"
+  },
+  {
+    "value": "225",
+    "kota": "samarinda"
+  },
+  {
+    "value": "313",
+    "kota": "sambas, kalbar"
+  },
+  {
+    "value": "226",
+    "kota": "sampang"
+  },
+  {
+    "value": "227",
+    "kota": "sampit"
+  },
+  {
+    "value": "228",
+    "kota": "sanggau"
+  },
+  {
+    "value": "229",
+    "kota": "sawahlunto"
+  },
+  {
+    "value": "230",
+    "kota": "sekayu"
+  },
+  {
+    "value": "231",
+    "kota": "selong"
+  },
+  {
+    "value": "232",
+    "kota": "semarang"
+  },
+  {
+    "value": "233",
+    "kota": "sengkang"
+  },
+  {
+    "value": "234",
+    "kota": "serang"
+  },
+  {
+    "value": "235",
+    "kota": "serui"
+  },
+  {
+    "value": "236",
+    "kota": "sibolga"
+  },
+  {
+    "value": "237",
+    "kota": "sidikalang"
+  },
+  {
+    "value": "238",
+    "kota": "sidoarjo"
+  },
+  {
+    "value": "239",
+    "kota": "sigli"
+  },
+  {
+    "value": "240",
+    "kota": "singaparna"
+  },
+  {
+    "value": "241",
+    "kota": "singaraja"
+  },
+  {
+    "value": "242",
+    "kota": "singkawang"
+  },
+  {
+    "value": "243",
+    "kota": "sinjai"
+  },
+  {
+    "value": "244",
+    "kota": "sintang"
+  },
+  {
+    "value": "245",
+    "kota": "situbondo"
+  },
+  {
+    "value": "246",
+    "kota": "slawi"
+  },
+  {
+    "value": "247",
+    "kota": "sleman"
+  },
+  {
+    "value": "248",
+    "kota": "soasiu"
+  },
+  {
+    "value": "249",
+    "kota": "soe"
+  },
+  {
+    "value": "250",
+    "kota": "solo"
+  },
+  {
+    "value": "251",
+    "kota": "solok"
+  },
+  {
+    "value": "252",
+    "kota": "soreang"
+  },
+  {
+    "value": "253",
+    "kota": "sorong"
+  },
+  {
+    "value": "254",
+    "kota": "sragen"
+  },
+  {
+    "value": "255",
+    "kota": "stabat"
+  },
+  {
+    "value": "256",
+    "kota": "subang"
+  },
+  {
+    "value": "257",
+    "kota": "sukabumi"
+  },
+  {
+    "value": "258",
+    "kota": "sukoharjo"
+  },
+  {
+    "value": "259",
+    "kota": "sumbawa besar"
+  },
+  {
+    "value": "260",
+    "kota": "sumedang"
+  },
+  {
+    "value": "261",
+    "kota": "sumenep"
+  },
+  {
+    "value": "262",
+    "kota": "sungai liat"
+  },
+  {
+    "value": "263",
+    "kota": "sungai penuh"
+  },
+  {
+    "value": "264",
+    "kota": "sungguminasa"
+  },
+  {
+    "value": "265",
+    "kota": "surabaya"
+  },
+  {
+    "value": "266",
+    "kota": "surakarta"
+  },
+  {
+    "value": "267",
+    "kota": "tabanan"
+  },
+  {
+    "value": "268",
+    "kota": "tahuna"
+  },
+  {
+    "value": "269",
+    "kota": "takalar"
+  },
+  {
+    "value": "270",
+    "kota": "takengon"
+  },
+  {
+    "value": "271",
+    "kota": "tamiang layang"
+  },
+  {
+    "value": "272",
+    "kota": "tanah grogot"
+  },
+  {
+    "value": "273",
+    "kota": "tangerang"
+  },
+  {
+    "value": "274",
+    "kota": "tanjung balai"
+  },
+  {
+    "value": "275",
+    "kota": "tanjung enim"
+  },
+  {
+    "value": "276",
+    "kota": "tanjung pandan"
+  },
+  {
+    "value": "277",
+    "kota": "tanjung pinang"
+  },
+  {
+    "value": "278",
+    "kota": "tanjung redep"
+  },
+  {
+    "value": "279",
+    "kota": "tanjung selor"
+  },
+  {
+    "value": "280",
+    "kota": "tapak tuan"
+  },
+  {
+    "value": "281",
+    "kota": "tarakan"
+  },
+  {
+    "value": "282",
+    "kota": "tarutung"
+  },
+  {
+    "value": "283",
+    "kota": "tasikmalaya"
+  },
+  {
+    "value": "284",
+    "kota": "tebing tinggi"
+  },
+  {
+    "value": "285",
+    "kota": "tegal"
+  },
+  {
+    "value": "286",
+    "kota": "temanggung"
+  },
+  {
+    "value": "287",
+    "kota": "tembilahan"
+  },
+  {
+    "value": "288",
+    "kota": "tenggarong"
+  },
+  {
+    "value": "289",
+    "kota": "ternate"
+  },
+  {
+    "value": "290",
+    "kota": "tolitoli"
+  },
+  {
+    "value": "291",
+    "kota": "tondano"
+  },
+  {
+    "value": "292",
+    "kota": "trenggalek"
+  },
+  {
+    "value": "293",
+    "kota": "tual"
+  },
+  {
+    "value": "294",
+    "kota": "tuban"
+  },
+  {
+    "value": "295",
+    "kota": "tulung agung"
+  },
+  {
+    "value": "296",
+    "kota": "ujung berung"
+  },
+  {
+    "value": "297",
+    "kota": "ungaran"
+  },
+  {
+    "value": "298",
+    "kota": "waikabubak"
+  },
+  {
+    "value": "299",
+    "kota": "waingapu"
+  },
+  {
+    "value": "300",
+    "kota": "wamena"
+  },
+  {
+    "value": "301",
+    "kota": "watampone"
+  },
+  {
+    "value": "302",
+    "kota": "watansoppeng"
+  },
+  {
+    "value": "303",
+    "kota": "wates"
+  },
+  {
+    "value": "304",
+    "kota": "wonogiri"
+  },
+  {
+    "value": "305",
+    "kota": "wonosari"
+  },
+  {
+    "value": "306",
+    "kota": "wonosobo"
+  },
+  {
+    "value": "307",
+    "kota": "yogyakarta"
+  }
+]

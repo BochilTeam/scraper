@@ -203,9 +203,7 @@ describe('Social media', () => {
                 expect(res.video).to.be.an('array')
                 expect(res.video).to.have.lengthOf.at.least(1)
                 expect(res.channel).to.be.an('array')
-                expect(res.channel).to.have.lengthOf.at.least(1)
                 expect(res.playlist).to.be.an('array')
-                expect(res.playlist).to.have.lengthOf.at.least(1)
 
                 return done()
             }).catch(done)

@@ -1,7 +1,7 @@
 const { expect } = require('chai')
 
 describe('Religions', () => {
-    const { asmaulhusna, alquran } = require('../lib/religions')
+    const { asmaulhusna, alquran, jadwalsholat } = require('../lib/religions')
     describe('Asmaul Husna', () => {
         it('AsmaulHusna', done => {
             asmaulhusna().then(res => {
@@ -32,6 +32,27 @@ describe('Religions', () => {
 
                 return done()
             }).catch(done)
+        })
+    })
+
+    describe('Jadwal Sholat', () => {
+        it('jadwalSholat', done => {
+            jadwalsholat('Semarang').then(res => {
+                expect(res).to.be.an('object')
+                expect(res.today).to.be.an('object')
+                expect(res.list).to.be.an('array')
+                expect(res.list).to.have.lengthOf.at.least(28)
+
+                return done()
+            }).catch(done)
+        })
+
+        it('List jadwal sholat', done => {
+            const res = require('../lib/religions').listJadwalSholat
+            expect(res).to.be.an('array')
+            expect(res).to.have.lengthOf.at.least(316)
+            
+            return done()
         })
     })
 })
