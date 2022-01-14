@@ -4,6 +4,7 @@ import cheerio from 'cheerio'
 interface IresyoutubeSearch {
     video: {
         authorName: string;
+        authorAvatar?: string;
         videoId: string;
         thumbnail: string;
         title: string;
@@ -63,22 +64,24 @@ export default function youtubeSearch(query: string): Promise<IresyoutubeSearch>
                 const isChannel = typeName === 'channelRenderer'
                 const isVideo = typeName == 'videoRenderer'
                 const isMix = typeName === 'radioRenderer'
-                console.log()
-                console.log(JSON.stringify(result, null, 4))
-                console.log()
-                if (isVideo) results.video.push({
-                    authorName: result.ownerText.runs[0].text,
-                    videoId: result.videoId,
-                    thumbnail: result.thumbnail.thumbnails.pop().url,
-                    title: result.title.runs.pop().text,
-                    description: result.detailedMetadataSnippets?.pop().snippetText.runs?.pop().text || '',
-                    publishedTime: result.publishedTimeText?.simpleText,
-                    durationH: result.lengthText?.accessibility.accessibilityData.label,
-                    duration: result.lengthText?.simpleText,
-                    viewH: result.viewCountText?.simpleText,
-                    view: result.viewCountText?.simpleText.split('x')[0].trim(),
-                    type: typeName.replace(/Renderer/i, '') as 'video'
-                })
+
+                if (isVideo) {
+                    let view: string = result.viewCountText?.simpleText || result.shortViewCountText?.simpleText, _duration = result.thumbnailOverlays?.find((v: { [Key: string]: any }) => Object.keys(v)[0] === 'thumbnailOverlayTimeStatusRenderer')?.thumbnailOverlayTimeStatusRenderer.text
+                    results.video.push({
+                        authorName: result.ownerText.runs[0].text,
+                        authorAvatar: result.channelThumbnailSupportedRenderers?.channelThumbnailWithLinkRenderer.thumbnail.thumbnails.pop().url,
+                        videoId: result.videoId,
+                        thumbnail: result.thumbnail.thumbnails.pop().url,
+                        title: result.title.runs.pop().text,
+                        description: result.detailedMetadataSnippets?.pop().snippetText.runs.pop().text || '',
+                        publishedTime: result.publishedTimeText?.simpleText,
+                        durationH: result.lengthText?.accessibility.accessibilityData.label || _duration?.accessibility.accessibilityData.label,
+                        duration: result.lengthText?.simpleText || _duration?.simpleText,
+                        viewH: view,
+                        view: view?.indexOf('x') !== -1 ? view.split('x')[0] : view?.split(' ')[0],
+                        type: typeName.replace(/Renderer/i, '') as 'video'
+                    })
+                }
 
                 if (isChannel) results.channel.push({
                     channelId: result.channelId,
