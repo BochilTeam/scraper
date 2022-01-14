@@ -10,10 +10,7 @@ interface Irestwitdl {
 
 export async function twitterdl(url: string): Promise<Irestwitdl[] | []> {
     if (!/https:\/\/twitter\.com\//i.test(url)) throw 'URL invalid!'
-    const payload: { url: string, submit: '' } = {
-        url,
-        submit: ''
-    }
+    const payload: { url: string } = { url }
     const res = await fetch('https://www.expertsphp.com/instagram-reels-downloader.php', {
         method: 'POST',
         body: new URLSearchParams(Object.entries(payload)),
