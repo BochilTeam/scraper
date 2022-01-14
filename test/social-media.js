@@ -201,8 +201,11 @@ describe('Social media', () => {
             youtubeSearch('Minecraft').then(res => {
                 expect(res).to.be.an('object')
                 expect(res.video).to.be.an('array')
+                expect(res.video).to.have.lengthOf.at.least(1)
                 expect(res.channel).to.be.an('array')
+                expect(res.channel).to.have.lengthOf.at.least(1)
                 expect(res.playlist).to.be.an('array')
+                expect(res.playlist).to.have.lengthOf.at.least(1)
 
                 return done()
             }).catch(done)
@@ -214,6 +217,7 @@ describe('Social media', () => {
             expect(res).to.be.an('object')
             expect(res.info).to.be.an('object')
             expect(res.articles).to.be.an('array')
+            expect(res.articles).to.have.lengthOf.at.least(1)
 
             return done()
         }).catch(done)
