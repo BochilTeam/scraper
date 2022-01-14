@@ -78,7 +78,7 @@ export default function youtubeSearch(query: string): Promise<IresyoutubeSearch>
                         durationH: result.lengthText?.accessibility.accessibilityData.label || _duration?.accessibility.accessibilityData.label,
                         duration: result.lengthText?.simpleText || _duration?.simpleText,
                         viewH: view,
-                        view: (view?.indexOf('x') === -1 ? view?.split(' ')[0] : view.split('x')[0]) || view,
+                        view: (view?.indexOf('x') === -1 ? view?.split(' ')[0] : view?.split('x')[0]) || view,
                         type: typeName.replace(/Renderer/i, '') as 'video'
                     })
                 }
