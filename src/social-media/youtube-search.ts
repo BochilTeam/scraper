@@ -67,9 +67,9 @@ export default function youtubeSearch(query: string): Promise<IresyoutubeSearch>
                 const isChannel = typeName === 'channelRenderer'
                 const isVideo = typeName == 'videoRenderer'
                 const isMix = typeName === 'radioRenderer'
-                
+
                 if (isVideo) {
-                    let view: string = result.viewCountText?.simpleText || result.shortViewCountText?.simpleText || result.shortViewCountText?.accessibility.accessibilityData.label,
+                    let view: string = result.viewCountText?.simpleText || result.shortViewCountText?.simpleText || result.shortViewCountText?.accessibility?.accessibilityData.label,
                         _duration = result.thumbnailOverlays?.find((v: { [Key: string]: any }) => Object.keys(v)[0] === 'thumbnailOverlayTimeStatusRenderer')?.thumbnailOverlayTimeStatusRenderer.text,
                         videoId: string = result.videoId,
                         duration: string = result.lengthText?.simpleText || _duration?.simpleText,
