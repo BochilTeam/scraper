@@ -196,7 +196,8 @@ describe('Social media', () => {
         })
 
         it('Youtube Search', done => {
-            youtubeSearch('Minecraft').then(res => {
+            youtubeSearch('longest video on youtube').then(res => {
+                console.log(res)
                 expect(res).to.be.an('object')
                 expect(res.video).to.be.an('array')
                 expect(res.video).to.have.lengthOf.at.least(1)

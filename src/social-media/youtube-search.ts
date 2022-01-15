@@ -6,11 +6,13 @@ interface IresyoutubeSearch {
         authorName: string;
         authorAvatar?: string;
         videoId: string;
+        url: string;
         thumbnail: string;
         title: string;
         description?: string;
         publishedTime: string;
         durationH: string;
+        durationS: number;
         duration: string;
         viewH: string;
         view: string;
@@ -18,12 +20,13 @@ interface IresyoutubeSearch {
     }[],
     channel: {
         channelId: string;
+        url: string;
         channelName: string;
         avatar: string;
         isVerified: boolean;
         subscriberH: string;
         subscriber: string;
-        videoCount: string;
+        videoCount: number;
         description: string;
         type: 'channel'
     }[],
@@ -40,7 +43,7 @@ interface IresyoutubeSearch {
         type: 'mix'
     }[]
 }
-
+type Ithumbnails = { url: string; width: number; height: number }
 export default function youtubeSearch(query: string): Promise<IresyoutubeSearch> {
     return new Promise<IresyoutubeSearch>((resolve, reject) => {
         request(`https://www.youtube.com/results?search_query=${query}`, {
@@ -66,34 +69,43 @@ export default function youtubeSearch(query: string): Promise<IresyoutubeSearch>
                 const isMix = typeName === 'radioRenderer'
 
                 if (isVideo) {
-                    let view: string = result.viewCountText?.simpleText || result.shortViewCountText?.simpleText, _duration = result.thumbnailOverlays?.find((v: { [Key: string]: any }) => Object.keys(v)[0] === 'thumbnailOverlayTimeStatusRenderer')?.thumbnailOverlayTimeStatusRenderer.text
+                    let view: string = result.viewCountText?.simpleText || result.shortViewCountText?.simpleText,
+                        _duration = result.thumbnailOverlays?.find((v: { [Key: string]: any }) => Object.keys(v)[0] === 'thumbnailOverlayTimeStatusRenderer')?.thumbnailOverlayTimeStatusRenderer.text,
+                        videoId: string = result.videoId,
+                        duration: string = result.lengthText?.simpleText || _duration?.simpleText,
+                        __duration: string[] = (duration?.split('.').length && duration.indexOf(':') == -1) ? duration.split('.') : duration?.split(':'),
+                        _durationS: number = 0
+                    __duration?.forEach((v, i) => _durationS += durationMultipliers[__duration.length]['' + i] * parseInt(v))
                     results.video.push({
                         authorName: result.ownerText.runs[0].text,
-                        authorAvatar: result.channelThumbnailSupportedRenderers?.channelThumbnailWithLinkRenderer.thumbnail.thumbnails.pop().url,
-                        videoId: result.videoId,
+                        authorAvatar: result.channelThumbnailSupportedRenderers?.channelThumbnailWithLinkRenderer.thumbnail.thumbnails.filter(({ url }: Ithumbnails) => url)?.pop().url,
+                        videoId,
+                        url: encodeURI('https://www.youtube.com/watch?v=' + videoId),
                         thumbnail: result.thumbnail.thumbnails.pop().url,
                         title: result.title.runs.pop().text,
                         description: result.detailedMetadataSnippets?.pop().snippetText.runs.pop().text || '',
                         publishedTime: result.publishedTimeText?.simpleText,
                         durationH: result.lengthText?.accessibility.accessibilityData.label || _duration?.accessibility.accessibilityData.label,
-                        duration: result.lengthText?.simpleText || _duration?.simpleText,
+                        durationS: _durationS,
+                        duration,
                         viewH: view,
-                        view: (view?.indexOf('x') === -1 ? view?.split(' ')[0] : view?.split('x')[0]) || view,
+                        view: ((view?.indexOf('x') === -1 ? view?.split(' ')[0] : view?.split('x')[0]) || view).trim(),
                         type: typeName.replace(/Renderer/i, '') as 'video'
                     })
                 }
 
                 if (isChannel) {
-                    console.log(JSON.stringify(result, null, 4))
+                    const channelId: string = result.channelId
                     results.channel.push({
-                        channelId: result.channelId,
+                        channelId,
+                        url: encodeURI('https://www.youtube.com/channel/' + channelId),
                         channelName: result.title.simpleText,
-                        avatar: 'https:' + result.thumbnail.thumbnails.pop().url,
+                        avatar: 'https:' + result.thumbnail.thumbnails.filter(({ url }: Ithumbnails) => url)?.pop().url,
                         isVerified: result.ownerBadges?.pop().metadataBadgeRenderer.style === 'BADGE_STYLE_TYPE_VERIFIED',
                         subscriberH: result.subscriberCountText.accessibility.accessibilityData.label,
                         subscriber: result.subscriberCountText.simpleText.split(' ')[0],
-                        videoCount: result.videoCountText.runs[0].text,
-                        description: result.descriptionSnippet.runs.pop().text,
+                        videoCount: parseInt(result.videoCountText.runs[0]?.text),
+                        description: result.descriptionSnippet.runs.map(({ text }: { text: string }) => text).join(''),
                         type: typeName.replace(/Renderer/i, '') as 'channel'
                     })
                 }
@@ -119,4 +131,19 @@ export default function youtubeSearch(query: string): Promise<IresyoutubeSearch>
 
     })
 
+}
+
+const durationMultipliers: { [key: string]: { [key: string]: number } } = {
+    '1': {
+        '0': 1
+    },
+    '2': {
+        '0': 60,
+        '1': 1
+    },
+    '3': {
+        '0': 3600,
+        '1': 60,
+        '2': 1
+    }
 }
