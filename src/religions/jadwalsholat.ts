@@ -1,6 +1,6 @@
-import axios from "axios";
 import cheerio from "cheerio";
 import { readFileSync } from "fs";
+import got from "got";
 import { join } from "path";
 import { ScraperError } from "../utils";
 import { JadwalSholat, JadwalSholatItem } from "./types";
@@ -20,9 +20,9 @@ export default async function jadwalsholat(
 		throw new ScraperError(
 			"List kota " + listJadwalSholat.map(({ kota }) => kota)
 		);
-	const { data: today } = await axios.get<string>(
+	const today = await got(
 		`https://www.jadwalsholat.org/adzan/ajax/ajax.daily1.php?id=${jadwal.value}`
-	);
+	).text();
 	let sholatToday: JadwalSholat["today"] = {};
 	const $ = cheerio.load(today);
 	$("table > tbody > tr")
@@ -33,9 +33,9 @@ export default async function jadwalsholat(
 			const time = el.eq(1).text();
 			sholatToday[sholat] = time;
 		});
-	const { data } = await axios.get<string>(
+	const data = await got(
 		`https://jadwalsholat.org/jadwal-sholat/monthly.php?id=${jadwal.value}`
-	);
+	).text();
 	const list: JadwalSholat["list"] = [];
 	const $$ = cheerio.load(data);
 	$$("table.table_adzan > tbody > tr")

@@ -1,5 +1,5 @@
 import cheerio from "cheerio";
-import fetch from "node-fetch";
+import got from "got";
 import { TwitterDownloader, TwitterDownloaderv2 } from "./types";
 
 export async function twitterdl(
@@ -7,11 +7,11 @@ export async function twitterdl(
 ): Promise<TwitterDownloader[] | []> {
 	if (!/https:\/\/twitter\.com\//i.test(url)) throw "URL invalid!";
 	const payload: { url: string } = { url };
-	const res = await fetch(
+	const res = await got(
 		"https://www.expertsphp.com/instagram-reels-downloader.php",
 		{
 			method: "POST",
-			body: new URLSearchParams(Object.entries(payload)),
+			searchParams: new URLSearchParams(Object.entries(payload)),
 			headers: {
 				"content-type": "application/x-www-form-urlencoded",
 				cookie:
@@ -22,8 +22,8 @@ export async function twitterdl(
 					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
 			},
 		}
-	);
-	const $ = cheerio.load(await res.text());
+	).text();
+	const $ = cheerio.load(res);
 	let results: TwitterDownloader[] = [];
 	$("table.table > tbody > tr").each(function () {
 		const quality = $(this).find("td").eq(2).find("strong").text();
@@ -41,7 +41,7 @@ export async function twitterdl(
 }
 
 export async function twitterdlv2(url: string): Promise<TwitterDownloaderv2[]> {
-	const resToken = await fetch("https://twittervideodownloader.com/", {
+	const resToken = await got("https://twittervideodownloader.com/", {
 		headers: {
 			accept:
 				"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
@@ -51,30 +51,31 @@ export async function twitterdlv2(url: string): Promise<TwitterDownloaderv2[]> {
 			"user-agent":
 				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
 		},
-	});
-	const $ = cheerio.load(await resToken.text());
+	}).text();
+	const $ = cheerio.load(resToken);
 	const payload: { csrfmiddlewaretoken: string; tweet: string } = {
 		csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val() as string,
 		tweet: url,
 	};
-	const res = await fetch("https://twittervideodownloader.com/download", {
-		method: "POST",
-		body: new URLSearchParams(Object.entries(payload) as string[][]),
-		headers: {
-			accept:
-				"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
-			"accept-encoding": "gzip, deflate, br",
-			"content-type": "application/x-www-form-urlencoded",
-			cookie:
-				"csrftoken=au5r4nZ6uN48szGKtaEYp4sh4hBWSbL72M7LggD0nPUh8JGajAI403UIpWhrc5dU; _ga=GA1.2.1240680676.1641628632; _gid=GA1.2.414203301.1641628632; __qca=P0-603222438-1641628633090; _pbjs_userid_consent_data=6683316680106290; _pubcid=529c1986-42d2-4dec-a0e8-3a7d7c453add; __gads=ID=c7fcfc8de61626ad:T=1641628636:S=ALNI_MaE6t3k60TjxfxOEU_7fiYOKTdg8Q; session_id=6831c9ed-aeaf-47cd-a4ea-fdf1667efea2; cto_bundle=3Tj6Hl93WmQzcHglMkJDRmdjWnFTYWg1ZHpLeWE5allVRUU2dlFOU1huayUyRjFTM0xYJTJCSzhsajNRRkF1Q2N2OU9JS1NlSjlxWmYzRTFqSzRuaSUyQjlacHNtYXFSRTV1UHZ1UE42djg4TUJuN05FaVdwTTR4c1hkSUlCRlY4WkJaSmd2WXhLc1NDdHRrRm44c25yeTIwMkRRRSUyQkhJalMlMkJBZ3YxZzZwck5VdTIwclNoMkRvbzglM0Q; cto_bundle=ZKGKs193WmQzcHglMkJDRmdjWnFTYWg1ZHpLeWF0Z3V5SVY2JTJGTDNCd3A1MHVWVmJMWCUyQjdLTHh2MGZjRzh3ZU5CdWs4TEJyWTNmN2IlMkZuUCUyQiUyRlBDazBORUZIM2d3d0NUR2E3VWh6bmhxNzNDMm9mQUtnTVNPMjBiOUxpSXNXZGoydGxlZjB0YTZIbkNCeU91NnZ2Y0xUJTJGV0ppYkJ0JTJCZlIxYW8yNXBGRXdLaG1Za3RWZzJrJTNE; cto_bidid=U6ndml9TQVBXTlA4SGwxYUt5Z0JqVFlHUSUyRk1QZ3Vwa1BaUGZubk1meUVmYSUyQmRSSzBUTkdGQiUyQll0bThNbWVGbjVxV293a2RDUVEzNTFvdVZxR09vaWxSWlE4a2lKTVQwYnp3JTJGV05GV0g2UUxWMnc5VkJXSFlsN2x6cExKb3pPQTAzWEZZ",
-			origin: "https://twittervideodownloader.com",
-			referer: "https://twittervideodownloader.com/",
-			"user-agent":
-				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
-		},
-	});
+	const res = await got
+		.post("https://twittervideodownloader.com/download", {
+			form: payload,
+			headers: {
+				accept:
+					"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+				"accept-encoding": "gzip, deflate, br",
+				"content-type": "application/x-www-form-urlencoded",
+				cookie:
+					"csrftoken=au5r4nZ6uN48szGKtaEYp4sh4hBWSbL72M7LggD0nPUh8JGajAI403UIpWhrc5dU; _ga=GA1.2.1240680676.1641628632; _gid=GA1.2.414203301.1641628632; __qca=P0-603222438-1641628633090; _pbjs_userid_consent_data=6683316680106290; _pubcid=529c1986-42d2-4dec-a0e8-3a7d7c453add; __gads=ID=c7fcfc8de61626ad:T=1641628636:S=ALNI_MaE6t3k60TjxfxOEU_7fiYOKTdg8Q; session_id=6831c9ed-aeaf-47cd-a4ea-fdf1667efea2; cto_bundle=3Tj6Hl93WmQzcHglMkJDRmdjWnFTYWg1ZHpLeWE5allVRUU2dlFOU1huayUyRjFTM0xYJTJCSzhsajNRRkF1Q2N2OU9JS1NlSjlxWmYzRTFqSzRuaSUyQjlacHNtYXFSRTV1UHZ1UE42djg4TUJuN05FaVdwTTR4c1hkSUlCRlY4WkJaSmd2WXhLc1NDdHRrRm44c25yeTIwMkRRRSUyQkhJalMlMkJBZ3YxZzZwck5VdTIwclNoMkRvbzglM0Q; cto_bundle=ZKGKs193WmQzcHglMkJDRmdjWnFTYWg1ZHpLeWF0Z3V5SVY2JTJGTDNCd3A1MHVWVmJMWCUyQjdLTHh2MGZjRzh3ZU5CdWs4TEJyWTNmN2IlMkZuUCUyQiUyRlBDazBORUZIM2d3d0NUR2E3VWh6bmhxNzNDMm9mQUtnTVNPMjBiOUxpSXNXZGoydGxlZjB0YTZIbkNCeU91NnZ2Y0xUJTJGV0ppYkJ0JTJCZlIxYW8yNXBGRXdLaG1Za3RWZzJrJTNE; cto_bidid=U6ndml9TQVBXTlA4SGwxYUt5Z0JqVFlHUSUyRk1QZ3Vwa1BaUGZubk1meUVmYSUyQmRSSzBUTkdGQiUyQll0bThNbWVGbjVxV293a2RDUVEzNTFvdVZxR09vaWxSWlE4a2lKTVQwYnp3JTJGV05GV0g2UUxWMnc5VkJXSFlsN2x6cExKb3pPQTAzWEZZ",
+				origin: "https://twittervideodownloader.com",
+				referer: "https://twittervideodownloader.com/",
+				"user-agent":
+					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
+			},
+		})
+		.text();
 	let results: TwitterDownloaderv2[] = [];
-	const $$ = cheerio.load(await res.text());
+	const $$ = cheerio.load(res);
 	$$("div.row.body-container > div > center > div.row").each(function () {
 		const el = $(this).find("div");
 		const _quality = el.eq(1).find("p").text().split(":");

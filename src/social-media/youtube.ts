@@ -1,5 +1,5 @@
 import cheerio from "cheerio";
-import fetch from "node-fetch";
+import got from "got";
 import { YoutubeDownloader, YoutubeVideoOrAudio } from "./types";
 
 interface IresFetch {
@@ -19,18 +19,17 @@ export async function youtubedl(
 		q_auto: 0,
 		ajax: 1,
 	};
-	const json: IresFetch = await (
-		await fetch(`https://www.y2mate.com/mates/${server}/analyze/ajax`, {
-			method: "POST",
+	const json: IresFetch = await got
+		.post(`https://www.y2mate.com/mates/${server}/analyze/ajax`, {
 			headers: {
 				"content-type": "application/x-www-form-urlencoded; charset=UTF-8",
 				cookie:
 					"_ga=GA1.2.1405332118.1641699259; _gid=GA1.2.1117783105.1641699259",
 				origin: "https://www.y2mate.com",
 			},
-			body: new URLSearchParams(Object.entries(params) as string[][]),
+			form: params,
 		})
-	).json();
+		.json();
 	const $ = cheerio.load(json.result);
 	const id = (/var k__id = "(.*?)"/.exec($.html()) || ["", ""])[1];
 	const v_id = (/var k_data_vid = "(.*?)"/.exec($.html()) || ["", ""])[1];
@@ -99,7 +98,7 @@ interface IresLinks {
 }
 
 export async function youtubedlv2(url: string): Promise<YoutubeDownloader> {
-	const html = await (await fetch("https://yt5s.com/en32")).text();
+	const html = await got("https://yt5s.com/en32").text();
 	const urlAjax = (/k_url_search="(.*?)"/.exec(html) || ["", ""])[1];
 	const urlConvert = (/k_url_convert="(.*?)"/.exec(html) || ["", ""])[1];
 	const params: { [Key: string]: string } = {
@@ -118,20 +117,18 @@ export async function youtubedlv2(url: string): Promise<YoutubeDownloader> {
 				[Key: string]: IresLinks;
 			};
 		};
-	} = await (
-		await fetch(urlAjax, {
-			method: "POST",
-			headers: {
-				"content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-				cookie:
-					"__cflb=04dToSoFRg9oqH9pYF2En9gKJK4fe8D9TcYtUD6tYu; _ga=GA1.2.1350132744.1641709803; _gid=GA1.2.1492233267.1641709803; _gat_gtag_UA_122831834_4=1",
-				origin: "https://yt5s.com",
-				"user-agent":
-					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
-			},
-			body: new URLSearchParams(Object.entries(params) as string[][]),
-		})
-	).json();
+	} = await got(urlAjax, {
+		method: "POST",
+		headers: {
+			"content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+			cookie:
+				"__cflb=04dToSoFRg9oqH9pYF2En9gKJK4fe8D9TcYtUD6tYu; _ga=GA1.2.1350132744.1641709803; _gid=GA1.2.1492233267.1641709803; _gat_gtag_UA_122831834_4=1",
+			origin: "https://yt5s.com",
+			"user-agent":
+				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
+		},
+		searchParams: new URLSearchParams(Object.entries(params) as string[][]),
+	}).json();
 	let video: YoutubeVideoOrAudio = {};
 	Object.values(json.links.mp4).forEach(({ k, size }: IresLinks) => {
 		video[k] = {
@@ -193,19 +190,17 @@ async function convert(
 		fquality,
 	};
 
-	const json: IresFetch = await (
-		await fetch("https://www.y2mate.com/mates/convert", {
-			method: "POST",
-			headers: {
-				"content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-				cookie:
-					"_ga=GA1.2.1405332118.1641699259; _gid=GA1.2.1117783105.1641699259; MarketGidStorage=%7B%220%22%3A%7B%7D%2C%22C702514%22%3A%7B%22page%22%3A2%2C%22time%22%3A1641701743540%7D%7D; _PN_SBSCRBR_FALLBACK_DENIED=1641701744162",
-				"user-agent":
-					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
-			},
-			body: new URLSearchParams(Object.entries(params) as string[][]),
-		})
-	).json();
+	const json: IresFetch = await got("https://www.y2mate.com/mates/convert", {
+		method: "POST",
+		headers: {
+			"content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+			cookie:
+				"_ga=GA1.2.1405332118.1641699259; _gid=GA1.2.1117783105.1641699259; MarketGidStorage=%7B%220%22%3A%7B%7D%2C%22C702514%22%3A%7B%22page%22%3A2%2C%22time%22%3A1641701743540%7D%7D; _PN_SBSCRBR_FALLBACK_DENIED=1641701744162",
+			"user-agent":
+				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
+		},
+		searchParams: new URLSearchParams(Object.entries(params) as string[][]),
+	}).json();
 	const $ = cheerio.load(json.result);
 	return $("a[href]").attr("href");
 }
@@ -229,20 +224,18 @@ function convertv2(
 			client: "yt5s.com",
 		};
 		const resServer: { c_server?: string; d_url?: string; c_status: string } =
-			await (
-				await fetch(url, {
-					method: "POST",
-					headers: {
-						"content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-						origin: "https://yt5s.com",
-						referer: "https://yt5s.com/",
-						"user-agent":
-							"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
-						"X-Requested-Key": "de0cfuirtgf67a",
-					},
-					body: new URLSearchParams(Object.entries(params) as string[][]),
-				})
-			).json();
+			await got(url, {
+				method: "POST",
+				headers: {
+					"content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+					origin: "https://yt5s.com",
+					referer: "https://yt5s.com/",
+					"user-agent":
+						"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
+					"X-Requested-Key": "de0cfuirtgf67a",
+				},
+				searchParams: new URLSearchParams(Object.entries(params) as string[][]),
+			}).json();
 		let server = resServer.c_server;
 		if (!server && ftype == "mp3") return resolve(server || resServer.d_url);
 		const payload: { [Key: string]: string | number } = {
@@ -258,12 +251,10 @@ function convertv2(
 			jobId?: string;
 			statusCode: number;
 			result: string;
-		} = await (
-			await fetch(`${server}/api/json/convert`, {
-				method: "POST",
-				body: new URLSearchParams(Object.entries(payload) as string[][]),
-			})
-		).json();
+		} = await got(`${server}/api/json/convert`, {
+			method: "POST",
+			searchParams: new URLSearchParams(Object.entries(payload) as string[][]),
+		}).json();
 		if (results.statusCode === 200) return resolve(results.result);
 		else if (results.statusCode === 300) {
 			try {

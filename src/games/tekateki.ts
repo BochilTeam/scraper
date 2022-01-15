@@ -1,13 +1,12 @@
-import fetch from "node-fetch";
+import got from "got";
 import { TekaTeki } from "./types";
 
 export let tekatekijson: TekaTeki[];
 export default async function tekateki(): Promise<TekaTeki> {
 	if (!tekatekijson) {
-		let res = await fetch(
+		tekatekijson = await got(
 			"https://raw.githubusercontent.com/BochilTeam/database/master/games/tekateki.json"
-		);
-		tekatekijson = await res.json();
+		).json();
 	}
 	return tekatekijson[
 		Math.floor(Math.random() * tekatekijson.length)

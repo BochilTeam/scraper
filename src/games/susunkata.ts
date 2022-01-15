@@ -1,13 +1,12 @@
-import fetch from "node-fetch";
+import got from "got";
 import { SusunKata } from "./types";
 
 export let susunkatajson: SusunKata[];
 export default async function susunkata(): Promise<SusunKata> {
 	if (!susunkatajson) {
-		let res = await fetch(
+		susunkatajson = await got(
 			"https://raw.githubusercontent.com/BochilTeam/database/master/games/susunkata.json"
-		);
-		susunkatajson = await res.json();
+		).json();
 	}
 	return susunkatajson[
 		Math.floor(Math.random() * susunkatajson.length)

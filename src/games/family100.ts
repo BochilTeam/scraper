@@ -1,4 +1,4 @@
-import { got } from "got";
+import got from "got";
 import { Family100 } from "./types";
 
 export let family100json: Family100[];

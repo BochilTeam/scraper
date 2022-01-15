@@ -1,8 +1,8 @@
-import axios from "axios";
 import cheerio from "cheerio";
+import got from "got";
 
 export default async function pinterest(query: string): Promise<string[]> {
-	const { data } = await axios.get<string>(
+	const data = await got(
 		`https://id.pinterest.com/search/pins/?autologin=true&q=${query}`,
 		{
 			headers: {
@@ -14,7 +14,7 @@ export default async function pinterest(query: string): Promise<string[]> {
 					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36",
 			},
 		}
-	);
+	).text();
 	let results: string[] = [];
 	const $ = cheerio.load(data);
 	$("img").each(function () {

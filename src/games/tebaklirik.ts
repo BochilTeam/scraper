@@ -1,13 +1,12 @@
-import fetch from "node-fetch";
+import got from "got";
 import { TebakLirik } from "./types";
 
 export let tebaklirikjson: TebakLirik[];
 export default async function tebaklirik(): Promise<TebakLirik> {
 	if (!tebaklirikjson) {
-		let res = await fetch(
+		tebaklirikjson = await got(
 			"https://raw.githubusercontent.com/BochilTeam/database/master/games/tebaklirik.json"
-		);
-		tebaklirikjson = await res.json();
+		).json();
 	}
 	return tebaklirikjson[
 		Math.floor(Math.random() * tebaklirikjson.length)

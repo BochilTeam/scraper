@@ -1,5 +1,5 @@
 import cheerio from "cheerio";
-import fetch from "node-fetch";
+import got from "got";
 import { Wikipedia } from "./types";
 
 export default async function wikipedia(
@@ -73,15 +73,15 @@ async function getHtml(lang: string, query: string): Promise<string> {
 	const defaultLink = `https://${
 		isSupportLang(lang) ? lang : "id"
 	}.wikipedia.org`;
-	let res = await fetch(defaultLink + "/wiki/" + query);
-	if (!(res.status == 404)) return await res.text();
+	let res = await got(defaultLink + "/wiki/" + query);
+	if (!(res.statusCode == 404)) return res.body;
 	const link = `${defaultLink}/w/index.php?${
 		lang == "id"
 			? `title=Istimewa:Pencarian&search=${query}&fulltext=1&ns0=1`
 			: `search=${query}&title=Special:Search&profile=advanced&fulltext=1&ns0=1`
 	}`;
-	res = await fetch(link);
-	let html = await res.text();
+	res = await got(link);
+	let html = res.body;
 	const $ = cheerio.load(html);
 	let results: string[] = [];
 	$("ul.mw-search-results > li.mw-search-result").each(function () {
@@ -91,7 +91,7 @@ async function getHtml(lang: string, query: string): Promise<string> {
 			?.trim();
 		if (link) results.push(encodeURI(link));
 	});
-	if (results[0]) return await (await fetch(defaultLink + results[0])).text();
+	if (results[0]) return (await got(defaultLink + results[0])).body;
 	throw "404 Not Found!!";
 }
 

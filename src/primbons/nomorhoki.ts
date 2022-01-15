@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import got from "got";
 import { NomerHoki } from "./types";
 
 export default async function nomorhoki(
@@ -8,16 +8,14 @@ export default async function nomorhoki(
 		nomer: encodeURIComponent(nomer),
 		submit: "+Submit!+",
 	};
-	const { data }: AxiosResponse<string> = await axios(
-		"https://www.primbon.com/no_hoki_bagua_shuzi.php",
-		{
-			method: "POST",
+	const data = await got
+		.post("https://www.primbon.com/no_hoki_bagua_shuzi.php", {
 			headers: {
 				"content-type": "application/x-www-form-urlencoded",
 			},
-			data: new URLSearchParams(Object.entries(config)),
-		}
-	);
+			form: config,
+		})
+		.text();
 	const results: string = data
 		.split("</b><br></td></tr><tr><td")[0]
 		.split(`<br><b>No. HP : ${nomer}</b><br>`)[1];
