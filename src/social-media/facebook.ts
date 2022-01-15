@@ -1,7 +1,8 @@
 import cheerio from "cheerio";
 import got from "got";
-import { FacebookDownloader, FacebookDownloaderV2 } from "./types";
 import { randomBytes } from "../encryptions/crypto";
+import { ScraperError } from "../utils";
+import { FacebookDownloader, FacebookDownloaderV2 } from "./types";
 
 interface Ires {
 	size?: string;
@@ -16,16 +17,19 @@ interface Ires {
 export async function facebookdl(url: string): Promise<FacebookDownloader> {
 	// https://fb.watch/9V3JrKcqHi/
 	const {
-		data: { id, thumbnail, duration, a, av, v },
+		id,
+		thumbnail,
+		duration,
+		a,
+		av,
+		v,
 	}: {
-		data: {
-			id: string;
-			thumbnail: string;
-			duration: number;
-			a: Ires[];
-			av: Ires[];
-			v: Ires[];
-		};
+		id: string;
+		thumbnail: string;
+		duration: number;
+		a: Ires[];
+		av: Ires[];
+		v: Ires[];
 	} = await got(
 		`https://youtube4kdownloader.com/ajax/getLinks.php?video=${encodeURIComponent(
 			url
@@ -61,7 +65,6 @@ export async function facebookdl(url: string): Promise<FacebookDownloader> {
 		duration,
 		result,
 	};
-
 }
 
 export async function facebookdlv2(url: string): Promise<FacebookDownloaderV2> {
@@ -89,8 +92,9 @@ export async function facebookdlv2(url: string): Promise<FacebookDownloaderV2> {
 			},
 		})
 		.json();
+	if (res["error"]) throw new ScraperError(res);
 	let result: FacebookDownloaderV2["result"] = [];
-	const $ = cheerio.load(res.data);
+	const $ = cheerio.load(res["data"] as string);
 	$("table.table > tbody > tr").each(function () {
 		const el = $(this).find("td");
 		if (/tidak/i.test(el.eq(1).text())) {

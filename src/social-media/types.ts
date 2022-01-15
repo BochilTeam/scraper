@@ -192,11 +192,13 @@ export interface YoutubeSearch {
 		authorName: string;
 		authorAvatar?: string;
 		videoId: string;
+		url: string;
 		thumbnail: string;
 		title: string;
 		description?: string;
 		publishedTime: string;
 		durationH: string;
+		durationS: number;
 		duration: string;
 		viewH: string;
 		view: string;
@@ -204,12 +206,13 @@ export interface YoutubeSearch {
 	}[];
 	channel: {
 		channelId: string;
+		url: string;
 		channelName: string;
 		avatar: string;
 		isVerified: boolean;
 		subscriberH: string;
 		subscriber: string;
-		videoCount: string;
+		videoCount: number;
 		description: string;
 		type: "channel";
 	}[];

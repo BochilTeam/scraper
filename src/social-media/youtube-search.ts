@@ -2,18 +2,19 @@ import cheerio from "cheerio";
 import got from "got";
 import { YoutubeSearch } from "./types";
 
+type Ithumbnails = { url: string; width: number; height: number };
 export default async function youtubeSearch(
 	query: string
 ): Promise<YoutubeSearch> {
-	const body = await got(
-		`https://www.youtube.com/results?search_query=${query}`,
-		{
-			headers: {
-				"user-agent":
-					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
-			},
-		}
-	).text();
+	const body = await got(`https://www.youtube.com/results`, {
+		headers: {
+			"user-agent":
+				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
+		},
+		searchParams: {
+			search_query: query,
+		},
+	}).text();
 	const $ = cheerio.load(body);
 	let sc;
 	$("script").map(function () {
@@ -40,50 +41,88 @@ export default async function youtubeSearch(
 		if (isVideo) {
 			let view: string =
 					result.viewCountText?.simpleText ||
-					result.shortViewCountText?.simpleText,
+					result.shortViewCountText?.simpleText ||
+					result.shortViewCountText?.accessibility?.accessibilityData.label,
 				_duration = result.thumbnailOverlays?.find(
 					(v: { [Key: string]: any }) =>
 						Object.keys(v)[0] === "thumbnailOverlayTimeStatusRenderer"
-				)?.thumbnailOverlayTimeStatusRenderer.text;
+				)?.thumbnailOverlayTimeStatusRenderer.text,
+				videoId: string = result.videoId,
+				duration: string =
+					result.lengthText?.simpleText || _duration?.simpleText,
+				__duration: string[] =
+					duration?.split(".").length && duration.indexOf(":") == -1
+						? duration.split(".")
+						: duration?.split(":"),
+				_durationS: number = 0;
+			__duration?.forEach(
+				(v, i) =>
+					(_durationS +=
+						durationMultipliers[__duration.length]["" + i] * parseInt(v))
+			);
 			results.video.push({
-				authorName: result.ownerText.runs[0].text,
+				authorName: (result.ownerText?.runs ||
+					result.longBylineText?.runs ||
+					[])[0]?.text,
 				authorAvatar:
-					result.channelThumbnailSupportedRenderers?.channelThumbnailWithLinkRenderer.thumbnail.thumbnails.pop()
-						.url,
-				videoId: result.videoId,
+					result.channelThumbnailSupportedRenderers?.channelThumbnailWithLinkRenderer.thumbnail.thumbnails
+						?.filter(({ url }: Ithumbnails) => url)
+						?.pop().url,
+				videoId,
+				url: encodeURI("https://www.youtube.com/watch?v=" + videoId),
 				thumbnail: result.thumbnail.thumbnails.pop().url,
-				title: result.title.runs.pop().text,
-				description:
-					result.detailedMetadataSnippets?.pop().snippetText.runs.pop().text ||
-					"",
+				title: (
+					result.title?.runs.find((v: { [Key: string]: any }) => v.text)
+						?.text || result.title?.accessibility.accessibilityData.label
+				)?.trim(),
+				description: result.detailedMetadataSnippets?.[0]?.snippetText.runs
+					?.filter(({ text }: { text: string }) => text)
+					?.map(({ text }: { text: string }) => text)
+					?.join(""),
 				publishedTime: result.publishedTimeText?.simpleText,
 				durationH:
 					result.lengthText?.accessibility.accessibilityData.label ||
 					_duration?.accessibility.accessibilityData.label,
-				duration: result.lengthText?.simpleText || _duration?.simpleText,
+				durationS: _durationS,
+				duration,
 				viewH: view,
-				view:
+				view: (
 					(view?.indexOf("x") === -1
 						? view?.split(" ")[0]
-						: view?.split("x")[0]) || view,
+						: view?.split("x")[0]) || view
+				)?.trim(),
 				type: typeName.replace(/Renderer/i, "") as "video",
 			});
 		}
 
 		if (isChannel) {
-			console.log(JSON.stringify(result, null, 4));
+			const channelId: string = result.channelId,
+				_subscriber: string =
+					result.subscriberCountText?.accessibility.accessibilityData.label ||
+					result.subscriberCountText?.simpleText;
 			results.channel.push({
-				channelId: result.channelId,
-				channelName: result.title.simpleText,
-				avatar: "https:" + result.thumbnail.thumbnails.pop().url,
+				channelId,
+				url: encodeURI("https://www.youtube.com/channel/" + channelId),
+				channelName:
+					result.title.simpleText ||
+					result.shortBylineText?.runs.find(
+						(v: { [Key: string]: any }) => v.text
+					)?.text,
+				avatar:
+					"https:" +
+					result.thumbnail.thumbnails
+						.filter(({ url }: Ithumbnails) => url)
+						?.pop().url,
 				isVerified:
 					result.ownerBadges?.pop().metadataBadgeRenderer.style ===
 					"BADGE_STYLE_TYPE_VERIFIED",
-				subscriberH:
-					result.subscriberCountText.accessibility.accessibilityData.label,
-				subscriber: result.subscriberCountText.simpleText.split(" ")[0],
-				videoCount: result.videoCountText.runs[0].text,
-				description: result.descriptionSnippet.runs.pop().text,
+				subscriberH: _subscriber?.trim(),
+				subscriber: _subscriber?.split(" ")[0],
+				videoCount: parseInt(result.videoCountText.runs[0]?.text),
+				description: result.descriptionSnippet?.runs
+					?.filter(({ text }: { text: string }) => text)
+					?.map(({ text }: { text: string }) => text)
+					?.join(""),
 				type: typeName.replace(/Renderer/i, "") as "channel",
 			});
 		}
@@ -108,3 +147,18 @@ export default async function youtubeSearch(
 	});
 	return results;
 }
+
+const durationMultipliers: { [key: string]: { [key: string]: number } } = {
+	"1": {
+		"0": 1,
+	},
+	"2": {
+		"0": 60,
+		"1": 1,
+	},
+	"3": {
+		"0": 3600,
+		"1": 60,
+		"2": 1,
+	},
+};

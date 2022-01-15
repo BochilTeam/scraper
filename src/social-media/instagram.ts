@@ -102,7 +102,6 @@ export async function instagramdlv2(
 		}));
 	}
 	return results;
-
 }
 interface Iigstory {
 	thumbnail: string;
