@@ -36,7 +36,7 @@ type Iigdlv2 = Iigdl | { thumbnail: string, sourceUrl?: string }
 export async function instagramdlv2(url: string): Promise<Iigdlv2[]> {
     if (!/https?:\/\/www\.instagram\.com\/(reel|tv|p)\//i.test(url)) throw 'Invalid url!!'
     const payload = {
-        url: encodeURI(url),
+        url: url,
         submit: ''
     }
     const { data }: AxiosResponse<string> = await axios({
@@ -45,7 +45,7 @@ export async function instagramdlv2(url: string): Promise<Iigdlv2[]> {
         data: new URLSearchParams(Object.entries(payload)),
         headers: {
             'content-type': 'application/x-www-form-urlencoded',
-            cookie: '_ga=GA1.2.654346005.1642149344; _gid=GA1.2.1562255413.1642149344; _gat_gtag_UA_142480840_1=1; __atuvc=1%7C2; __atuvs=61e135df10258fab000; __gads=ID=b4c9d2019034e5ed-227b64f3e5cf003a:T=1642149344:RT=1642149344:S=ALNI_MbtRULwcpAb_-lCLCSUPN5m5rd54A',
+            cookie: '_ga=GA1.2.654346005.1642149344; _gid=GA1.2.1562255413.1642149344; __gads=ID=b4c9d2019034e5ed-227b64f3e5cf003a:T=1642149344:RT=1642149344:S=ALNI_MbtRULwcpAb_-lCLCSUPN5m5rd54A; __atuvc=3%7C2; __atuvs=61e27fc33a272333000; _gat_gtag_UA_142480840_1=1',
             origin: 'https://downloadgram.org',
             referer: 'https://downloadgram.org/',
             'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36'
