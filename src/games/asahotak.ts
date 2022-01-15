@@ -1,13 +1,12 @@
-import fetch from "node-fetch";
+import got from "got";
 import { AsahOtak } from "./types";
 
 export let asahotakjson: AsahOtak[];
 export default async function asahotak(): Promise<AsahOtak> {
 	if (!asahotakjson) {
-		let res = await fetch(
+		asahotakjson = await got(
 			"https://raw.githubusercontent.com/BochilTeam/database/master/games/asahotak.json"
-		);
-		asahotakjson = await res.json();
+		).json();
 	}
 	return asahotakjson[
 		Math.floor(Math.random() * asahotakjson.length)
