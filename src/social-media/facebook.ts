@@ -12,9 +12,7 @@ interface Ires {
 }
 
 // only support download video yet
-export async function FacebookDownloader(
-	url: string
-): Promise<FacebookDownloader> {
+export async function facebookdl(url: string): Promise<FacebookDownloader> {
 	// https://fb.watch/9V3JrKcqHi/
 	const res = await fetch(
 		`https://youtube4kdownloader.com/ajax/getLinks.php?video=${encodeURIComponent(
@@ -65,9 +63,7 @@ export async function FacebookDownloader(
 	};
 }
 
-export async function FacebookDownloaderv2(
-	url: string
-): Promise<FacebookDownloaderV2> {
+export async function facebookdlv2(url: string): Promise<FacebookDownloaderV2> {
 	const params: { url: string } = {
 		url: url,
 	};
