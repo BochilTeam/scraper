@@ -16,30 +16,26 @@ interface Ires {
 export async function facebookdl(url: string): Promise<FacebookDownloader> {
 	// https://fb.watch/9V3JrKcqHi/
 	const {
-		id,
-		thumbnail,
-		duration,
-		a,
-		av,
-		v,
+		data: { id, thumbnail, duration, a, av, v },
 	}: {
-		id: string;
-		thumbnail: string;
-		duration: number;
-		a: Ires[];
-		av: Ires[];
-		v: Ires[];
-	} = await got(
-		`https://youtube4kdownloader.com/ajax/getLinks.php?video=${encodeURIComponent(
-			url
-		)}&rand=${randomBytes(13)}`,
-		{
-			headers: {
-				"User-Agent":
-					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
-			},
-		}
-	).json();
+		data: {
+			id: string;
+			thumbnail: string;
+			duration: number;
+			a: Ires[];
+			av: Ires[];
+			v: Ires[];
+		};
+	} = await got(`https://youtube4kdownloader.com/ajax/getLinks.php`, {
+		headers: {
+			"User-Agent":
+				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
+		},
+		searchParams: {
+			video: url,
+			rand: randomBytes(13),
+		},
+	}).json();
 	const result: FacebookDownloader["result"] = a
 		.concat(av)
 		.concat(v)
@@ -70,7 +66,7 @@ export async function facebookdlv2(url: string): Promise<FacebookDownloaderV2> {
 	const params: { url: string } = {
 		url: url,
 	};
-	const res: { data: string } = await got
+	const res: { data: string; error: boolean } = await got
 		.post("https://snapsave.app/action.php", {
 			headers: {
 				accept:
@@ -91,9 +87,10 @@ export async function facebookdlv2(url: string): Promise<FacebookDownloaderV2> {
 			},
 		})
 		.json();
-	if (res["error"]) throw new ScraperError(res);
+
+	if (res.error) throw new ScraperError(JSON.stringify(res));
 	let result: FacebookDownloaderV2["result"] = [];
-	const $ = cheerio.load(res["data"] as string);
+	const $ = cheerio.load(res.data);
 	$("table.table > tbody > tr").each(function () {
 		const el = $(this).find("td");
 		if (/tidak/i.test(el.eq(1).text())) {
