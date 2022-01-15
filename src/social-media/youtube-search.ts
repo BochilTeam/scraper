@@ -67,9 +67,9 @@ export default function youtubeSearch(query: string): Promise<IresyoutubeSearch>
                 const isChannel = typeName === 'channelRenderer'
                 const isVideo = typeName == 'videoRenderer'
                 const isMix = typeName === 'radioRenderer'
-
+                
                 if (isVideo) {
-                    let view: string = result.viewCountText?.simpleText || result.shortViewCountText?.simpleText,
+                    let view: string = result.viewCountText?.simpleText || result.shortViewCountText?.simpleText || result.shortViewCountText?.accessibility.accessibilityData.label,
                         _duration = result.thumbnailOverlays?.find((v: { [Key: string]: any }) => Object.keys(v)[0] === 'thumbnailOverlayTimeStatusRenderer')?.thumbnailOverlayTimeStatusRenderer.text,
                         videoId: string = result.videoId,
                         duration: string = result.lengthText?.simpleText || _duration?.simpleText,
@@ -77,35 +77,35 @@ export default function youtubeSearch(query: string): Promise<IresyoutubeSearch>
                         _durationS: number = 0
                     __duration?.forEach((v, i) => _durationS += durationMultipliers[__duration.length]['' + i] * parseInt(v))
                     results.video.push({
-                        authorName: result.ownerText.runs[0].text,
-                        authorAvatar: result.channelThumbnailSupportedRenderers?.channelThumbnailWithLinkRenderer.thumbnail.thumbnails.filter(({ url }: Ithumbnails) => url)?.pop().url,
+                        authorName: (result.ownerText?.runs || result.longBylineText?.runs || [])[0]?.text,
+                        authorAvatar: result.channelThumbnailSupportedRenderers?.channelThumbnailWithLinkRenderer.thumbnail.thumbnails?.filter(({ url }: Ithumbnails) => url)?.pop().url,
                         videoId,
                         url: encodeURI('https://www.youtube.com/watch?v=' + videoId),
                         thumbnail: result.thumbnail.thumbnails.pop().url,
-                        title: result.title.runs.pop().text,
-                        description: result.detailedMetadataSnippets?.pop().snippetText.runs.pop().text || '',
+                        title: (result.title?.runs.find((v: { [Key: string]: any }) => v.text)?.text || result.title?.accessibility.accessibilityData.label)?.trim(),
+                        description: result.detailedMetadataSnippets?.[0]?.snippetText.runs?.filter(({ text }: { text: string }) => text)?.map(({ text }: { text: string }) => text)?.join(''),
                         publishedTime: result.publishedTimeText?.simpleText,
                         durationH: result.lengthText?.accessibility.accessibilityData.label || _duration?.accessibility.accessibilityData.label,
                         durationS: _durationS,
                         duration,
                         viewH: view,
-                        view: ((view?.indexOf('x') === -1 ? view?.split(' ')[0] : view?.split('x')[0]) || view).trim(),
+                        view: ((view?.indexOf('x') === -1 ? view?.split(' ')[0] : view?.split('x')[0]) || view)?.trim(),
                         type: typeName.replace(/Renderer/i, '') as 'video'
                     })
                 }
 
                 if (isChannel) {
-                    const channelId: string = result.channelId
+                    const channelId: string = result.channelId, _subscriber: string = result.subscriberCountText?.accessibility.accessibilityData.label || result.subscriberCountText?.simpleText
                     results.channel.push({
                         channelId,
                         url: encodeURI('https://www.youtube.com/channel/' + channelId),
-                        channelName: result.title.simpleText,
+                        channelName: result.title.simpleText || result.shortBylineText?.runs.find((v: { [Key: string]: any }) => v.text)?.text,
                         avatar: 'https:' + result.thumbnail.thumbnails.filter(({ url }: Ithumbnails) => url)?.pop().url,
                         isVerified: result.ownerBadges?.pop().metadataBadgeRenderer.style === 'BADGE_STYLE_TYPE_VERIFIED',
-                        subscriberH: result.subscriberCountText.accessibility.accessibilityData.label,
-                        subscriber: result.subscriberCountText.simpleText.split(' ')[0],
+                        subscriberH: _subscriber?.trim(),
+                        subscriber: _subscriber?.split(' ')[0],
                         videoCount: parseInt(result.videoCountText.runs[0]?.text),
-                        description: result.descriptionSnippet.runs.map(({ text }: { text: string }) => text).join(''),
+                        description: result.descriptionSnippet?.runs?.filter(({ text }: { text: string }) => text)?.map(({ text }: { text: string }) => text)?.join(''),
                         type: typeName.replace(/Renderer/i, '') as 'channel'
                     })
                 }
