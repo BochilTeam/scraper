@@ -1,5 +1,6 @@
 import crypto from "crypto";
 
+
 export function randomUUID(opts: { disableEntropyCache: boolean }): string {
 	if (typeof crypto.randomUUID === "function")
 		return crypto.randomUUID(opts) as string;

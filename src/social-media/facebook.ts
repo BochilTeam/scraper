@@ -1,6 +1,8 @@
 import cheerio from "cheerio";
 import got from "got";
 import { FacebookDownloader, FacebookDownloaderV2 } from "./types";
+import { randomBytes } from "../encryptions/crypto";
+
 interface Ires {
 	size?: string;
 	ext: string;
@@ -27,7 +29,7 @@ export async function facebookdl(url: string): Promise<FacebookDownloader> {
 	} = await got(
 		`https://youtube4kdownloader.com/ajax/getLinks.php?video=${encodeURIComponent(
 			url
-		)}&rand=a95ce6c6be8b6`,
+		)}&rand=${randomBytes(13)}`,
 		{
 			headers: {
 				"User-Agent":
@@ -59,6 +61,7 @@ export async function facebookdl(url: string): Promise<FacebookDownloader> {
 		duration,
 		result,
 	};
+
 }
 
 export async function facebookdlv2(url: string): Promise<FacebookDownloaderV2> {
