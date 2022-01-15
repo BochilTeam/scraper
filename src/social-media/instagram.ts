@@ -2,7 +2,6 @@ import cheerio from "cheerio";
 import FormData from "form-data";
 import got from "got";
 import { InstagramDownloader, InstagramDownloaderv2 } from "./types";
-
 export async function instagramdl(url: string): Promise<InstagramDownloader[]> {
 	if (!/https?:\/\/www\.instagram\.com\/(reel|tv|p)\//i.test(url))
 		throw "Invalid url!!";

@@ -3,7 +3,6 @@ import got from "got";
 import { randomBytes } from "../encryptions/crypto";
 import { ScraperError } from "../utils";
 import { FacebookDownloader, FacebookDownloaderV2 } from "./types";
-
 interface Ires {
 	size?: string;
 	ext: string;
