@@ -83,17 +83,20 @@ export default function youtubeSearch(query: string): Promise<IresyoutubeSearch>
                     })
                 }
 
-                if (isChannel) results.channel.push({
-                    channelId: result.channelId,
-                    channelName: result.title.simpleText,
-                    avatar: 'https:' + result.thumbnail.thumbnails.pop().url,
-                    isVerified: result.ownerBadges.pop().metadataBadgeRenderer.style === 'BADGE_STYLE_TYPE_VERIFIED',
-                    subscriberH: result.subscriberCountText.accessibility.accessibilityData.label,
-                    subscriber: result.subscriberCountText.simpleText.split(' ')[0],
-                    videoCount: result.videoCountText.runs[0].text,
-                    description: result.descriptionSnippet.runs.pop().text,
-                    type: typeName.replace(/Renderer/i, '') as 'channel'
-                })
+                if (isChannel) {
+                    console.log(JSON.stringify(result, null, 4))
+                    results.channel.push({
+                        channelId: result.channelId,
+                        channelName: result.title.simpleText,
+                        avatar: 'https:' + result.thumbnail.thumbnails.pop().url,
+                        isVerified: result.ownerBadges?.pop().metadataBadgeRenderer.style === 'BADGE_STYLE_TYPE_VERIFIED',
+                        subscriberH: result.subscriberCountText.accessibility.accessibilityData.label,
+                        subscriber: result.subscriberCountText.simpleText.split(' ')[0],
+                        videoCount: result.videoCountText.runs[0].text,
+                        description: result.descriptionSnippet.runs.pop().text,
+                        type: typeName.replace(/Renderer/i, '') as 'channel'
+                    })
+                }
 
                 if (isMix) results.playlist.push({
                     playlistId: result.playlistId,
