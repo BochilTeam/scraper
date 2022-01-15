@@ -1,5 +1,7 @@
 import fetch from "node-fetch";
 import cheerio from "cheerio"
+import { ScraperError } from "../utils";
+import { randomBytes } from '../encryptions/crypto'
 
 interface Iresfacebookdl {
     id: string,
@@ -29,7 +31,7 @@ interface Ires {
 // only support download video yet
 export async function facebookdl(url: string): Promise<Iresfacebookdl> {
     // https://fb.watch/9V3JrKcqHi/
-    const res = await fetch(`https://youtube4kdownloader.com/ajax/getLinks.php?video=${encodeURIComponent(url)}&rand=a95ce6c6be8b6`, {
+    const res = await fetch(`https://youtube4kdownloader.com/ajax/getLinks.php?video=${encodeURIComponent(url)}&rand=${randomBytes(13)}`, {
         headers: {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36',
         }
@@ -86,7 +88,9 @@ export async function facebookdlv2(url: string): Promise<Iresfacebookdlv2> {
         body: new URLSearchParams(Object.entries(params))
     })
     let result: Iresfacebookdlv2['result'] = []
-    const $ = cheerio.load((await res.json()).data as string)
+    const json = await res.json()
+    if (json.error) throw new ScraperError(json)
+    const $ = cheerio.load((json).data as string)
     $('table.table > tbody > tr').each(function () {
         const el = $(this).find('td')
         if (/tidak/i.test(el.eq(1).text())) {

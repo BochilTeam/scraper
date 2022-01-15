@@ -1,5 +1,4 @@
 import crypto from 'crypto'
-import fetch from 'node-fetch'
 
 export function randomUUID(opts: { disableEntropyCache: boolean }): string {
     if (typeof crypto.randomUUID === 'function') return crypto.randomUUID(opts) as string
