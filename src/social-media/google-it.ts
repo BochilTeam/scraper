@@ -13,6 +13,7 @@ export async function googleIt(query: string): Promise<GoogleIt> {
 		},
 	}).text();
 	const $ = cheerio.load(body);
+	console.log($.html());
 	const infoEl = $("div.I6TXqe > div.osrp-blk");
 	let info: GoogleIt["info"] = {
 		title: infoEl.find("h2.qrShPb > span").text().trim(),

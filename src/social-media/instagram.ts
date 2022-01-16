@@ -1,6 +1,7 @@
 import cheerio from "cheerio";
 import got from "got";
-import { InstagramDownloader, InstagramDownloaderv2 } from "./types";
+import { InstagramDownloader, InstagramDownloaderv2, InstagramStory } from "./types";
+
 export async function instagramdl(url: string): Promise<InstagramDownloader[]> {
 	if (!/https?:\/\/www\.instagram\.com\/(reel|tv|p)\//i.test(url))
 		throw "Invalid url!!";
@@ -102,18 +103,15 @@ export async function instagramdlv2(
 	}
 	return results;
 }
-interface Iigstory {
-	thumbnail: string;
-	isVideo: boolean;
-	url: string;
-}
 
-export async function instagramStory(name: string): Promise<Iigstory[]> {
+
+
+export async function instagramStory(name: string): Promise<InstagramStory[]> {
 	const data = await got(
 		`https://www.insta-stories.net/data.php?username=${name}&t=${+new Date()}`
 	).text();
 	const $ = cheerio.load(data);
-	let results: Iigstory[] = [];
+	let results: InstagramStory[] = [];
 	$("center").each(function () {
 		let thumbnail: string,
 			isVideo: boolean = false,

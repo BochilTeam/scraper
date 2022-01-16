@@ -4,6 +4,7 @@ export interface StickerTelegram {
 	link: string;
 	stickers: string[];
 }
+
 export interface ResponseStickerLine {
 	title: string;
 	productUrl: string;

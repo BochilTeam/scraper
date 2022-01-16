@@ -13,6 +13,7 @@ export interface FacebookDownloader {
 		isAudio: boolean;
 	}[];
 }
+
 export interface FacebookDownloaderV2 {
 	id: string;
 	thumbnail: string;
@@ -21,6 +22,7 @@ export interface FacebookDownloaderV2 {
 		url: string;
 	}[];
 }
+
 export interface GoogleIt {
 	info: {
 		title?: string;
@@ -35,19 +37,31 @@ export interface GoogleIt {
 		description: string;
 	}[];
 }
-export interface InstagramDownloader {
-	thumbnail: Buffer;
-	url: string;
+
+interface IinstagramDownloader { url: string }
+export type InstagramDownloader = IinstagramDownloader & {
+	thumbnail: Buffer
+};
+export type InstagramDownloaderv2 = IinstagramDownloader & {
+	thumbnail: string;
+	sourceUrl?: string
+};
+export type InstagramStory = IinstagramDownloader & {
+	thumbnail: string;
+	isVideo: boolean;
 }
-export type InstagramDownloaderv2 =
-	| InstagramDownloader
-	| { thumbnail: string; sourceUrl?: string };
-export interface TiktokDownloader {
+
+interface ItiktokDownloader {
 	author: {
 		unique_id: string;
 		nickname: string;
 		avatar: string;
 	};
+	video: {
+		[Key: string]: string;
+	}
+}
+export type TiktokDownloader = ItiktokDownloader & {
 	description: string;
 	video: {
 		with_watermark: string;
@@ -56,13 +70,13 @@ export interface TiktokDownloader {
 	};
 	music: string;
 }
-export type TiktokDownloaderv2 =
-	| TiktokDownloader
-	| {
-			description?: void;
-			video: { no_watermark: string; no_watermark_hd: string };
-			music?: void;
-	  };
+export type TiktokDownloaderv2 = ItiktokDownloader & {
+	video: {
+		no_watermark: string;
+		no_watermark_hd: string
+	};
+};
+
 export interface TiktokFyp {
 	id: string;
 	desc: string;
@@ -180,13 +194,16 @@ export interface TiktokFyp {
 	stitchDisplay: number;
 }
 
-export interface TwitterDownloader {
+interface ItwitterDownloader {
 	quality: string;
 	type: string;
 	url: string;
+}
+export type TwitterDownloader = ItwitterDownloader & {
 	isVideo: boolean;
 }
-export type TwitterDownloaderv2 = TwitterDownloader | { isVideo?: void };
+export type TwitterDownloaderv2 = ItwitterDownloader
+
 export interface YoutubeSearch {
 	video: {
 		authorName: string;

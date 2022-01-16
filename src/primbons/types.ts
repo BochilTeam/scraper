@@ -16,6 +16,7 @@ export interface NomerHoki {
 		negatif: number;
 	};
 }
+
 export type Zodiac =
 	| "capricorn"
 	| "aquarius"

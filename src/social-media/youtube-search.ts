@@ -16,7 +16,7 @@ export default async function youtubeSearch(
 		},
 	}).text();
 	const $ = cheerio.load(body);
-	let sc;
+	let sc: { [Key: string]: any };
 	$("script").map(function () {
 		const el = $(this).html();
 		let regex: RegExpExecArray;
@@ -40,9 +40,9 @@ export default async function youtubeSearch(
 
 		if (isVideo) {
 			let view: string =
-					result.viewCountText?.simpleText ||
-					result.shortViewCountText?.simpleText ||
-					result.shortViewCountText?.accessibility?.accessibilityData.label,
+				result.viewCountText?.simpleText ||
+				result.shortViewCountText?.simpleText ||
+				result.shortViewCountText?.accessibility?.accessibilityData.label,
 				_duration = result.thumbnailOverlays?.find(
 					(v: { [Key: string]: any }) =>
 						Object.keys(v)[0] === "thumbnailOverlayTimeStatusRenderer"
@@ -50,15 +50,15 @@ export default async function youtubeSearch(
 				videoId: string = result.videoId,
 				duration: string =
 					result.lengthText?.simpleText || _duration?.simpleText,
-				__duration: string[] =
-					duration?.split(".").length && duration.indexOf(":") == -1
-						? duration.split(".")
-						: duration?.split(":"),
-				_durationS: number = 0;
-			__duration?.forEach(
-				(v, i) =>
-					(_durationS +=
-						durationMultipliers[__duration.length]["" + i] * parseInt(v))
+				durationS: number = 0;
+			(
+				duration?.split(".").length && duration.indexOf(":") == -1 ?
+					duration.split(".") :
+					duration?.split(":")
+			)?.forEach(
+				(v, i, arr) =>
+				(durationS +=
+					durationMultipliers[arr.length]["" + i] * parseInt(v))
 			);
 			results.video.push({
 				authorName: (result.ownerText?.runs ||
@@ -72,8 +72,8 @@ export default async function youtubeSearch(
 				url: encodeURI("https://www.youtube.com/watch?v=" + videoId),
 				thumbnail: result.thumbnail.thumbnails.pop().url,
 				title: (
-					result.title?.runs.find((v: { [Key: string]: any }) => v.text)
-						?.text || result.title?.accessibility.accessibilityData.label
+					result.title?.runs.find((v: { [Key: string]: any }) => v.text)?.text ||
+					result.title?.accessibility.accessibilityData.label
 				)?.trim(),
 				description: result.detailedMetadataSnippets?.[0]?.snippetText.runs
 					?.filter(({ text }: { text: string }) => text)
@@ -83,7 +83,7 @@ export default async function youtubeSearch(
 				durationH:
 					result.lengthText?.accessibility.accessibilityData.label ||
 					_duration?.accessibility.accessibilityData.label,
-				durationS: _durationS,
+				durationS,
 				duration,
 				viewH: view,
 				view: (
@@ -137,8 +137,8 @@ export default async function youtubeSearch(
 						videoId: childVideoRenderer.videoId,
 						title: childVideoRenderer.title.simpleText,
 						durationH:
-							childVideoRenderer.lengthText.accessibility.accessibilityData
-								.label,
+							childVideoRenderer.lengthText.accessibility
+								.accessibilityData.label,
 						duration: childVideoRenderer.lengthText.simpleText,
 					};
 				}),
