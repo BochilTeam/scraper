@@ -1,18 +1,31 @@
 import { expect } from "chai";
 import {
 	asahotak,
+	asahotakjson,
 	caklontong,
+	caklontongjson,
 	family100,
+	family100json,
 	siapakahaku,
+	siapakahakujson,
 	susunkata,
+	susunkatajson,
 	tebakbendera,
+	tebakbenderajson,
 	tebakgambar,
+	tebakgambarjson,
 	tebakkabupaten,
+	tebakkabupatenjson,
 	tebakkata,
+	tebakkatajson,
 	tebakkimia,
+	tebakkimiajson,
 	tebaklirik,
+	tebaklirikjson,
 	tebaktebakan,
+	tebaktebakanjson,
 	tekateki,
+	tekatekijson,
 } from ".";
 
 describe("Games", () => {
@@ -27,7 +40,7 @@ describe("Games", () => {
 		});
 
 		it("tebakgambar JSON", () => {
-			let res = require("../").tebakgambarjson;
+			let res = tebakgambarjson;
 			expect(res).to.an("array");
 			expect(res).to.have.lengthOf.at.least(1000);
 		});
@@ -43,7 +56,7 @@ describe("Games", () => {
 		});
 
 		it("asahotak JSON", () => {
-			let res = require("../").asahotakjson;
+			let res = asahotakjson;
 			expect(res).to.an("array");
 			expect(res).to.have.lengthOf.at.least(228);
 		});
@@ -60,7 +73,7 @@ describe("Games", () => {
 		});
 
 		it("caklontong JSON", () => {
-			let res = require("../").caklontongjson;
+			let res = caklontongjson;
 			expect(res).to.an("array");
 			expect(res).to.have.lengthOf.at.least(414);
 		});
@@ -75,7 +88,7 @@ describe("Games", () => {
 		});
 
 		it("family100 JSON", () => {
-			let res = require("../").family100json;
+			let res = family100json;
 			expect(res).to.an("array");
 			expect(res).to.have.lengthOf.at.least(7152);
 		});
@@ -91,7 +104,7 @@ describe("Games", () => {
 		});
 
 		it("tebakkata JSON", () => {
-			let res = require("../").tebakkatajson;
+			let res = tebakkatajson;
 			expect(res).to.an("array");
 			expect(res).to.have.lengthOf.at.least(302);
 		});
@@ -107,7 +120,7 @@ describe("Games", () => {
 		});
 
 		it("tebakkimia JSON", () => {
-			let res = require("../").tebakkimiajson;
+			let res = tebakkimiajson;
 			expect(res).to.an("array");
 			expect(res).to.have.lengthOf.at.least(125);
 		});
@@ -122,7 +135,7 @@ describe("Games", () => {
 		});
 
 		it("tekateki JSON", () => {
-			let res = require("../").tekatekijson;
+			let res = tekatekijson;
 			expect(res).to.an("array");
 			expect(res).to.have.lengthOf.at.least(200);
 		});
@@ -138,7 +151,7 @@ describe("Games", () => {
 		});
 
 		it("siapakahaku JSON", () => {
-			let res = require("../").siapakahakujson;
+			let res = siapakahakujson;
 			expect(res).to.an("array");
 			expect(res).to.have.lengthOf.at.least(268);
 		});
@@ -155,7 +168,7 @@ describe("Games", () => {
 		});
 
 		it("susunkata JSON", () => {
-			let res = require("../").susunkatajson;
+			let res = susunkatajson;
 			expect(res).to.an("array");
 			expect(res).to.have.lengthOf.at.least(353);
 		});
@@ -172,7 +185,7 @@ describe("Games", () => {
 		});
 
 		it("tebakbendera JSON", () => {
-			let res = require("../").tebakbenderajson;
+			let res = tebakbenderajson;
 			expect(res).to.an("array");
 			expect(res).to.have.lengthOf.at.least(246);
 		});
@@ -188,7 +201,7 @@ describe("Games", () => {
 		});
 
 		it("tebakkabupaten JSON", () => {
-			let res = require("../").tebakkabupatenjson;
+			let res = tebakkabupatenjson;
 			expect(res).to.an("array");
 			expect(res).to.have.lengthOf.at.least(514);
 		});
@@ -203,7 +216,7 @@ describe("Games", () => {
 		});
 
 		it("tebaklirik JSON", () => {
-			let res = require("../").tebaklirikjson;
+			let res = tebaklirikjson;
 			expect(res).to.an("array");
 			expect(res).to.have.lengthOf.at.least(38);
 		});
@@ -218,7 +231,7 @@ describe("Games", () => {
 		});
 
 		it("tebaktebakan JSON", () => {
-			let res = require("../").tebaktebakanjson;
+			let res = tebaktebakanjson;
 			expect(res).to.an("array");
 			expect(res).to.have.lengthOf.at.least(199);
 		});

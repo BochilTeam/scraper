@@ -1,7 +1,7 @@
 import got from "got";
 import { TiktokDownloader, TiktokDownloaderv2, TiktokFyp } from "./types";
 
-export async function tiktokdl(url: string): Promise<TiktokDownloader | {}> {
+export async function tiktokdl(url: string): Promise<TiktokDownloader> {
 	if (/v[tm]\.tiktok\.com/g.test(url)) {
 		let res = await got(url);
 		url = res.url;
