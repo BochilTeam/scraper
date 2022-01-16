@@ -1,15 +1,14 @@
-import fetch from 'node-fetch'
+import got from "got";
+import { TekaTeki } from "./types";
 
-interface tekatekiresult {
-    soal: string,
-    jawaban: string
-}
-
-export let tekatekijson: tekatekiresult[]
-export default async function tekateki(): Promise<tekatekiresult> {
-    if (!tekatekijson) {
-        let res = await fetch('https://raw.githubusercontent.com/BochilTeam/database/master/games/tekateki.json')
-        tekatekijson = await res.json()
-    }
-    return tekatekijson[Math.floor(Math.random() * tekatekijson.length)] as tekatekiresult
+export let tekatekijson: TekaTeki[];
+export default async function tekateki(): Promise<TekaTeki> {
+	if (!tekatekijson) {
+		tekatekijson = await got(
+			"https://raw.githubusercontent.com/BochilTeam/database/master/games/tekateki.json"
+		).json();
+	}
+	return tekatekijson[
+		Math.floor(Math.random() * tekatekijson.length)
+	] as TekaTeki;
 }

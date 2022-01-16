@@ -1,16 +1,14 @@
-import fetch from 'node-fetch'
+import got from "got";
+import { TebakBendera } from "./types";
 
-interface tebakbenderaresult {
-    flag: string,
-    img: string,
-    name: string
-}
-
-export let tebakbenderajson: tebakbenderaresult[]
-export default async function tebakbendera(): Promise<tebakbenderaresult> {
-    if (!tebakbenderajson) {
-        let res = await fetch('https://raw.githubusercontent.com/BochilTeam/database/master/games/tebakbendera.json')
-        tebakbenderajson = await res.json()
-    }
-    return tebakbenderajson[Math.floor(Math.random() * tebakbenderajson.length)] as tebakbenderaresult
+export let tebakbenderajson: TebakBendera[];
+export default async function tebakbendera(): Promise<TebakBendera> {
+	if (!tebakbenderajson) {
+		tebakbenderajson = await got(
+			"https://raw.githubusercontent.com/BochilTeam/database/master/games/tebakbendera.json"
+		).json();
+	}
+	return tebakbenderajson[
+		Math.floor(Math.random() * tebakbenderajson.length)
+	] as TebakBendera;
 }

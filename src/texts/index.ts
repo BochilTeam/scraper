@@ -1,10 +1,10 @@
-import bucin, { bucinjson } from './bucin'
-import dare, { darejson } from './dare'
-import truth, { truthjson } from './truth'
+import bucin, { bucinjson } from "./bucin";
+import dare, { darejson } from "./dare";
+import truth, { truthjson } from "./truth";
 
-export * from './aksarajawa'
+export * from "./aksarajawa";
 export {
     bucin, bucinjson,
     dare, darejson,
     truth, truthjson
-}
+};

@@ -1,15 +1,14 @@
-import fetch from 'node-fetch'
+import got from "got";
+import { TebakKimia } from "./types";
 
-interface tebakkimiaresult {
-    unsur: string,
-    lambang: string,
-}
-
-export let tebakkimiajson: tebakkimiaresult[]
-export default async function tebakkimia(): Promise<tebakkimiaresult> {
-    if (!tebakkimiajson) {
-        let res = await fetch('https://raw.githubusercontent.com/BochilTeam/database/master/games/tebakkimia.json')
-        tebakkimiajson = await res.json()
-    }
-    return tebakkimiajson[Math.floor(Math.random() * tebakkimiajson.length)] as tebakkimiaresult
+export let tebakkimiajson: TebakKimia[];
+export default async function tebakkimia(): Promise<TebakKimia> {
+	if (!tebakkimiajson) {
+		tebakkimiajson = await got(
+			"https://raw.githubusercontent.com/BochilTeam/database/master/games/tebakkimia.json"
+		).json();
+	}
+	return tebakkimiajson[
+		Math.floor(Math.random() * tebakkimiajson.length)
+	] as TebakKimia;
 }

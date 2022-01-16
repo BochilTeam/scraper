@@ -1,7 +1,4 @@
-import wikipedia from './wikipedia'
+import wikipedia from "./wikipedia";
 
-export * from './minecraft'
-export {
-    wikipedia 
-}
-
+export * from "./minecraft";
+export { wikipedia };

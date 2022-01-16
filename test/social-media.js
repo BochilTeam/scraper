@@ -6,7 +6,7 @@ describe('Social media', () => {
         tiktokdlv2,
         tiktokfyp,
         instagramdl,
-        //instagramStory,
+        instagramStory,
         facebookdl,
         twitterdl,
         instagramdlv2,
@@ -37,7 +37,7 @@ describe('Social media', () => {
 
         //         return done()
         //     }).catch(done)
-        // })
+        // }) // Github action error!
 
         it('tiktokfyp', function (done) {
             tiktokfyp().then(function (res) {
@@ -70,7 +70,10 @@ describe('Social media', () => {
             instagramdl('https://www.instagram.com/reel/CXK49yFLtJ_/?utm_source=ig_web_copy_link').then(res => {
                 expect(res).to.be.an('array')
                 expect(res).to.have.lengthOf.at.least(1)
-                res.forEach(({ thumbnail, url }) => {
+                res.forEach(({
+                    thumbnail,
+                    url
+                }) => {
                     expect(thumbnail).instanceof(Buffer)
                     expect(url).to.be.a('string')
                 })
@@ -83,7 +86,10 @@ describe('Social media', () => {
             instagramdlv2('https://www.instagram.com/reel/CXK49yFLtJ_/?utm_source=ig_web_copy_link').then(res => {
                 expect(res).to.be.an('array')
                 expect(res).to.have.lengthOf.at.least(1)
-                res.forEach(({ thumbnail, url }) => {
+                res.forEach(({
+                    thumbnail,
+                    url
+                }) => {
                     expect(thumbnail).to.be.a('string')
                     expect(url).to.be.a('string')
                 })
@@ -92,18 +98,22 @@ describe('Social media', () => {
             }).catch(done)
         })
 
-        // it('Instagram Story', function (done) {
-        //     instagramStory('freefirebgid').then(res => {
-        //         expect(res).to.be.an('array')
-        //         res.forEach(({ thumbnail, isVideo, url }) => {
-        //             expect(thumbnail).to.be.a('string')
-        //             expect(isVideo).to.be.a('boolean')  
-        //             expect(url).to.be.a('string')
-        //         })
+        it('Instagram Story', function (done) {
+            instagramStory('freefirebgid').then(res => {
+                expect(res).to.be.an('array')
+                res.forEach(({
+                    thumbnail,
+                    isVideo,
+                    url
+                }) => {
+                    expect(thumbnail).to.be.a('string')
+                    expect(isVideo).to.be.a('boolean')
+                    expect(url).to.be.a('string')
+                })
 
-        //         return done()
-        //     }).catch(done)
-        // })
+                return done()
+            }).catch(done)
+        })
     })
 
     describe('Facebook (Metaverse :V)', function () {
@@ -114,7 +124,12 @@ describe('Social media', () => {
                 expect(res.thumbnail).to.be.a('string')
                 expect(res.duration).to.be.a('number')
                 expect(res.result).to.be.an('array')
-                res.result.forEach(({ ext, url, isVideo, isAudio }) => {
+                res.result.forEach(({
+                    ext,
+                    url,
+                    isVideo,
+                    isAudio
+                }) => {
                     expect(ext).to.be.a('string')
                     expect(url).to.be.a('string')
                     expect(isVideo).to.be.a('boolean')
@@ -131,7 +146,10 @@ describe('Social media', () => {
                 expect(res.id).to.be.a('string')
                 expect(res.thumbnail).to.be.a('string')
                 expect(res.result).to.be.an('array')
-                res.result.forEach(({ quality, url }) => {
+                res.result.forEach(({
+                    quality,
+                    url
+                }) => {
                     expect(quality).to.be.a('string')
                     expect(url).to.be.a('string')
                 })
@@ -145,7 +163,12 @@ describe('Social media', () => {
         it('Twitter Downloader', done => {
             twitterdl('https://twitter.com/jen_degen/status/1458167531869458440?s=20').then(res => {
                 expect(res).to.be.an('array')
-                res.forEach(({ quality, type, url, isVideo }) => {
+                res.forEach(({
+                    quality,
+                    type,
+                    url,
+                    isVideo
+                }) => {
                     expect(quality).to.be.a('string')
                     expect(type).to.be.a('string')
                     expect(url).to.be.a('string')
@@ -159,7 +182,11 @@ describe('Social media', () => {
         it('Twitter Downloader V2', done => {
             twitterdlv2('https://twitter.com/jen_degen/status/1458167531869458440?s=20').then(res => {
                 expect(res).to.be.an('array')
-                res.forEach(({ quality, type, url }) => {
+                res.forEach(({
+                    quality,
+                    type,
+                    url
+                }) => {
                     expect(quality).to.be.a('string')
                     expect(type).to.be.a('string')
                     expect(url).to.be.a('string')

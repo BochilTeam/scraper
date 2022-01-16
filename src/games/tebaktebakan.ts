@@ -1,15 +1,14 @@
-import fetch from 'node-fetch'
+import got from "got";
+import { TebakTebakan } from "./types";
 
-interface tebaktebakanresult {
-    soal: string,
-    jawaban: string
-}
-
-export let tebaktebakanjson: tebaktebakanresult[]
-export default async function tebaktebakan(): Promise<tebaktebakanresult> {
-    if (!tebaktebakanjson) {
-        let res = await fetch('https://raw.githubusercontent.com/BochilTeam/database/master/games/tebaktebakan.json')
-        tebaktebakanjson = await res.json()
-    }
-    return tebaktebakanjson[Math.floor(Math.random() * tebaktebakanjson.length)] as tebaktebakanresult
+export let tebaktebakanjson: TebakTebakan[];
+export default async function tebaktebakan(): Promise<TebakTebakan> {
+	if (!tebaktebakanjson) {
+		tebaktebakanjson = await got(
+			"https://raw.githubusercontent.com/BochilTeam/database/master/games/tebaktebakan.json"
+		).json();
+	}
+	return tebaktebakanjson[
+		Math.floor(Math.random() * tebaktebakanjson.length)
+	] as TebakTebakan;
 }
