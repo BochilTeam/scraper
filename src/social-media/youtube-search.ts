@@ -118,7 +118,7 @@ export default async function youtubeSearch(
 					"BADGE_STYLE_TYPE_VERIFIED",
 				subscriberH: _subscriber?.trim(),
 				subscriber: _subscriber?.split(" ")[0],
-				videoCount: parseInt(result.videoCountText.runs[0]?.text),
+				videoCount: parseInt(result.videoCountText?.runs[0]?.text),
 				description: result.descriptionSnippet?.runs
 					?.filter(({ text }: { text: string }) => text)
 					?.map(({ text }: { text: string }) => text)

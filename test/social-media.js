@@ -2,19 +2,24 @@ const expect = require('chai').expect
 
 describe('Social media', () => {
     const {
+        googleIt,
         tiktokdl,
         tiktokdlv2,
         tiktokfyp,
         instagramdl,
         instagramStory,
+        instagramStoryv2,
         facebookdl,
-        twitterdl,
-        instagramdlv2,
-        twitterdlv2,
         facebookdlv2,
+        facebookdlv3,
+        twitterdl,
+        twitterdlv2,
+        instagramdlv2,
+        instagramdlv3,
+        instagramdlv4,
         youtubedl,
         youtubedlv2,
-        googleIt,
+        youtubedlv3,
         youtubeSearch
     } = require('../lib/social-media')
     describe('Tiktok scraper', function () {
@@ -98,10 +103,65 @@ describe('Social media', () => {
             }).catch(done)
         })
 
+        it('Instagram Downloader V3', done => {
+            instagramdlv3('https://www.instagram.com/reel/CXK49yFLtJ_/?utm_source=ig_web_copy_link').then(res => {
+                expect(res).to.be.an('array')
+                expect(res).to.have.lengthOf.at.least(1)
+                res.forEach(({
+                    thumbnail,
+                    url
+                }) => {
+                    expect(thumbnail).to.be.a('string')
+                    expect(url).to.be.a('string')
+                })
+
+                return done()
+            }).catch(done)
+        })
+
+        it('Instagram Downloader V4', done => {
+            instagramdlv4('https://www.instagram.com/reel/CXK49yFLtJ_/?utm_source=ig_web_copy_link').then(res => {
+                expect(res).to.be.an('array')
+                expect(res).to.have.lengthOf.at.least(1)
+                res.forEach(({
+                    thumbnail,
+                    url
+                }) => {
+                    expect(thumbnail).to.be.a('string')
+                    expect(url).to.be.a('string')
+                })
+
+                return done()
+            }).catch(done)
+        })
+
         it('Instagram Story', function (done) {
             instagramStory('freefirebgid').then(res => {
-                expect(res).to.be.an('array')
-                res.forEach(({
+                expect(res).to.be.an('object')
+                expect(res.user).to.be.an('object')
+                expect(res.results).to.be.an('array')
+                expect(res.results).to.have.lengthOf.at.least(1)
+                res.results.forEach(({
+                    thumbnail,
+                    isVideo,
+                    url
+                }) => {
+                    expect(thumbnail).to.be.a('string')
+                    expect(isVideo).to.be.a('boolean')
+                    expect(url).to.be.a('string')
+                })
+
+                return done()
+            }).catch(done)
+        })
+
+        it('Instagram Story V2', function (done) {
+            instagramStoryv2('freefirebgid').then(res => {
+                expect(res).to.be.an('object')
+                expect(res.user).to.be.an('object')
+                expect(res.results).to.be.an('array')
+                expect(res.results).to.have.lengthOf.at.least(1)
+                res.results.forEach(({
                     thumbnail,
                     isVideo,
                     url
@@ -124,6 +184,7 @@ describe('Social media', () => {
                 expect(res.thumbnail).to.be.a('string')
                 expect(res.duration).to.be.a('number')
                 expect(res.result).to.be.an('array')
+                expect(res.result).to.have.lengthOf.at.least(1)
                 res.result.forEach(({
                     ext,
                     url,
@@ -146,12 +207,37 @@ describe('Social media', () => {
                 expect(res.id).to.be.a('string')
                 expect(res.thumbnail).to.be.a('string')
                 expect(res.result).to.be.an('array')
+                expect(res.result).to.have.lengthOf.at.least(1)
                 res.result.forEach(({
                     quality,
                     url
                 }) => {
                     expect(quality).to.be.a('string')
                     expect(url).to.be.a('string')
+                })
+
+                return done()
+            }).catch(done)
+        })
+
+        it('Facebook Downloader V3', done => {
+            facebookdlv3('https://fb.watch/9WktuN9j-z/').then(res => {
+                expect(res).to.be.an('object')
+                expect(res.title).to.be.a('string')
+                expect(res.thumbnail).to.be.a('string')
+                expect(res.result).to.be.an('array')
+                expect(res.result).to.have.lengthOf.at.least(1)
+                res.result.forEach(({
+                    url,
+                    quality,
+                    isAudio,
+                    isVideo,
+                }) => {
+                    expect(url).to.be.a('string')
+                    expect(quality).to.be.a('string')
+                    expect(isAudio).to.be.a('boolean')
+                    expect(isVideo).to.be.a('boolean')
+
                 })
 
                 return done()
@@ -200,6 +286,7 @@ describe('Social media', () => {
     describe('Youtube', function () {
         it('Youtube Downloader', done => {
             youtubedl('https://youtu.be/iik25wqIuFo').then(res => {
+                res.video['360p'].download().catch(done)
                 expect(res).to.be.an('object')
                 expect(res.thumbnail).to.be.a('string')
                 expect(res.title).to.be.a('string')
@@ -212,6 +299,20 @@ describe('Social media', () => {
 
         it('Youtube Downloader v2', done => {
             youtubedlv2('https://youtu.be/nETHrCFb17I').then(res => {
+                res.video['240p'].download().catch(done)
+                expect(res).to.be.an('object')
+                expect(res.thumbnail).to.be.a('string')
+                expect(res.title).to.be.a('string')
+                expect(res.video).to.be.an('object')
+                expect(res.audio).to.be.an('object')
+
+                return done()
+            }).catch(done)
+        })
+
+        it('Youtube Downloader v3', done => {
+            youtubedlv3('https://youtu.be/iik25wqIuFo').then(res => {
+                res.video['360'].download().catch(done)
                 expect(res).to.be.an('object')
                 expect(res.thumbnail).to.be.a('string')
                 expect(res.title).to.be.a('string')

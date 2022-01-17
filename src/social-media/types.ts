@@ -22,7 +22,16 @@ export interface FacebookDownloaderV2 {
 		url: string;
 	}[];
 }
-
+export interface FacebookDownloaderV3 {
+	title: string;
+	thumbnail: string;
+	result: {
+		quality: string;
+		url: string;
+		isAudio: boolean;
+		isVideo: boolean;
+	}[];
+}
 export interface GoogleIt {
 	info: {
 		title?: string;
@@ -42,13 +51,38 @@ interface IinstagramDownloader { url: string }
 export type InstagramDownloader = IinstagramDownloader & {
 	thumbnail: Buffer
 };
-export type InstagramDownloaderv2 = IinstagramDownloader & {
+export type InstagramDownloaderV2 = IinstagramDownloader & {
 	thumbnail: string;
 	sourceUrl?: string
 };
-export type InstagramStory = IinstagramDownloader & {
+export type InstagramDownloaderV4 = IinstagramDownloader & {
 	thumbnail: string;
-	isVideo: boolean;
+}
+interface IinstagramStory {
+	user: {
+		username: string;
+	},
+	results: {
+		thumbnail: string;
+		url: string;
+		isVideo: boolean;
+	}[]
+}
+export type InstagramStory = IinstagramStory
+export type InstagramStoryv2 = {
+	user: IinstagramStory['user'] & {
+		id: string;
+		fullName: string;
+		profilePicUrl: string;
+		biography: string;
+		followers: number;
+		following: number;
+	};
+	results: IinstagramStory['results'] & {
+		sourceUrl: string;
+		type: string;
+		fileType: string;
+	}[]
 }
 
 interface ItiktokDownloader {
@@ -262,4 +296,20 @@ export interface YoutubeDownloader {
 	title: string;
 	video: YoutubeVideoOrAudio;
 	audio: YoutubeVideoOrAudio;
+}
+
+export type YoutubeVideoOrAudioV3 = {
+	[key: string]: {
+		quality: string;
+		fileSizeH?: string;
+		fileSize?: number;
+		download(): Promise<string>;
+	};
+};
+export type YoutubeDownloaderV3 = {
+	id: string;
+	thumbnail: string;
+	title: string;
+	video: YoutubeVideoOrAudioV3;
+	audio: YoutubeVideoOrAudioV3;
 }

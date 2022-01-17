@@ -1,6 +1,20 @@
 import cheerio from "cheerio";
 import got from "got";
-import { YoutubeDownloader, YoutubeVideoOrAudio } from "./types";
+import { ScraperError } from "../utils";
+import {
+	YoutubeDownloader,
+	YoutubeVideoOrAudio,
+	YoutubeDownloaderV3,
+	YoutubeVideoOrAudioV3
+} from "./types";
+import { sizeFormatter } from 'human-readable'
+
+const toFormat = sizeFormatter({
+	std: 'JEDEC', // 'SI' (default) | 'IEC' | 'JEDEC'
+	decimalPlaces: 2,
+	keepTrailingZeroes: false,
+	render: (literal, symbol) => `${literal} ${symbol}B`,
+})
 
 interface IresFetch {
 	status: string;
@@ -8,7 +22,7 @@ interface IresFetch {
 }
 
 // https://github.com/BochilGaming/games-wabot/blob/main/lib/y2mate.js
-const servers = ["en163", "id90"];
+const servers = ["en163", "id90", "en172"];
 export async function youtubedl(
 	url: string,
 	server: string = "en163"
@@ -24,7 +38,7 @@ export async function youtubedl(
 			headers: {
 				"content-type": "application/x-www-form-urlencoded; charset=UTF-8",
 				cookie:
-					"_ga=GA1.2.1405332118.1641699259; _gid=GA1.2.1117783105.1641699259",
+					"_ga=GA1.2.1405332118.1641699259; _gid=GA1.2.70284915.1642387108; _gat_gtag_UA_84863187_23=1",
 				origin: "https://www.y2mate.com",
 			},
 			form: params,
@@ -174,6 +188,84 @@ export async function youtubedlv2(url: string): Promise<YoutubeDownloader> {
 	};
 }
 
+export async function youtubedlv3(url: string): Promise<YoutubeDownloaderV3> {
+	const payload = {
+		url
+	}
+	const {
+		id,
+		meta: {
+			title
+		},
+		thumb,
+		url: results
+	} = await got.post("https://api.onlinevideoconverter.pro/api/convert", {
+		headers: {
+			accept: "application/json, text/plain, */*",
+			"accept-encoding": "gzip, deflate, br",
+			"accept-language": "en-US,en;q=0.9",
+			"content-type": "application/json",
+			origin: "https://onlinevideoconverter.pro",
+			referer: "https://onlinevideoconverter.pro/",
+			"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36"
+		},
+		body: JSON.stringify(payload)
+	}).json()
+	const video: YoutubeVideoOrAudioV3 = {}, audioArray: YoutubeVideoOrAudioV3 = {}
+	results.forEach(
+		({
+			url,
+			info_url,
+			attr,
+			quality,
+			audio,
+			no_audio,
+			filesize,
+			ext
+		}: {
+			url: string;
+			name: string;
+			subname: string;
+			info_url: string;
+			type: string;
+			ext: string;
+			downloadable: boolean;
+			quality: string;
+			audio: boolean;
+			no_audio: boolean;
+			itag: string;
+			filesize: number;
+			attr: {
+				title: string;
+				class: string;
+			},
+		}) => {
+			if (!no_audio && ext === 'mp4') {
+				video[quality] = {
+					quality,
+					fileSizeH: filesize && toFormat(filesize) || null,
+					fileSize: filesize,
+					download: async () => (url || info_url)
+				}
+			}
+			if (audio && !no_audio) {
+				audioArray[quality] = {
+					quality,
+					fileSizeH: filesize && toFormat(filesize) || null,
+					fileSize: filesize,
+					download: async () => (url || info_url)
+				}
+			}
+		})
+	return {
+		id,
+		title,
+		thumbnail: thumb,
+		video,
+		audio: audioArray
+	}
+}
+
 async function convert(
 	_id: string,
 	v_id: string,
@@ -199,10 +291,12 @@ async function convert(
 			"user-agent":
 				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
 		},
-		searchParams: new URLSearchParams(Object.entries(params) as string[][]),
+		form: params
 	}).json();
 	const $ = cheerio.load(json.result);
-	return $("a[href]").attr("href");
+	const link = $("a[href]").attr("href");
+	if (link == 'https://app.y2mate.com/download') throw new ScraperError(JSON.stringify({ link, json: json }, null, 2))
+	return link
 }
 
 function convertv2(
@@ -234,7 +328,7 @@ function convertv2(
 						"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
 					"X-Requested-Key": "de0cfuirtgf67a",
 				},
-				searchParams: new URLSearchParams(Object.entries(params) as string[][]),
+				form: params
 			}).json();
 		let server = resServer.c_server;
 		if (!server && ftype == "mp3") return resolve(server || resServer.d_url);
@@ -253,16 +347,15 @@ function convertv2(
 			result: string;
 		} = await got(`${server}/api/json/convert`, {
 			method: "POST",
-			searchParams: new URLSearchParams(Object.entries(payload) as string[][]),
+			form: payload,
 		}).json();
 		if (results.statusCode === 200) return resolve(results.result);
 		else if (results.statusCode === 300) {
 			try {
 				const WebSocket = require("ws");
 				const Url = new URL(server);
-				const WSUrl = `${/https/i.test(Url.protocol) ? "wss:" : "ws:"}//${
-					Url.host
-				}/sub/${results.jobId}?fname=yt5s.com`;
+				const WSUrl = `${/https/i.test(Url.protocol) ? "wss:" : "ws:"}//${Url.host
+					}/sub/${results.jobId}?fname=yt5s.com`;
 				const ws = new WebSocket(WSUrl, undefined, {
 					headers: {
 						"Accept-Encoding": "gzip, deflate, br",
@@ -279,7 +372,7 @@ function convertv2(
 						message.toString()
 					);
 					if (msg.action === "success") {
-						ws.close(0);
+						try { ws.close(); } catch (e) { console.error(e) }
 						ws.removeAllListeners("message");
 						return resolve(msg.url);
 					} else if (msg.action === "error") return reject(msg);

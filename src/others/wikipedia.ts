@@ -70,16 +70,15 @@ function isSupportLang(lang: string): boolean {
 
 async function getHtml(lang: string, query: string): Promise<string> {
 	query = encodeURIComponent(query.trim());
-	const defaultLink = `https://${
-		isSupportLang(lang) ? lang : "id"
-	}.wikipedia.org`;
+	const defaultLink = `https://${isSupportLang(lang) ? lang : "id"
+		}.wikipedia.org`;
 	let res = await got(defaultLink + "/wiki/" + query);
 	if (!(res.statusCode == 404)) return res.body;
 	const link = `${defaultLink}/w/index.php?${
-		lang == "id"
-			? `title=Istimewa:Pencarian&search=${query}&fulltext=1&ns0=1`
-			: `search=${query}&title=Special:Search&profile=advanced&fulltext=1&ns0=1`
-	}`;
+		lang == "id" ?
+			`title=Istimewa:Pencarian&search=${query}&fulltext=1&ns0=1` :
+			`search=${query}&title=Special:Search&profile=advanced&fulltext=1&ns0=1`
+		}`;
 	res = await got(link);
 	let html = res.body;
 	const $ = cheerio.load(html);

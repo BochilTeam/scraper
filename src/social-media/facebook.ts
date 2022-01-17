@@ -2,7 +2,12 @@ import cheerio from "cheerio";
 import got from "got";
 import { randomBytes } from "../encryptions/crypto";
 import { ScraperError } from "../utils";
-import { FacebookDownloader, FacebookDownloaderV2 } from "./types";
+import {
+	FacebookDownloader,
+	FacebookDownloaderV2,
+	FacebookDownloaderV3
+} from "./types";
+
 interface Ires {
 	size?: string;
 	ext: string;
@@ -54,6 +59,7 @@ export async function facebookdl(url: string): Promise<FacebookDownloader> {
 			};
 			// ext webm video without audio
 		});
+	if (!result.length) throw new ScraperError(`Can't download!\n${JSON.stringify({ id, thumbnail, duration, a, av, v }, null, 2)}`)
 	return {
 		id,
 		thumbnail,
@@ -99,6 +105,7 @@ export async function facebookdlv2(url: string): Promise<FacebookDownloaderV2> {
 			result.push({ quality, url });
 		}
 	});
+	if (!result.length) throw new ScraperError(`Can't download!\n${$.html()}`)
 	return {
 		id: $("div.media-content > div.content > p > strong")
 			.text()
@@ -107,4 +114,49 @@ export async function facebookdlv2(url: string): Promise<FacebookDownloaderV2> {
 		thumbnail: $("figure > p.image > img[src]").attr("src"),
 		result,
 	};
+}
+
+export async function facebookdlv3(url: string): Promise<FacebookDownloaderV3> {
+	const payload = {
+		url
+	}
+	const text = await got("https://www.getfvid.com/downloader", {
+		method: "POST",
+		headers: {
+			accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+			"accept-encoding": "gzip, deflate, br",
+			"accept-language": "en-US,en;q=0.9",
+			"content-type": "application/x-www-form-urlencoded",
+			cookie: "_ga=GA1.2.887753826.1642391325; _gid=GA1.2.2022692773.1642391325; __gads=ID=4ea88e3817c8d71b-22332defffcf0045:T=1642391326:RT=1642391326:S=ALNI_MY3oJyiEG_b8KXZBJ7RqvN2Mn8wbw; XSRF-TOKEN=eyJpdiI6ImdNUElWWU83S01jOTdZeitCUWdkWXc9PSIsInZhbHVlIjoiTGxnaE9oRVJTKzA5NDBncUtBa0xEdCtqNHBJXC9ZMVFPR1U2RnBSYUFzZHltWElZS2VtVUltUTJ2TjB5V3pEeTYzRUNMcENjMURGSkhBXC9OUitpcjMrZz09IiwibWFjIjoiMTViZTNjZDI3ZTZmOTk2ZWRjOWM1NTA5MTU2NDFhYWFlMjIxNTQxZTJlYjliMjJiMzE3YzlkNGMxODc2NjhmMCJ9; laravel_session=eyJpdiI6IjhZbElIRmpLSkVqZGZpQXJoK2MzVHc9PSIsInZhbHVlIjoianBSSFhPb2t0RFY4Q1wvYkk1S3pxMUNxXC82b0U1NHZROTVpS1Z4dGhES3ZTYTNsenJUSXpwcWNMVDkwWFk4OUY1TitGNmlDK1RXbTVyREVzcHVoRnRidz09IiwibWFjIjoiY2U1YzI2ODZlYWI2NzFkZDU1NTQ5Zjk0M2NmMDc2MTZhY2M3ODQxYjljZGUzMDQwMTYxZGQwZGYxMDM3NDMyZSJ9; __cf_bm=ephRNXRqwgrTB4SmHlsudy886EfsR2Ns2KtXVBnph4I-1642392732-0-AXtTUW5HRNQUeUcTJPhJTOPlMcjBFmMyoLKYOnxrDZ6Fa06XaJ4pMNW9arLg4zco/ef+ji00IV8NZb0nGOAKgfg=; _gat=1; __atuvc=6%7C3; __atuvs=61e4e71d2b803588005; __atssc=google%3B3",
+			origin: "https://www.getfvid.com",
+			referer: "https://www.getfvid.com/",
+			"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36"
+		},
+		form: payload
+	}).text()
+	const $ = cheerio.load(text)
+	const row = $("div.card > div.row > div")
+	const thumbnail: string = /background-image: url\((.*?)\);/i.exec(
+		row.eq(0).find('a[href]').attr('style')
+	)[1]
+	const result: FacebookDownloaderV3['result'] = []
+	row.find('.btns-download > p > a[href]').each(function () {
+		const el = $(this)
+		const info = el.text().trim()
+		const isAudio = /audio/i.test(info)
+		const quality = isAudio ? 'audio' : /Download in (\w+) Quality/i.exec(info)[1]
+		const isVideo = quality !== 'audio'
+		result.push({
+			url: el.attr('href'),
+			quality,
+			isAudio,
+			isVideo,
+		})
+	})
+	if (!result.length) throw new ScraperError(`Can't download!\n${$.html()}`)
+	return {
+		title: $("#title_video").val() as string,
+		thumbnail,
+		result
+	}
 }
