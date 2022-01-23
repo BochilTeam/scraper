@@ -1,7 +1,14 @@
-const { expect } = require('chai')
+import { expect } from 'chai'
+import {
+    googleImage,
+    pinterest,
+    wallpaper,
+    stickerLine,
+    stickerTelegram,
+    wallpaperv2
+} from './index'
 
 describe('Images', () => {
-    const { googleImage, pinterest, wallpaper, stickerLine, stickerTelegram, wallpaperv2 } = require('../')
     it('google-image', done => {
         googleImage('Minecraft').then(res => {
             expect(res).to.be.an('array')

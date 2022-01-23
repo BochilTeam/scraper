@@ -103,7 +103,12 @@ dist
 # TernJS port file
 .tern-port
 
+# src directory
+src/**/*.js
+src/**/*.d.ts
+
 # lib
-lib/
+lib/**/*.js
+lib/**/*.ts
 
 package-lock.json

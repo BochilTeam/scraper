@@ -1,22 +1,20 @@
-const { expect } = require('chai')
-
+import { expect } from 'chai'
+import {
+    tebakgambar, tebakgambarjson,
+    asahotak, asahotakjson,
+    caklontong, caklontongjson,
+    family100, family100json,
+    tebakkata, tebakkatajson,
+    tebakkimia, tebakkimiajson,
+    tekateki, tekatekijson,
+    siapakahaku, siapakahakujson,
+    susunkata, susunkatajson,
+    tebakbendera, tebakbenderajson,
+    tebaklirik, tebaklirikjson,
+    tebakkabupaten, tebakkabupatenjson,
+    tebaktebakan, tebaktebakanjson
+} from './index'
 describe('Games', () => {
-    const {
-        tebakgambar,
-        caklontong,
-        asahotak,
-        family100,
-        tebakkata,
-        tebakkimia,
-        tekateki,
-        siapakahaku,
-        susunkata,
-        tebakbendera,
-        tebakkabupaten,
-        tebaklirik,
-        tebaktebakan
-    } = require('../lib/games')
-    
     describe('Tebakgambar', () => {
         it('tebakgambar', done => {
             tebakgambar().then(result => {
@@ -31,7 +29,7 @@ describe('Games', () => {
         })
 
         it('tebakgambar JSON', done => {
-            let res = require('../').tebakgambarjson
+            const res = tebakgambarjson
             expect(res).to.an('array')
             expect(res).to.have.lengthOf.at.least(1000)
 
@@ -52,7 +50,7 @@ describe('Games', () => {
         })
 
         it('asahotak JSON', done => {
-            let res = require('../').asahotakjson
+            let res = asahotakjson
             expect(res).to.an('array')
             expect(res).to.have.lengthOf.at.least(228)
 
@@ -74,7 +72,7 @@ describe('Games', () => {
         })
 
         it('caklontong JSON', done => {
-            let res = require('../').caklontongjson
+            let res = caklontongjson
             expect(res).to.an('array')
             expect(res).to.have.lengthOf.at.least(414)
 
@@ -94,7 +92,7 @@ describe('Games', () => {
         })
 
         it('family100 JSON', done => {
-            let res = require('../').family100json
+            let res = family100json
             expect(res).to.an('array')
             expect(res).to.have.lengthOf.at.least(7152)
 
@@ -115,7 +113,7 @@ describe('Games', () => {
         })
 
         it('tebakkata JSON', done => {
-            let res = require('../').tebakkatajson
+            let res = tebakkatajson
             expect(res).to.an('array')
             expect(res).to.have.lengthOf.at.least(302)
 
@@ -135,7 +133,7 @@ describe('Games', () => {
         })
 
         it('tebakkimia JSON', done => {
-            let res = require('../').tebakkimiajson
+            let res = tebakkimiajson
             expect(res).to.an('array')
             expect(res).to.have.lengthOf.at.least(125)
 
@@ -155,7 +153,7 @@ describe('Games', () => {
         })
 
         it('tekateki JSON', done => {
-            let res = require('../').tekatekijson
+            let res = tekatekijson
             expect(res).to.an('array')
             expect(res).to.have.lengthOf.at.least(200)
 
@@ -176,7 +174,7 @@ describe('Games', () => {
         })
 
         it('siapakahaku JSON', done => {
-            let res = require('../').siapakahakujson
+            let res = siapakahakujson
             expect(res).to.an('array')
             expect(res).to.have.lengthOf.at.least(268)
 
@@ -198,7 +196,7 @@ describe('Games', () => {
         })
 
         it('susunkata JSON', done => {
-            let res = require('../').susunkatajson
+            let res = susunkatajson
             expect(res).to.an('array')
             expect(res).to.have.lengthOf.at.least(353)
 
@@ -219,7 +217,7 @@ describe('Games', () => {
         })
 
         it('tebakbendera JSON', done => {
-            let res = require('../').tebakbenderajson
+            let res = tebakbenderajson
             expect(res).to.an('array')
             expect(res).to.have.lengthOf.at.least(246)
 
@@ -240,7 +238,7 @@ describe('Games', () => {
         })
 
         it('tebakkabupaten JSON', done => {
-            let res = require('../').tebakkabupatenjson
+            let res = tebakkabupatenjson
             expect(res).to.an('array')
             expect(res).to.have.lengthOf.at.least(514)
 
@@ -260,7 +258,7 @@ describe('Games', () => {
         })
 
         it('tebaklirik JSON', done => {
-            let res = require('../').tebaklirikjson
+            let res = tebaklirikjson
             expect(res).to.an('array')
             expect(res).to.have.lengthOf.at.least(38)
 
@@ -280,7 +278,7 @@ describe('Games', () => {
         })
 
         it('tebaktebakan JSON', done => {
-            let res = require('../').tebaktebakanjson
+            let res = tebaktebakanjson
             expect(res).to.an('array')
             expect(res).to.have.lengthOf.at.least(199)
 

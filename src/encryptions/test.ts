@@ -1,7 +1,13 @@
-const { expect } = require('chai')
+import { expect } from 'chai'
+import {
+    toBase64,
+    fromBase64ToString,
+    randomUUID,
+    randomBytes,
+    createHash
+} from './index'
 
 describe('Encryptions', () => {
-    const { toBase64, fromBase64ToString, randomUUID, randomBytes, createHash } = require('../lib/encryptions')
     describe('Base64', () => {
         it('From string to base64', done => {
             try {
@@ -33,7 +39,7 @@ describe('Encryptions', () => {
             try {
                 const res = randomUUID()
                 expect(res).to.be.a('string')
-                
+
                 return done()
             } catch (e) {
                 return done(e)

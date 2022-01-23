@@ -1,11 +1,12 @@
 import cheerio from "cheerio";
 import got, { Headers, Response } from "got";
-import {
+import type {
 	InstagramDownloader,
 	InstagramDownloaderV2,
 	InstagramDownloaderV4,
 	InstagramStory,
-	InstagramStoryv2
+	InstagramStoryv2,
+	InstagramStalk
 } from "./types";
 import { ScraperError } from "../utils";
 
@@ -20,8 +21,8 @@ export async function instagramdl(url: string): Promise<InstagramDownloader[]> {
 				action: "post",
 			},
 			headers: {
-				cookie:
-					"_ga=GA1.2.1450546575.1637033620; __gads=ID=68a947f8174e0410-22fc6960b3ce005e:T=1637033620:RT=1637033620:S=ALNI_MbXTvxtxuISyAFMevds6-00PecLlw; _gid=GA1.2.1740129251.1639389841; PHPSESSID=s6v9d60qk41t8mmp15s3cdm1o0; _gat=1; __atuvc=8%7C46%2C0%7C47%2C0%7C48%2C0%7C49%2C4%7C50; __atuvs=61b82670279d8b87001; __atssc=google%3B6",
+				origin: "https://snapinsta.app",
+				referer: "https://snapinsta.app/",
 				"user-agent":
 					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36",
 			},
@@ -217,7 +218,13 @@ export async function instagramStory(name: string): Promise<InstagramStory> {
 		data = await got('https://www.insta-stories.net/data.php', {
 			searchParams: new URLSearchParams(
 				Object.entries(params) as string[][]
-			)
+			),
+			headers: {
+				Cookie: '__gads=ID=a0129f64c017a213-2229f80500d0003f:T=1642402102:RT=1642402102:S=ALNI_MYpfNSDYSzzQdpadtBXJczU1ZrfKQ; FCNEC=[["AKsRol8c44yP5_EyHSe8zIa4WwUMzK96oz8pPcTILK6NBeERGaGQTAoVdmG95d2DWhkj71HeAJEKMBmudTLabT_7FubgP2ES5eiqmI3458TB2AL6HSJtR0c7ZUiC3c8K-Da1kNJD5dKtON5UulOJWOsEO3tS1zERdA=="],null,[]]',
+				Host: 'www.insta-stories.net',
+				Referer: 'https://www.insta-stories.net/',
+				'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36'
+			}
 		}).text()
 		if (data !== 'nostory') break
 	}
@@ -304,5 +311,55 @@ export async function instagramStoryv2(name: string): Promise<InstagramStoryv2> 
 			fileType,
 			isVideo: type === "video"
 		}))
+	}
+}
+
+export async function instagramStalk(username: string): Promise<InstagramStalk> {
+	const data = await got(`https://dumpor.com/search?query=${encodeURIComponent(username).replace(/%20/g, '+')}`).text()
+	const $ = cheerio.load(data)
+	const accounts: { url: string, avatar: string, username: string }[] = []
+	$('#nav-profiles > div > div.search-item').each(function () {
+		const el = $(this)
+		accounts.push({
+			url: el.find('.content__img-wrap > a')
+				.attr('href')?.trim(),
+			avatar: el.find('.content__img-wrap > a > img')
+				.attr('src')?.trim(),
+			username: el.find('.content__text > a')
+				.text().trim()
+		})
+	})
+	const html = await got(`https://dumpor.com/${accounts[0].url}`).text()
+	const $$ = cheerio.load(html)
+	const name = $$('div.user__title > a > h1').text().trim()
+	const Uname = $$('div.user__title > h4').text().trim()
+	const description = $$('div.user__info-desc').text().trim()
+	const row = $$('#user-page > div.container > div > div > div:nth-child(1) > div > a')
+	const postsH = row.eq(0).text().replace(/Posts/i, '')?.trim()
+	const followersH = row.eq(2).text().replace(/Followers/i, '')?.trim()
+	const followingH = row.eq(3).text().replace(/Following/i, '')?.trim()
+	const list = $$('ul.list > li.list__item')
+	const posts = parseInt(
+		list.eq(0).text().replace(/Posts/i, '')
+			?.trim()?.replace(/\s/g, '')
+	)
+	const followers = parseInt(
+		list.eq(1).text().replace(/Followers/i, '')
+			?.trim()?.replace(/\s/g, '')
+	)
+	const following = parseInt(
+		list.eq(2).text().replace(/Following/i, '')
+			?.trim()?.replace(/\s/g, '')
+	)
+	return {
+		name,
+		username: Uname,
+		description,
+		postsH,
+		posts,
+		followersH,
+		followers,
+		followingH,
+		following,
 	}
 }

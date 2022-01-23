@@ -1,7 +1,12 @@
-const { expect } = require('chai')
+import { expect } from 'chai'
+import {
+    artimimpi,
+    artinama,
+    nomorhoki,
+    getZodiac
+} from './index'
 
 describe('Primbon', () => {
-    const { artimimpi, artinama, nomorhoki, getZodiac } = require('../')
     it('ArtiMimpi', done => {
         artimimpi('Jalan').then(res => {
             expect(res).to.be.an('array')

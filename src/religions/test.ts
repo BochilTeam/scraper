@@ -1,7 +1,11 @@
-const { expect } = require('chai')
+import { expect } from 'chai'
+import {
+    asmaulhusna, asmaulhusnajson,
+    alquran,
+    jadwalsholat, listJadwalSholat
+} from './index'
 
 describe('Religions', () => {
-    const { asmaulhusna, alquran, jadwalsholat } = require('../lib/religions')
     describe('Asmaul Husna', () => {
         it('AsmaulHusna', done => {
             asmaulhusna().then(res => {
@@ -17,9 +21,9 @@ describe('Religions', () => {
         })
 
         it('AsmaulHusna JSON', done => {
-            const res = require('../lib/religions').asmaulhusnajson
+            const res = asmaulhusnajson
             expect(res).to.be.an('array')
-            expect(res).to.have.length('99')
+            expect(res).to.have.length(99)
 
             return done()
         })
@@ -28,7 +32,7 @@ describe('Religions', () => {
     describe('Al quran', () => {
         it('Alquran', done => {
             alquran().then(res => {
-                expect(res).to.have.length('114')
+                expect(res).to.have.length(114)
 
                 return done()
             }).catch(done)
@@ -48,10 +52,10 @@ describe('Religions', () => {
         })
 
         it('List jadwal sholat', done => {
-            const res = require('../lib/religions').listJadwalSholat
+            const res = listJadwalSholat
             expect(res).to.be.an('array')
             expect(res).to.have.lengthOf.at.least(316)
-            
+
             return done()
         })
     })

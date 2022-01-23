@@ -1,27 +1,27 @@
-const expect = require('chai').expect
-
+import { expect } from 'chai'
+import {
+    googleIt,
+    tiktokdl,
+    tiktokdlv2,
+    tiktokfyp,
+    instagramdl,
+    instagramdlv2,
+    instagramdlv3,
+    instagramdlv4,
+    instagramStory,
+    instagramStoryv2,
+    instagramStalk,
+    facebookdl,
+    facebookdlv2,
+    facebookdlv3,
+    twitterdl,
+    twitterdlv2,
+    youtubedl,
+    youtubedlv2,
+    youtubedlv3,
+    youtubeSearch
+} from './index'
 describe('Social media', () => {
-    const {
-        googleIt,
-        tiktokdl,
-        tiktokdlv2,
-        tiktokfyp,
-        instagramdl,
-        instagramStory,
-        instagramStoryv2,
-        facebookdl,
-        facebookdlv2,
-        facebookdlv3,
-        twitterdl,
-        twitterdlv2,
-        instagramdlv2,
-        instagramdlv3,
-        instagramdlv4,
-        youtubedl,
-        youtubedlv2,
-        youtubedlv3,
-        youtubeSearch
-    } = require('../lib/social-media')
     describe('Tiktok scraper', function () {
         it('tiktokdl', function (done) {
             tiktokdl('https://www.tiktok.com/@omagadsus/video/7025456384175017243?is_from_webapp=1&sender_device=pc&web_id6982004129280116226').then(function (res) {
@@ -150,6 +150,23 @@ describe('Social media', () => {
                     expect(isVideo).to.be.a('boolean')
                     expect(url).to.be.a('string')
                 })
+
+                return done()
+            }).catch(done)
+        })
+
+        it('Instagram Stalk', done => {
+            instagramStalk('freefirebgid').then(res => {
+                expect(res).to.be.an('object')
+                expect(res.name).to.be.a('string')
+                expect(res.username).to.be.a('string')
+                expect(res.description).to.be.a('string')
+                expect(res.postsH).to.be.a('string')
+                expect(res.posts).to.be.a('number')
+                expect(res.followersH).to.be.a('string')
+                expect(res.followers).to.be.a('number')
+                expect(res.followingH).to.be.a('string')
+                expect(res.following).to.be.a('number')
 
                 return done()
             }).catch(done)

@@ -1,12 +1,11 @@
-const { expect } = require('chai')
+import { expect } from 'chai'
+import {
+    wikipedia,
+    jadwalTV,
+    jadwalTVNow
+} from './index'
 
 describe('Others', () => {
-    const {
-        // statusJava, 
-        wikipedia,
-        jadwalTV,
-        jadwalTVNow
-    } = require('../lib/others')
 
     // TODO
     // describe('Minecraft', () => {

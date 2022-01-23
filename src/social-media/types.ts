@@ -84,6 +84,17 @@ export type InstagramStoryv2 = {
 		fileType: string;
 	}[]
 }
+export type InstagramStalk = {
+	name: string;
+	username: string;
+	description: string;
+	postsH: string;
+	posts: number;
+	followersH: string;
+	followers: number;
+	followingH: string;
+	following: number;
+}
 
 interface ItiktokDownloader {
 	author: {

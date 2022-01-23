@@ -1,6 +1,6 @@
 import crypto from "crypto";
 
-export function randomUUID(opts: { disableEntropyCache: boolean }): string {
+export function randomUUID(opts?: { disableEntropyCache: boolean }): string {
 	if (typeof crypto.randomUUID === "function")
 		return crypto.randomUUID(opts) as string;
 	const rnds8Pool = new Uint8Array(256); // # of random values to pre-allocate

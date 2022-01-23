@@ -1,9 +1,10 @@
 import got from "got";
+import { ScraperError } from "../utils";
 import { NomerHoki } from "./types";
 
 export default async function nomorhoki(
 	nomer: number | string
-): Promise<NomerHoki | {}> {
+): Promise<NomerHoki> {
 	const config = {
 		nomer: encodeURIComponent(nomer),
 		submit: "+Submit!+",
@@ -25,7 +26,7 @@ export default async function nomorhoki(
 			?.split("</b><br><br>")[0]
 			?.replace(/&#37/gi, "")
 	);
-	if (!angka_bagua_shuzi) return {};
+	if (!angka_bagua_shuzi) throw new ScraperError(`Can't get data, maybe your number(${nomer}) invalid!`)
 	const kekayaan: number = parseInt(
 		results.split("Kekayaan =")[1].split("<br>")[0]
 	);

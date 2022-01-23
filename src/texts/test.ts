@@ -1,7 +1,13 @@
-const { expect } = require('chai')
-
+import { expect } from 'chai'
+import {
+    latinToAksara,
+    aksaraToLatin,
+    bucin, bucinjson,
+    dare, darejson,
+    truth, truthjson
+} from './index'
 describe('Texts', () => {
-    const { latinToAksara, aksaraToLatin, bucin, dare, truth } = require('../lib/texts')
+
     describe('Aksara Jawa', () => {
         it('Latin to Aksara', done => {
             try {
@@ -34,7 +40,7 @@ describe('Texts', () => {
             }).catch(done)
         })
         it('Bucin JSON', done => {
-            const res = require('../lib/texts').bucinjson
+            const res = bucinjson
             expect(res).to.be.an('array')
             expect(res).to.have.lengthOf.at.least(365)
 
@@ -51,7 +57,7 @@ describe('Texts', () => {
             }).catch(done)
         })
         it('Dare JSON', done => {
-            const res = require('../lib/texts').darejson
+            const res = darejson
             expect(res).to.be.an('array')
             expect(res).to.have.lengthOf.at.least(63)
 
@@ -68,7 +74,7 @@ describe('Texts', () => {
             }).catch(done)
         })
         it('Truth JSON', done => {
-            const res = require('../lib/texts').truthjson
+            const res = truthjson
             expect(res).to.be.an('array')
             expect(res).to.have.lengthOf.at.least(61)
 

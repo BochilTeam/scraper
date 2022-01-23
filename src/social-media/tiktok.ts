@@ -1,7 +1,8 @@
 import got from "got";
+import { ScraperError } from "../utils";
 import { TiktokDownloader, TiktokDownloaderv2, TiktokFyp } from "./types";
 
-export async function tiktokdl(url: string): Promise<TiktokDownloader | {}> {
+export async function tiktokdl(url: string): Promise<TiktokDownloader> {
 	if (/v[tm]\.tiktok\.com/g.test(url)) {
 		let res = await got(url);
 		url = res.url;
@@ -10,12 +11,12 @@ export async function tiktokdl(url: string): Promise<TiktokDownloader | {}> {
 		`https://api.snaptik.site/video-key?video_url=${url}`
 	).json();
 	if (res["status"] != "success")
-		throw new Error("Failed to get TikTok video key");
+		throw new ScraperError("Failed to get TikTok video key");
 	let data = await got(
 		`https://api.snaptik.site/video-details-by-key?key=${res["data"]["key"]}`
 	).json();
 	if (data["status"] != "success")
-		throw new Error("Failed to get TikTok video details");
+		throw new ScraperError("Failed to get TikTok video details");
 
 	const results: TiktokDownloader = {
 		author: { ...data["data"]["author"] },
