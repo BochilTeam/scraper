@@ -19,7 +19,7 @@
     "build:cjs": "tsc --project tsconfig.cjs.json",
     "build:esm": "ttsc --project tsconfig.esm.json",
     "build:types": "tsc --project tsconfig.types.json",
-    "build": "npm run build:cjs && npm run build:esm && npm run build:types",
+    "build": "npm install --ignore-scripts --only=dev && npm run build:cjs && npm run build:esm && npm run build:types",
     "prepare": "npm run build"
   },
   "repository": {

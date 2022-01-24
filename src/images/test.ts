@@ -3,9 +3,10 @@ import {
     googleImage,
     pinterest,
     wallpaper,
+    wallpaperv2,
+    wallpaperv3,
     stickerLine,
     stickerTelegram,
-    wallpaperv2
 } from './index'
 
 describe('Images', () => {
@@ -39,6 +40,15 @@ describe('Images', () => {
 
         it('wallpaper V2', done => {
             wallpaperv2('Wallpaper Anime').then(res => {
+                expect(res).to.be.an('array')
+                res.forEach(v => expect(v).to.be.a('string'))
+
+                return done()
+            }).catch(done)
+        })
+
+        it ('Wallpaper V3', done => {
+            wallpaperv3('Wallpaper HD').then(res => {
                 expect(res).to.be.an('array')
                 res.forEach(v => expect(v).to.be.a('string'))
 

@@ -37,8 +37,7 @@ export async function wallpaperv2(
 	const data = await got(
 		`https://wall.alphacoders.com/by_category.php?id=3&name=${encodeURIComponent(
 			query
-		).replace(/%20/g, "+")}&quickload=50&page=${page}${
-			is4K ? "&filter=4K+Ultra+HD" : ""
+		).replace(/%20/g, "+")}&quickload=50&page=${page}${is4K ? "&filter=4K+Ultra+HD" : ""
 		}`
 	).text();
 	const $ = cheerio.load(data);
@@ -48,4 +47,15 @@ export async function wallpaperv2(
 		if (img) results.push(img);
 	});
 	return results;
+}
+
+export async function wallpaperv3(query: string, page: number = 1): Promise<string[]> {
+	const html = await got(`https://www.hdwallpapers.in/search/page/${page}?q=${encodeURIComponent(query)}`).text()
+	const results: string[] = []
+	const $ = cheerio.load(html)
+	$('#content > div.page-content.wallpaper > ul > li.wall').each(function () {
+		const img = $(this).find('a > img[src]').attr('src')
+		if (img) results.push('https://www.hdwallpapers.in' + img);
+	})
+	return results
 }

@@ -1,3 +1,4 @@
+// @ts-ignore
 import got from "got";
 export let truthjson: string[] = [];
 

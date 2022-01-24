@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { expect } from 'chai'
 import {
     asmaulhusna, asmaulhusnajson,
