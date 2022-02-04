@@ -20,7 +20,8 @@
     "build:esm": "echo 'build:esm' && ttsc --project tsconfig.esm.json && echo 'build:esm-success'",
     "build:types": "echo 'build:types' && tsc --project tsconfig.types.json && echo 'build:types-success'",
     "build": "echo 'build' && npm install --ignore-scripts -D && npm run build:cjs && npm run build:esm && npm run build:types && echo 'build-success'",
-    "prepare": "echo 'prepare' && npm run build && echo 'prepare-success'"
+    "prepare": "echo 'prepare' && npm run build && echo 'prepare-success'",
+    "preinstall": "echo 'preinstall'"
   },
   "repository": {
     "type": "git",
