@@ -315,7 +315,7 @@ describe('Social media', () => {
         })
 
         it('Youtube Downloader v2', done => {
-            youtubedlv2('https://youtu.be/nETHrCFb17I').then(res => {
+            youtubedlv2('https://youtu.be/iik25wqIuFo').then(res => {
                 res.video['240p'].download().catch(done)
                 expect(res).to.be.an('object')
                 expect(res.thumbnail).to.be.a('string')

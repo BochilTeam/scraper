@@ -51,3 +51,10 @@ export interface Tsunami {
 	depth: string;
 	location: string;
 }
+
+export interface Lyrics {
+	title: string;
+	author: string;
+	lyrics: string;
+	link: string;
+}

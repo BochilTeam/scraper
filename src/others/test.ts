@@ -2,10 +2,14 @@ import { expect } from 'chai'
 import {
     wikipedia,
     jadwalTV,
-    jadwalTVNow, listJadwalTV,
+    jadwalTVNow, 
+    listJadwalTV,
     mediafiredl,
-    gempa, gempaNow,
-    tsunami
+    gempa, 
+    gempaNow,
+    tsunami,
+    lyrics, 
+    lyricsv2
 } from './index'
 
 describe('Others', () => {
@@ -142,5 +146,27 @@ describe('Others', () => {
 
             return done()
         }).catch(done)
+    })
+
+    describe('Lyrics', () => {
+        it('Lyrics', done => {
+            lyrics('rick astley never gonna give you up').then(res => {
+                expect(res).to.be.an('object')
+                expect(res.title).to.be.a('string')
+                expect(res.author).to.be.a('string')
+                expect(res.lyrics).to.be.a('string')
+                expect(res.link).to.be.a('string')
+
+                return done()
+            }).catch(done)
+        })
+
+        it('Lyrics V2', done => {
+            lyricsv2('never gonna give you up').then(res => {
+                console.log(res)
+
+                return done()
+            }).catch(done)
+        })
     })
 })
