@@ -16,9 +16,9 @@
     "test:cjs": "npm run build:cjs && mocha --timeout 50000 ./lib/cjs/**/test.js",
     "test:esm": "npm run build:esm && mocha --timeout 50000 ./lib/esm/**/test.js",
     "test": "npm run build && mocha --timeout 50000 ./lib/**/**/test.js",
-    "build:cjs": "tsc --project tsconfig.cjs.json",
-    "build:esm": "ttsc --project tsconfig.esm.json",
-    "build:types": "tsc --project tsconfig.types.json",
+    "build:cjs": "tsc --project tsconfig.cjs.json || echo 'build:cjs'",
+    "build:esm": "ttsc --project tsconfig.esm.json || echo 'build:esm'",
+    "build:types": "tsc --project tsconfig.types.json || echo 'build:types'",
     "build": "npm install --ignore-scripts -D && npm run build:cjs && npm run build:esm && npm run build:types",
     "prepare": "npm run build"
   },
