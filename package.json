@@ -19,8 +19,8 @@
     "build:cjs": "echo 'build:cjs' && tsc --project tsconfig.cjs.json",
     "build:esm": "echo 'build:esm' && ttsc --project tsconfig.esm.json",
     "build:types": "echo 'build:types' && tsc --project tsconfig.types.json",
-    "build": "npm install --ignore-scripts -D && npm run build:cjs && npm run build:esm && npm run build:types",
-    "prepare": "npm run build"
+    "build": "echo 'build' && npm install --ignore-scripts -D && npm run build:cjs && npm run build:esm && npm run build:types",
+    "prepare": "npm run build && echo 'prepare'"
   },
   "repository": {
     "type": "git",
