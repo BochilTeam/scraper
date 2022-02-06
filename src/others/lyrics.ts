@@ -36,7 +36,7 @@ export async function lyrics(query: string): Promise<Lyrics> {
     }
 }
 
-export async function lyricsv2(query: string) {
+export async function lyricsv2(query: string): Promise<Lyrics> {
     const data: {
         meta: {
             status: number
@@ -71,13 +71,23 @@ export async function lyricsv2(query: string) {
         title,
         url
     } = data.response.sections.find(
-        ({ type }) => ['song', 'lyric'].includes(type)
+        ({ type, hits }) => ['song', 'lyric'].includes(type) &&
+            hits.find(({ type }) => ['song', 'lyric'].includes(type))
     ).hits.find(
         ({ type }) => ['song', 'lyric'].includes(type)
     ).result
     if (!url) throw new ScraperError(`Can't get lyrics!\n${JSON.stringify(data, null, 2)}`)
     const html = await got(url).text()
     const $ = cheerio.load(html)
-    const elements = $('#lyrics-root > div[data-lyrics-container="true"]').find('br').replaceWith('\n').text()
-    return elements
+    let results: string = ''
+    $('#lyrics-root > div[data-lyrics-container="true"]').each((_, el) => {
+        const element = $($(el).html().replace(/<br>/g, '\n')).text().trim()
+        if (element) results += element
+    })
+    return {
+        title,
+        author: artist_names,
+        lyrics: results.trim(),
+        link: url
+    }
 }

@@ -6,3 +6,4 @@ export * from "./texts/index";
 export * from "./others/index";
 export * from "./encryptions/index";
 export * from "./religions/index";
+export * from "./news/index";
