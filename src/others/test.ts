@@ -18,25 +18,25 @@ describe('Others', () => {
 
     // TODO
     describe('Minecraft', () => {
-        it('Minecraft java', done => {
-            statusJava('moelsmp2.mcalias.com', 25566).then(res => {
-                expect(res).to.be.an('object')
-                expect(res.ip).to.be.a('string')
-                expect(res.port).to.be.a('number')
-                expect(res.description).to.be.a('string')
-                expect(res.descriptionText).to.be.a('string')
-                expect(res.players).to.be.an('object')
-                expect(res.players.max).to.be.a('number')
-                expect(res.players.online).to.be.a('number')
-                expect(res.players.sample).to.be.an('array')
-                expect(res.version).to.be.an('object')
-                expect(res.version.name).to.be.a('string')
-                expect(res.version.protocol).to.be.a('number')
-                expect(res.favicon).to.be.a('string')
+        // it('Minecraft java', done => {
+        //     statusJava('moelsmp2.mcalias.com', 25566).then(res => {
+        //         expect(res).to.be.an('object')
+        //         expect(res.ip).to.be.a('string')
+        //         expect(res.port).to.be.a('number')
+        //         expect(res.description).to.be.a('string')
+        //         expect(res.descriptionText).to.be.a('string')
+        //         expect(res.players).to.be.an('object')
+        //         expect(res.players.max).to.be.a('number')
+        //         expect(res.players.online).to.be.a('number')
+        //         expect(res.players.sample).to.be.an('array')
+        //         expect(res.version).to.be.an('object')
+        //         expect(res.version.name).to.be.a('string')
+        //         expect(res.version.protocol).to.be.a('number')
+        //         expect(res.favicon).to.be.a('string')
 
-                return done()
-            }).catch(done)
-        })
+        //         return done()
+        //     }).catch(done)
+        // })
     })
 
     it('Wikipedia', (done) => {
@@ -177,16 +177,16 @@ describe('Others', () => {
             }).catch(done)
         })
 
-        it('Lyrics V2', done => {
-            lyricsv2('never gonna give you up').then(res => {
-                expect(res.title).to.be.a('string')
-                expect(res.author).to.be.a('string')
-                expect(res.lyrics).to.be.a('string')
-                expect(res.link).to.be.a('string')
+        // it('Lyrics V2', done => {
+        //     lyricsv2('never gonna give you up').then(res => {
+        //         expect(res.title).to.be.a('string')
+        //         expect(res.author).to.be.a('string')
+        //         expect(res.lyrics).to.be.a('string')
+        //         expect(res.link).to.be.a('string')
 
-                return done()
-            }).catch(done)
-        })
+        //         return done()
+        //     }).catch(done)
+        // })
     })
 
     it('KBBI', done => {
