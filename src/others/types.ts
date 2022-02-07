@@ -58,3 +58,53 @@ export interface Lyrics {
 	lyrics: string;
 	link: string;
 }
+
+export interface Kbbi {
+	index: number;
+	title: string;
+	means: string[];
+}
+
+interface Iresponse {
+	description: {
+		extra: {
+			color: string;
+			text: string;
+			bold?: boolean;
+		}[];
+		text: string;
+	};
+	players: {
+		max: number;
+		online: number;
+		sample: {
+			id: string;
+			name: string;
+		}[];
+	};
+	version: {
+		name: string;
+		protocol: number;
+	};
+	favicon: string;
+}
+
+export interface MinecraftJava {
+	// generate types from return function minecraftJava in minecraft.ts
+	ip: string;
+	port: number;
+	description: string;
+	descriptionText: string;
+	players: {
+		max: number;
+		online: number;
+		sample: string[];
+	}
+	version: {
+		name: string;
+		protocol: number;
+	},
+	favicon?: string;
+	ping: number;
+	originalResponse: Iresponse;
+}

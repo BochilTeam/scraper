@@ -135,26 +135,46 @@ describe('Social media', () => {
             }).catch(done)
         })
 
-        it('Instagram Story', function (done) {
-            instagramStory('freefirebgid').then(res => {
-                expect(res).to.be.an('object')
-                expect(res.user).to.be.an('object')
-                expect(res.results).to.be.an('array')
-                expect(res.results).to.have.lengthOf.at.least(1)
-                res.results.forEach(({
-                    thumbnail,
-                    isVideo,
-                    url
-                }) => {
-                    expect(thumbnail).to.be.a('string')
-                    expect(isVideo).to.be.a('boolean')
-                    expect(url).to.be.a('string')
-                })
+        // it('Instagram Story', function (done) {
+        //     instagramStory('freefirebgid').then(res => {
+        //         expect(res).to.be.an('object')
+        //         expect(res.user).to.be.an('object')
+        //         expect(res.results).to.be.an('array')
+        //         expect(res.results).to.have.lengthOf.at.least(1)
+        //         res.results.forEach(({
+        //             thumbnail,
+        //             isVideo,
+        //             url
+        //         }) => {
+        //             expect(thumbnail).to.be.a('string')
+        //             expect(isVideo).to.be.a('boolean')
+        //             expect(url).to.be.a('string')
+        //         })
 
-                return done()
-            }).catch(done)
-        })
+        //         return done()
+        //     }).catch(done)
+        // })
 
+        // it('Instagram Story V2', function (done) {
+        //     instagramStoryv2('freefirebgid').then(res => {
+        //         expect(res).to.be.an('object')
+        //         expect(res.user).to.be.an('object')
+        //         expect(res.results).to.be.an('array')
+        //         expect(res.results).to.have.lengthOf.at.least(1)
+        //         res.results.forEach(({
+        //             thumbnail,
+        //             isVideo,
+        //             url
+        //         }) => {
+        //             expect(thumbnail).to.be.a('string')
+        //             expect(isVideo).to.be.a('boolean')
+        //             expect(url).to.be.a('string')
+        //         })
+                
+        //         return done()
+        //     }).catch(done)
+        // })
+        
         it('Instagram Stalk', done => {
             instagramStalk('freefirebgid').then(res => {
                 expect(res).to.be.an('object')
@@ -172,25 +192,6 @@ describe('Social media', () => {
             }).catch(done)
         })
 
-        it('Instagram Story V2', function (done) {
-            instagramStoryv2('freefirebgid').then(res => {
-                expect(res).to.be.an('object')
-                expect(res.user).to.be.an('object')
-                expect(res.results).to.be.an('array')
-                expect(res.results).to.have.lengthOf.at.least(1)
-                res.results.forEach(({
-                    thumbnail,
-                    isVideo,
-                    url
-                }) => {
-                    expect(thumbnail).to.be.a('string')
-                    expect(isVideo).to.be.a('boolean')
-                    expect(url).to.be.a('string')
-                })
-
-                return done()
-            }).catch(done)
-        })
     })
 
     describe('Facebook (Metaverse :V)', function () {

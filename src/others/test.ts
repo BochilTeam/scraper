@@ -2,26 +2,42 @@ import { expect } from 'chai'
 import {
     wikipedia,
     jadwalTV,
-    jadwalTVNow, 
+    jadwalTVNow,
     listJadwalTV,
     mediafiredl,
-    gempa, 
+    gempa,
     gempaNow,
     tsunami,
-    lyrics, 
-    lyricsv2
+    lyrics,
+    lyricsv2,
+    kbbi,
+    statusJava,
 } from './index'
 
 describe('Others', () => {
 
     // TODO
-    // describe('Minecraft', () => {
-    //     it('Minecraft java', done => {
-    //         statusJava('').then(res => {
-    //             return done()
-    //         }).catch(done)
-    //     })
-    // })
+    describe('Minecraft', () => {
+        // it('Minecraft java', done => {
+        //     statusJava('moelsmp2.mcalias.com', 25566).then(res => {
+        //         expect(res).to.be.an('object')
+        //         expect(res.ip).to.be.a('string')
+        //         expect(res.port).to.be.a('number')
+        //         expect(res.description).to.be.a('string')
+        //         expect(res.descriptionText).to.be.a('string')
+        //         expect(res.players).to.be.an('object')
+        //         expect(res.players.max).to.be.a('number')
+        //         expect(res.players.online).to.be.a('number')
+        //         expect(res.players.sample).to.be.an('array')
+        //         expect(res.version).to.be.an('object')
+        //         expect(res.version.name).to.be.a('string')
+        //         expect(res.version.protocol).to.be.a('number')
+        //         expect(res.favicon).to.be.a('string')
+
+        //         return done()
+        //     }).catch(done)
+        // })
+    })
 
     it('Wikipedia', (done) => {
         wikipedia('Minecraft', 'en').then(res => {
@@ -161,12 +177,33 @@ describe('Others', () => {
             }).catch(done)
         })
 
-        it('Lyrics V2', done => {
-            lyricsv2('never gonna give you up').then(res => {
-                console.log(res)
+        // it('Lyrics V2', done => {
+        //     lyricsv2('never gonna give you up').then(res => {
+        //         expect(res.title).to.be.a('string')
+        //         expect(res.author).to.be.a('string')
+        //         expect(res.lyrics).to.be.a('string')
+        //         expect(res.link).to.be.a('string')
 
-                return done()
-            }).catch(done)
-        })
+        //         return done()
+        //     }).catch(done)
+        // })
+    })
+
+    it('KBBI', done => {
+        kbbi('halo').then(res => {
+            expect(res).to.be.an('array')
+            res.forEach((
+                { index, title, means }
+            ) => {
+                expect(index).to.be.a('number')
+                expect(title).to.be.a('string')
+                expect(means).to.be.an('array')
+                means.forEach(
+                    (mean) => expect(mean).to.be.a('string')
+                )
+            })
+
+            return done()
+        }).catch(done)
     })
 })

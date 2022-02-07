@@ -47,14 +47,14 @@ describe('Images', () => {
             }).catch(done)
         })
 
-        it ('Wallpaper V3', done => {
-            wallpaperv3('Wallpaper HD').then(res => {
-                expect(res).to.be.an('array')
-                res.forEach(v => expect(v).to.be.a('string'))
+        // it ('Wallpaper V3', done => {
+        //     wallpaperv3('Wallpaper HD').then(res => {
+        //         expect(res).to.be.an('array')
+        //         res.forEach(v => expect(v).to.be.a('string'))
 
-                return done()
-            }).catch(done)
-        })
+        //         return done()
+        //     }).catch(done)
+        // })
     })
 
     it('Sticker Telegram', done => {

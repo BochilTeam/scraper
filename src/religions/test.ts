@@ -45,7 +45,7 @@ describe('Religions', () => {
                 expect(res).to.be.an('object')
                 expect(res.today).to.be.an('object')
                 expect(res.list).to.be.an('array')
-                expect(res.list).to.have.lengthOf.at.least(28)
+                expect(res.list).to.have.lengthOf.at.least(27)
 
                 return done()
             }).catch(done)

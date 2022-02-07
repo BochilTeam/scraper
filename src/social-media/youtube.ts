@@ -352,7 +352,7 @@ function convertv2(
 		if (results.statusCode === 200) return resolve(results.result);
 		else if (results.statusCode === 300) {
 			try {
-				const WebSocket = require("ws");
+				const WebSocket = (await import('ws')).default
 				const Url = new URL(server);
 				const WSUrl = `${/https/i.test(Url.protocol) ? "wss:" : "ws:"}//${Url.host
 					}/sub/${results.jobId}?fname=yt5s.com`;
