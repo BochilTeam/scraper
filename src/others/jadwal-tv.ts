@@ -4,6 +4,10 @@ import { join, resolve } from "path";
 import { readFileSync } from "fs";
 import { JadwalTV, JadwalTVNOW } from "./types"
 import { ScraperError } from "../utils"
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 type ListJadwalTV = {
     value: string;
@@ -12,7 +16,7 @@ type ListJadwalTV = {
 }[]
 export const listJadwalTV: ListJadwalTV = JSON.parse(
     readFileSync(
-        join(resolve(), './data/jadwal-tv.json'),
+        join(__dirname, '../../data/jadwal-tv.json'),
         'utf8'
     )
 )
