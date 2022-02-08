@@ -66,6 +66,29 @@ console.log(dl_url)
 - `youtubeSearch` use website https://www.youtube.com
 
 
+### Tiktok downloader
+```js
+// Tiktok downloader
+const { 
+    tiktokdl,
+    tiktokdlv2 
+} = require('@bochilteam/scraper')
+// Tiktok downloader v1
+const url = 'https://www.tiktok.com/@tiktok/video/6844446901010982300'
+tiktokdl(url).then(console.log).catch(console.error)
+// tiktokdl v2
+tiktokdlv2(url).then(console.log).catch(console.error)
+
+// async / await 
+console.log(await tiktokdl(url).catch(console.error))
+console.log(await tiktokdlv2(url).catch(console.error))
+```
+- `tiktokdl` use website https://api.snaptik.site
+- `tiktokdlv2` use website https://api.tikmate.app
+- `tiktokdlv3` use website https://www.expertsphp.com
+- `tiktokfyp` use website https://t.tiktok.com
+
+
 ### Aksara Jawa
 ```js
 // Aksara jawa
@@ -206,7 +229,9 @@ console.log(await kompas())
 - `antaranews` use website https://www.antaranews.com
 - `cnbindonesia` use website https://www.cnbcindonesia.com
 - `kompas` use website https://www.kompas.com
-
+- `liputan6` use website https://www.liputan6.com
+- `merdeka` use website https://www.merdeka.com
+- `suaracom` use website https://www.suara.com
 
 ### Encryption
 ```js
@@ -234,3 +259,7 @@ console.log(createHash('sha256', 'Hello World!!'))
 - `randomUUID` source: https://github.com/uuidjs/uuid/blob/main/src/v4.js and https://github.com/nodejs/node/blob/master/lib/internal/crypto/random.js
 - `randomBytes` use `crypto` module
 - `createHash` use `crypto` module
+
+
+# WARNING!
+**this package will deprecate to support CJS, and make this package only support ESM**

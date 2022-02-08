@@ -121,6 +121,11 @@ export type TiktokDownloaderv2 = ItiktokDownloader & {
 		no_watermark_hd: string
 	};
 };
+export type TiktokDownloaderv3 = {
+	video: {
+		no_watermark: string;
+	}
+}
 
 export interface TiktokFyp {
 	id: string;

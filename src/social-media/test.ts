@@ -3,6 +3,7 @@ import {
     googleIt,
     tiktokdl,
     tiktokdlv2,
+    tiktokdlv3,
     tiktokfyp,
     instagramdl,
     instagramdlv2,
@@ -21,6 +22,7 @@ import {
     youtubedlv3,
     youtubeSearch
 } from './index'
+
 describe('Social media', () => {
     describe('Tiktok scraper', function () {
         it('tiktokdl', function (done) {
@@ -43,6 +45,15 @@ describe('Social media', () => {
         //         return done()
         //     }).catch(done)
         // }) // Github action error!
+        it('tiktokdl v3', function (done) {
+            tiktokdlv3('https://www.tiktok.com/@omagadsus/video/7025456384175017243?is_from_webapp=1&sender_device=pc&web_id6982004129280116226').then(function (res) {
+                expect(res).to.be.an('object')
+                expect(res.video).to.be.an('object')
+                expect(res.video.no_watermark).to.be.a('string')
+
+                return done()
+            }).catch(done)
+        })
 
         it('tiktokfyp', function (done) {
             tiktokfyp().then(function (res) {
@@ -170,11 +181,11 @@ describe('Social media', () => {
         //             expect(isVideo).to.be.a('boolean')
         //             expect(url).to.be.a('string')
         //         })
-                
+
         //         return done()
         //     }).catch(done)
         // })
-        
+
         it('Instagram Stalk', done => {
             instagramStalk('freefirebgid').then(res => {
                 expect(res).to.be.an('object')

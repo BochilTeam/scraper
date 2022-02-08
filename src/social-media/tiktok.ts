@@ -1,6 +1,13 @@
 import got from "got";
+import cheerio from 'cheerio'
 import { ScraperError } from "../utils";
-import { TiktokDownloader, TiktokDownloaderv2, TiktokFyp } from "./types";
+import type {
+	TiktokDownloader,
+	TiktokDownloaderv2,
+	TiktokDownloaderv3,
+	TiktokFyp
+} from "./types";
+
 
 export async function tiktokdl(url: string): Promise<TiktokDownloader> {
 	if (/v[tm]\.tiktok\.com/g.test(url)) {
@@ -68,6 +75,33 @@ export async function tiktokdlv2(url: string): Promise<TiktokDownloaderv2> {
 			no_watermark_hd: `https://tikmate.app/download/${data.token}/${data.id}.mp4?hd=1`,
 		},
 	};
+}
+
+export async function tiktokdlv3(url: string): Promise<TiktokDownloaderv3> {
+	const body = {
+		url: encodeURI(url)
+	}
+	const html = await got('https://www.expertsphp.com/tiktok-video-downloader.php', {
+		method: 'POST',
+		headers: {
+			accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+			'content-type': 'application/x-www-form-urlencoded',
+			origin: 'https://www.expertsphp.com',
+			referer: 'https://www.expertsphp.com/tiktok-video-downloader.php',
+			'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36'
+		},
+		form: body
+	}).text()
+	const $ = cheerio.load(html)
+	const no_watermark = $('table.table > tbody > tr').map((_, el) => {
+		return $(el).find('td').eq(0).find('a').attr('href')
+	}).get().find(v => v)
+	if (!no_watermark) throw new ScraperError('Failed to download tiktok video!')
+	return {
+		video: {
+			no_watermark,
+		}
+	}
 }
 
 export async function tiktokfyp(): Promise<TiktokFyp[] | []> {
