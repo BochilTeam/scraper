@@ -2,14 +2,15 @@
   "name": "@bochilteam/scraper",
   "version": "0.0.6",
   "description": "scraper module",
-  "main": "./lib/index.js",
+  "type": "module",
+  "module": "./lib/index.js",
   "types": "./lib/@types/index.d.ts",
   "scripts": {
     "test": "npm run build:test && mocha --timeout 50000 ./lib/**/**/test.js",
     "build": "npm i --ignore-script && npm run build:all && npm run build:types",
-    "build:all": "tsc",
-    "build:types": "tsc --p ./tsconfig.types.json",
-    "build:test": "tsc --p tsconfig.test.json",
+    "build:all": "ttsc",
+    "build:types": "ttsc --p ./tsconfig.types.json",
+    "build:test": "ttsc --p tsconfig.test.json",
     "prepare": "npm run build"
   },
   "repository": {

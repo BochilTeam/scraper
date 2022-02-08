@@ -21,7 +21,7 @@
     // "noLib": true,                                    /* Disable including any library files, including the default lib.d.ts. */
     // "useDefineForClassFields": true,                  /* Emit ECMAScript-standard-compliant class fields. */
     /* Modules */
-    "module": "commonjs", /* Specify what module code is generated. */
+    "module": "es2020", /* Specify what module code is generated. */
     // "rootDir": "./",                                  /* Specify the root folder within your source files. */
     "moduleResolution": "node", /* Specify how TypeScript looks up a file from a given module specifier. */
     "baseUrl": "./", /* Specify the base directory to resolve non-relative module names. */
@@ -88,7 +88,13 @@
     // "allowUnreachableCode": true,                     /* Disable error reporting for unreachable code. */
     /* Completeness */
     // "skipDefaultLibCheck": false,                     /* Skip type checking .d.ts files that are included with TypeScript. */
-    "skipLibCheck": false                                /* Skip type checking all .d.ts files. */
+    "skipLibCheck": false, /* Skip type checking all .d.ts files. */
+    "plugins": [
+      {
+        "transform": "@zoltu/typescript-transformer-append-js-extension/output/index.js",
+        "after": true,
+      }
+    ]
   },
   "include": [
     "src/*.ts",
