@@ -40,9 +40,9 @@
     "human-readable": "^0.2.1"
   },
   "directories": {
-    "example": "example",
     "src": "src",
-    "test": "test"
+    "test": "test",
+    "lib": "lib"
   },
   "optionalDependencies": {
     "ws": "^8.4.2"

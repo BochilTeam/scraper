@@ -108,7 +108,6 @@ src/**/*.js
 src/**/*.d.ts
 
 # lib
-lib/**/*.js
-lib/**/*.ts
+lib/
 
 package-lock.json
