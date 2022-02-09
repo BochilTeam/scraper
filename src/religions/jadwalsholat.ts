@@ -1,12 +1,12 @@
 import cheerio from "cheerio";
 import { readFileSync } from "fs";
 import got from "got";
-import { join, resolve } from "path";
+import { join } from "path";
 import { ScraperError } from "../utils";
 import { JadwalSholat, JadwalSholatItem } from "./types";
 
 export const listJadwalSholat: JadwalSholatItem[] = JSON.parse(
-	readFileSync(join(resolve(), "./data/jadwal-sholat.json"), "utf-8")
+	readFileSync(join(__dirname, "../../data/jadwal-sholat.json"), "utf-8")
 );
 export default async function jadwalsholat(
 	kota: string
