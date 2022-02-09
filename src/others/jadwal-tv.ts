@@ -1,6 +1,6 @@
 import got from "got";
 import cheerio from "cheerio";
-import { join, resolve } from "path";
+import { join } from "path";
 import { readFileSync } from "fs";
 import { JadwalTV, JadwalTVNOW } from "./types"
 import { ScraperError } from "../utils"

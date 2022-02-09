@@ -1,7 +1,7 @@
 import cheerio from "cheerio";
 import { readFileSync } from "fs";
 import got from "got";
-import { join, resolve } from "path";
+import { join } from "path";
 import { ScraperError } from "../utils";
 import { JadwalSholat, JadwalSholatItem } from "./types";
 import { dirname } from 'path'
