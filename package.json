@@ -1,6 +1,6 @@
 {
   "name": "@bochilteam/scraper",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "scraper module",
   "main": "./lib/index.js",
   "types": "./lib/@types/index.d.ts",
