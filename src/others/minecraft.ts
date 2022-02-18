@@ -223,7 +223,7 @@ class TCPsocket extends EventEmitter {
 		this.socket?.removeAllListeners?.();
 	}
 	waitForResponse() {
-		return new Promise<Uint8Array>((resolve) => {
+		return new Promise<void>((resolve) => {
 			const timeout = setTimeout(resolve, 250);
 			this.on('data', () => {
 				// @ts-ignore

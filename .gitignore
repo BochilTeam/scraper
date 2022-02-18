@@ -110,4 +110,7 @@ src/**/*.d.ts
 # lib
 lib/
 
+# types
+@types/
+
 package-lock.json
