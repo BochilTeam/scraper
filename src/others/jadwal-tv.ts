@@ -4,6 +4,10 @@ import { join } from "path";
 import { readFileSync } from "fs";
 import { JadwalTV, JadwalTVNOW } from "./types"
 import { ScraperError } from "../utils"
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 type ListJadwalTV = {
     value: string;

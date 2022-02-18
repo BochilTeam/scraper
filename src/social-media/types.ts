@@ -15,7 +15,9 @@ export interface FacebookDownloader {
 }
 
 export interface FacebookDownloaderV2 {
-	id: string;
+	id?: string;
+	title: string;
+	description: string;
 	thumbnail: string;
 	result: {
 		quality: string;
@@ -328,4 +330,9 @@ export type YoutubeDownloaderV3 = {
 	title: string;
 	video: YoutubeVideoOrAudioV3;
 	audio: YoutubeVideoOrAudioV3;
+}
+
+export interface GroupWA {
+	url: string;
+	subject: string;
 }

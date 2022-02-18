@@ -41,7 +41,7 @@ export async function facebookdl(url: string): Promise<FacebookDownloader> {
 			rand: randomBytes(13),
 		},
 	}).json();
-	const result: FacebookDownloader["result"] = a
+	const result: FacebookDownloader["result"] = (a || [])
 		.concat(av)
 		.concat(v)
 		.map(({ size, ext, url, quality, vcodec, fid }) => {
@@ -81,7 +81,7 @@ export async function facebookdlv2(url: string): Promise<FacebookDownloaderV2> {
 				"accept-language": "en-US,en;q=0.9",
 				"content-type": "application/x-www-form-urlencoded",
 				cookie:
-					"PHPSESSID=8bp3pmf9b22vm9ihvuv6pn1h3d; current_language=id; _ga=GA1.2.5314845.1641630867; _gid=GA1.2.1966536698.1641630867; _gat=1; __gads=ID=66279abc1ad9d914-226d4524bccf00f8:T=1641630868:RT=1641630868:S=ALNI_MbL7LSCkGI6VwO33W7V6VkOozebNg; __atuvc=1%7C1; __atuvs=61d94c9354d617a5000; __atssc=google%3B1",
+					" _ga=GA1.2.5314845.1641630867; __gads=ID=66279abc1ad9d914-226d4524bccf00f8:T=1641630868:RT=1641630868:S=ALNI_MbL7LSCkGI6VwO33W7V6VkOozebNg; __atssc=google%3B1; PHPSESSID=7vlu6ejd27d9pilkhdtiqahpte; _gid=GA1.2.100395489.1645176321; _gat=1; ads_new=1; __atuvc=0%7C3%2C0%7C4%2C0%7C5%2C0%7C6%2C2%7C7; __atuvs=620f660a85bf722f001",
 				origin: "https://snapsave.app",
 				referer: "https://snapsave.app/id",
 				"user-agent":
@@ -110,7 +110,9 @@ export async function facebookdlv2(url: string): Promise<FacebookDownloaderV2> {
 		id: $("div.media-content > div.content > p > strong")
 			.text()
 			.split("#")?.[1]
-			?.trim(),
+			?.trim() || '',
+		title: $('div.media-content > div.content > p > strong').text(),
+		description:  $('div.media-content > div.content > p > span.video-des').text(),
 		thumbnail: $("figure > p.image > img[src]").attr("src"),
 		result,
 	};

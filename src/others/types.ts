@@ -90,7 +90,7 @@ interface Iresponse {
 }
 
 export interface MinecraftJava {
-	// generate types from return function minecraftJava in minecraft.ts
+
 	ip: string;
 	port: number;
 	description: string;
@@ -107,4 +107,9 @@ export interface MinecraftJava {
 	favicon?: string;
 	ping: number;
 	originalResponse: Iresponse;
+}
+
+export interface NameFreeFire {
+	id: string;
+	username: string;
 }

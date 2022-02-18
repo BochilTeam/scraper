@@ -20,7 +20,8 @@ import {
     youtubedl,
     youtubedlv2,
     youtubedlv3,
-    youtubeSearch
+    youtubeSearch,
+    groupWA
 } from './index'
 
 describe('Social media', () => {
@@ -234,6 +235,8 @@ describe('Social media', () => {
             facebookdlv2('https://fb.watch/9WktuN9j-z/').then(res => {
                 expect(res).to.be.an('object')
                 expect(res.id).to.be.a('string')
+                expect(res.title).to.be.a('string')
+                expect(res.description).to.be.a('string')
                 expect(res.thumbnail).to.be.a('string')
                 expect(res.result).to.be.an('array')
                 expect(res.result).to.have.lengthOf.at.least(1)
@@ -371,6 +374,22 @@ describe('Social media', () => {
             expect(res.info).to.be.an('object')
             expect(res.articles).to.be.an('array')
             expect(res.articles).to.have.lengthOf.at.least(1)
+
+            return done()
+        }).catch(done)
+    })
+
+    it('Group Whatsapp', done => {
+        groupWA('A').then(res => {
+            expect(res).to.be.an('array')
+            expect(res).to.have.lengthOf.at.least(1)
+            res.forEach(({
+                url,
+                subject,
+            }) => {
+                expect(url).to.be.a('string')
+                expect(subject).to.be.a('string')
+            })
 
             return done()
         }).catch(done)

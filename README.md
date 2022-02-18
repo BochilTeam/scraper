@@ -9,12 +9,12 @@ npm i @bochilteam/scraper
 ### Instagram Downloader
 ```js
 // Instagram Downloader
-const { 
+import { 
     instagramdl, 
     instagramdlv2, 
     instagramStory,
     instagramStoryv2
-} = require('@bochilteam/scraper')
+} from '@bochilteam/scraper'
 
 const url = 'https://www.instagram.com/reel/CXK49yFLtJ_/?utm_source=ig_web_copy_link'
 instagramdl(url).then(console.log).catch(console.error)
@@ -24,7 +24,7 @@ instagramdlv2(url).then(console.log).catch(console.error)
 instagramdl(url).catch(_ => instagramdlv2(url)).then(console.log)
 
 
-// Use async/await 
+// Use async/await or top level await
 console.log(await instagramdl(url).catch(console.error))
 console.log(await instagramdlv2(url).catch(console.error))
 
@@ -45,10 +45,10 @@ console.log(story)
 ### Youtube Downloader
 ```js
 // Youtube downloader
-const { 
+import { 
     youtubedl,
     youtubedlv2 
-} = require('@bochilteam/scraper')
+} from '@bochilteam/scraper'
 
 const url = 'https://youtu.be/iik25wqIuFo'
 youtubedl(url).catch(_ => youtubedlv2(url)).then(({ video }) => {
@@ -69,10 +69,10 @@ console.log(dl_url)
 ### Tiktok downloader
 ```js
 // Tiktok downloader
-const { 
+import { 
     tiktokdl,
     tiktokdlv2 
-} = require('@bochilteam/scraper')
+} from '@bochilteam/scraper'
 // Tiktok downloader v1
 const url = 'https://www.tiktok.com/@tiktok/video/6844446901010982300'
 tiktokdl(url).then(console.log).catch(console.error)
@@ -92,10 +92,10 @@ console.log(await tiktokdlv2(url).catch(console.error))
 ### Aksara Jawa
 ```js
 // Aksara jawa
-const { 
+import { 
     latinToAksara,
     aksaraToLatin
-} = require('@bochilteam/scraper')
+} from '@bochilteam/scraper'
 
 // Latin to aksara jawa
 console.log(latinToAksara('hallo rek'))
@@ -108,10 +108,10 @@ Source: https://bennylin.github.io/transliterasijawa/
 ### Primbons
 ```js
 // Primbons
-const { 
+import { 
     getZodiac,
     nomorhoki
-} = require('@bochilteam/scraper')
+} from '@bochilteam/scraper'
 
 // Get zodiac
 console.log(getZodiac(1, 1))
@@ -127,12 +127,12 @@ console.log(await nomorhoki(6213353))
 ### Images
 ```js
 // Images
-const {
+import {
     googleImage,
     pinterest,
     wallpaper,
     stickerTelegram,
-} = require('@bochilteam/scraper')
+} from '@bochilteam/scraper'
 
 const keyword = 'minecraft'
 // Google image
@@ -156,11 +156,11 @@ console.log(await stickerTelegram(keyword))
 ### Religions
 ```js
 // Religions
-const {
+import {
     asmaulhusna, asmaulhusnajson,
     alquran,
     jadwalsholat, listJadwalSholat
-} = require('@bochilteam/scraper')
+} from '@bochilteam/scraper'
 
 // Asmaul Husna
 console.log(await asmaulhusna())
@@ -180,10 +180,10 @@ console.log(await jadwalsholat('semarang'))
 ### Games
 ```js
 // Games
-const {
+import {
     tebakgambar, tebakgambarjson,
     asahotak, asahotakjson
-} = require('@bochilteam/scraper')
+} from '@bochilteam/scraper'
 
 // Tebak gambar
 console.log(await tebakgambar())
@@ -213,11 +213,11 @@ console.log(asahotakjson) // the json will empty if you never use `asahotak()`
 ### News
 ```js
 // News
-const {
+import {
     cnbindonesia,
     antaranews,
     kompas
-} = require('@bochilteam/scraper')
+} from '@bochilteam/scraper'
 
 // Cnbindonesia
 console.log(await cnbindonesia())
@@ -236,13 +236,13 @@ console.log(await kompas())
 ### Encryption
 ```js
 // Encryption
-const {
+import {
     toBase64,
     fromBase64ToString,
     randomUUID,
     randomBytes,
     createHash
-} = require('@bochilteam/scraper')
+} from '@bochilteam/scraper'
 
 // To base64
 const base64 = toBase64('Hello World!!')
@@ -259,7 +259,3 @@ console.log(createHash('sha256', 'Hello World!!'))
 - `randomUUID` source: https://github.com/uuidjs/uuid/blob/main/src/v4.js and https://github.com/nodejs/node/blob/master/lib/internal/crypto/random.js
 - `randomBytes` use `crypto` module
 - `createHash` use `crypto` module
-
-
-# WARNING!
-**this package will deprecate to support CJS, and make this package only support ESM**

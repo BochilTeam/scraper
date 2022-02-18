@@ -1,4 +1,5 @@
 import { expect } from 'chai'
+import { isTag } from 'domhandler'
 import {
     wikipedia,
     jadwalTV,
@@ -12,6 +13,7 @@ import {
     lyricsv2,
     kbbi,
     statusJava,
+    nameFreeFire
 } from './index'
 
 describe('Others', () => {
@@ -203,6 +205,16 @@ describe('Others', () => {
                 )
             })
 
+            return done()
+        }).catch(done)
+    })
+
+    it('ID Free Fire', done => {
+        nameFreeFire('821587717').then(res => {
+            expect(res).to.be.an('object')
+            expect(res.username).to.be.a('string')
+            expect(res.id).to.be.a('string')
+            
             return done()
         }).catch(done)
     })
