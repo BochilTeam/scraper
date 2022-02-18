@@ -2,7 +2,7 @@
     "extends": "./tsconfig.json",
     "compilerOptions": {
         "declaration": true,
-        "declarationDir": "./lib/@types",
+        "declarationDir": "./@types",
         "emitDeclarationOnly": true
     }
 }

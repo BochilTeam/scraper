@@ -120,7 +120,6 @@ export async function instagramdlv3(url: string): Promise<InstagramDownloaderV2[
 		submit: ""
 	}, headers: Headers = {
 		"content-type": "application/x-www-form-urlencoded",
-		// cookie: "",
 		origin: "https://instasave.website",
 		referer: "https://instasave.website/",
 		"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36"
@@ -200,6 +199,7 @@ export async function instagramdlv4(url: string): Promise<InstagramDownloaderV4[
 		images_links: InstagramDownloaderV4[];
 		videos_links: InstagramDownloaderV4[]
 	} = JSON.parse(data)
+	if (!(json.images_links.length || json.videos_links.length)) throw new ScraperError(`Can't download!\n${JSON.stringify(json, null, 2)}`)
 	return [
 		...json.images_links,
 		...json.videos_links
