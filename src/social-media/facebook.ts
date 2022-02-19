@@ -1,7 +1,10 @@
 import cheerio from "cheerio";
 import got from "got";
 import { randomBytes } from "../encryptions/crypto";
-import { ScraperError } from "../utils";
+import {
+	ScraperError,
+	decodeSnapApp
+} from "../utils";
 import {
 	FacebookDownloader,
 	FacebookDownloaderV2,
@@ -70,9 +73,9 @@ export async function facebookdl(url: string): Promise<FacebookDownloader> {
 
 export async function facebookdlv2(url: string): Promise<FacebookDownloaderV2> {
 	const params: { url: string } = {
-		url: url,
+		url: encodeURI(url),
 	};
-	const res: { data: string; error: boolean } = await got
+	const res = await got
 		.post("https://snapsave.app/action.php", {
 			headers: {
 				accept:
@@ -80,26 +83,28 @@ export async function facebookdlv2(url: string): Promise<FacebookDownloaderV2> {
 				"accept-encoding": "gzip, deflate, br",
 				"accept-language": "en-US,en;q=0.9",
 				"content-type": "application/x-www-form-urlencoded",
-				cookie:
-					" _ga=GA1.2.5314845.1641630867; __gads=ID=66279abc1ad9d914-226d4524bccf00f8:T=1641630868:RT=1641630868:S=ALNI_MbL7LSCkGI6VwO33W7V6VkOozebNg; __atssc=google%3B1; PHPSESSID=7vlu6ejd27d9pilkhdtiqahpte; _gid=GA1.2.100395489.1645176321; _gat=1; ads_new=1; __atuvc=0%7C3%2C0%7C4%2C0%7C5%2C0%7C6%2C2%7C7; __atuvs=620f660a85bf722f001",
 				origin: "https://snapsave.app",
-				referer: "https://snapsave.app/id",
+				referer: "https://snapsave.app/",
 				"user-agent":
 					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,like Gecko) Chrome/96.0.4664.110 Safari/537.36",
 			},
-			form: params,
-			searchParams: {
-				lang: "id",
-			},
-		})
-		.json();
-
-	if (res.error) throw new ScraperError(JSON.stringify(res));
+			form: params
+		}).text();
+	const decodeParams = res.split('))</script>')[0]
+		.split('decodeURIComponent(escape(r))}(')[1]
+		?.split(',')?.map(v => v.replace(/^"/, '')
+			.replace(/"$/, '').trim());
+	const decode = decodeSnapApp(...decodeParams);
+	const html = decode?.split('("download-section").innerHTML = "')[1]
+		?.split('; parent.document.getElementById("inputData").remove();')[0]
+		?.split('</style><section class=')[1].split('"> ')
+		?.slice(1)?.map(v => (v + '">').trim()).join()
+		?.split('</section><div class=')[0]?.replace(/\\(\\)?/g, '');
 	let result: FacebookDownloaderV2["result"] = [];
-	const $ = cheerio.load(res.data);
+	const $ = cheerio.load(html);
 	$("table.table > tbody > tr").each(function () {
 		const el = $(this).find("td");
-		if (/tidak/i.test(el.eq(1).text())) {
+		if (/tidak|no/i.test(el.eq(1).text())) {
 			const quality = el.eq(0).text().split("(")?.[0]?.trim();
 			const url = el.eq(2).find("a[href]").attr("href");
 			result.push({ quality, url });
@@ -112,7 +117,7 @@ export async function facebookdlv2(url: string): Promise<FacebookDownloaderV2> {
 			.split("#")?.[1]
 			?.trim() || '',
 		title: $('div.media-content > div.content > p > strong').text(),
-		description:  $('div.media-content > div.content > p > span.video-des').text(),
+		description: $('div.media-content > div.content > p > span.video-des').text(),
 		thumbnail: $("figure > p.image > img[src]").attr("src"),
 		result,
 	};

@@ -113,3 +113,23 @@ export interface NameFreeFire {
 	id: string;
 	username: string;
 }
+
+export interface BioskopNow {
+	title: string;
+	img: string;
+	url: string;
+	genre: string;
+	duration: string;
+	playingAt: string;
+}
+
+export interface Bioskop {
+	title: string;
+	img: string;
+	url: string;
+	genre: string;
+	duration: string;
+	release: string;
+	director: string;
+	cast: string;
+}

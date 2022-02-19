@@ -8,6 +8,7 @@ export * from "./mediafire"
 export * from "./BMKG"
 export * from "./lyrics"
 export * from "./minecraft"
+export * from "./bioskop"
 // TODO: add cekResi
 // export * from "./cek-resi"
 export {

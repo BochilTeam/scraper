@@ -51,7 +51,7 @@ export interface GoogleIt {
 
 interface IinstagramDownloader { url: string }
 export type InstagramDownloader = IinstagramDownloader & {
-	thumbnail: Buffer
+	thumbnail: string;
 };
 export type InstagramDownloaderV2 = IinstagramDownloader & {
 	thumbnail: string;

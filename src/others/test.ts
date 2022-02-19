@@ -13,7 +13,9 @@ import {
     lyricsv2,
     kbbi,
     statusJava,
-    nameFreeFire
+    nameFreeFire,
+    bioskopNow,
+    bioskop
 } from './index'
 
 describe('Others', () => {
@@ -214,8 +216,62 @@ describe('Others', () => {
             expect(res).to.be.an('object')
             expect(res.username).to.be.a('string')
             expect(res.id).to.be.a('string')
-            
+
             return done()
         }).catch(done)
+    })
+
+    describe('Bioskop', () => {
+        it('Bioskop now', done => {
+            bioskopNow().then(res => {
+                expect(res).to.be.an('array')
+                expect(res).to.have.lengthOf.at.least(1)
+                res.forEach(({
+                    title,
+                    img,
+                    url,
+                    genre,
+                    duration,
+                    playingAt
+                }) => {
+                    expect(title).to.be.a('string')
+                    expect(img).to.be.a('string')
+                    expect(url).to.be.a('string')
+                    expect(genre).to.be.a('string')
+                    expect(duration).to.be.a('string')
+                    expect(playingAt).to.be.a('string')
+                })
+
+                return done()
+            }).catch(done)
+        })
+
+        it('Bioskop', done => {
+            bioskop().then(res => {
+                expect(res).to.be.an('array')
+                expect(res).to.have.lengthOf.at.least(1)
+                res.forEach(({
+                    title,
+                    img,
+                    url,
+                    genre,
+                    duration,
+                    release,
+                    director,
+                    cast
+                }) => {
+                    expect(title).to.be.a('string')
+                    expect(img).to.be.a('string')
+                    expect(url).to.be.a('string')
+                    expect(genre).to.be.a('string')
+                    expect(duration).to.be.a('string')
+                    expect(release).to.be.a('string')
+                    expect(director).to.be.a('string')
+                    expect(cast).to.be.an('string')
+                })
+
+                return done()
+            }).catch(done)
+        })
     })
 })

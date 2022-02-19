@@ -259,3 +259,19 @@ console.log(createHash('sha256', 'Hello World!!'))
 - `randomUUID` source: https://github.com/uuidjs/uuid/blob/main/src/v4.js and https://github.com/nodejs/node/blob/master/lib/internal/crypto/random.js
 - `randomBytes` use `crypto` module
 - `createHash` use `crypto` module
+
+### Bioskop
+```js
+// Bioskop
+import {
+    bioskopNow,
+    bioskop
+} from '@bochilteam/scraper'
+
+// Bioskop 
+console.log(await bioskop())
+// Bioskop Now
+console.log(await bioskopNow())
+```
+- `bioskop` use website https://jadwalnonton.com
+- `bioskopNow` use website https://jadwalnonton.com

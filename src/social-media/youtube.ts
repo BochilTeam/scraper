@@ -141,7 +141,7 @@ export async function youtubedlv2(url: string): Promise<YoutubeDownloader> {
 			"user-agent":
 				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
 		},
-		searchParams: new URLSearchParams(Object.entries(params) as string[][]),
+		searchParams: new URLSearchParams(Object.entries(params) as [string, string][]),
 	}).json();
 	let video: YoutubeVideoOrAudio = {};
 	Object.values(json.links.mp4).forEach(({ k, size }: IresLinks) => {
