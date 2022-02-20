@@ -86,6 +86,8 @@ describe('Others', () => {
                 expect(res.url).to.be.a('string')
                 expect(res.url2).to.be.a('string')
                 expect(res.filename).to.be.a('string')
+                expect(res.filetype).to.be.a('string')
+                expect(res.ext).to.be.a('string')
                 expect(res.aploud).to.be.a('string')
                 expect(res.filesizeH).to.be.a('string')
                 expect(res.filesize).to.be.a('number')
