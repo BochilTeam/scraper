@@ -11,7 +11,7 @@
   },
   "scripts": {
     "test": "npm run build:test && mocha --timeout 50000 ./lib/**/**/test.js",
-    "build": "npm i --ignore-script && npm run build:all && npm run build:types",
+    "build": "npm run build:all && npm run build:types",
     "build:all": "ttsc --p tsconfig.json",
     "build:types": "ttsc --p tsconfig.types.json",
     "build:test": "ttsc --p tsconfig.test.json",

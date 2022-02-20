@@ -44,7 +44,7 @@ export async function facebookdl(url: string): Promise<FacebookDownloader> {
 			rand: randomBytes(13),
 		},
 	}).json();
-	const result: FacebookDownloader["result"] = (a || [])
+	const result: FacebookDownloader['result'] = (a || [])
 		.concat(av)
 		.concat(v)
 		.map(({ size, ext, url, quality, vcodec, fid }) => {
@@ -61,7 +61,7 @@ export async function facebookdl(url: string): Promise<FacebookDownloader> {
 				isAudio: /audio/i.test(quality) || (isVideo && !isWebm),
 			};
 			// ext webm video without audio
-		});
+		})
 	if (!result.length) throw new ScraperError(`Can't download!\n${JSON.stringify({ id, thumbnail, duration, a, av, v }, null, 2)}`)
 	return {
 		id,

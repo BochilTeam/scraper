@@ -20,10 +20,11 @@ export interface Mediafire {
 	url: string;
 	url2: string;
 	filename: string;
+	filetype: string;
+	ext: string;
 	aploud: string;
 	filesizeH: string;
-	filesize: number
-
+	filesize: number;
 }
 
 export interface Gempa {
