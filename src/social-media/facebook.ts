@@ -1,7 +1,10 @@
 import cheerio from "cheerio";
 import got from "got";
 import { randomBytes } from "../encryptions/crypto";
-import { ScraperError } from "../utils";
+import {
+	ScraperError,
+	decodeSnapApp
+} from "../utils";
 import {
 	FacebookDownloader,
 	FacebookDownloaderV2,
@@ -41,7 +44,7 @@ export async function facebookdl(url: string): Promise<FacebookDownloader> {
 			rand: randomBytes(13),
 		},
 	}).json();
-	const result: FacebookDownloader["result"] = a
+	const result: FacebookDownloader['result'] = (a || [])
 		.concat(av)
 		.concat(v)
 		.map(({ size, ext, url, quality, vcodec, fid }) => {
@@ -58,7 +61,7 @@ export async function facebookdl(url: string): Promise<FacebookDownloader> {
 				isAudio: /audio/i.test(quality) || (isVideo && !isWebm),
 			};
 			// ext webm video without audio
-		});
+		})
 	if (!result.length) throw new ScraperError(`Can't download!\n${JSON.stringify({ id, thumbnail, duration, a, av, v }, null, 2)}`)
 	return {
 		id,
@@ -70,9 +73,9 @@ export async function facebookdl(url: string): Promise<FacebookDownloader> {
 
 export async function facebookdlv2(url: string): Promise<FacebookDownloaderV2> {
 	const params: { url: string } = {
-		url: url,
+		url: encodeURI(url),
 	};
-	const res: { data: string; error: boolean } = await got
+	const res = await got
 		.post("https://snapsave.app/action.php", {
 			headers: {
 				accept:
@@ -80,26 +83,28 @@ export async function facebookdlv2(url: string): Promise<FacebookDownloaderV2> {
 				"accept-encoding": "gzip, deflate, br",
 				"accept-language": "en-US,en;q=0.9",
 				"content-type": "application/x-www-form-urlencoded",
-				cookie:
-					"PHPSESSID=8bp3pmf9b22vm9ihvuv6pn1h3d; current_language=id; _ga=GA1.2.5314845.1641630867; _gid=GA1.2.1966536698.1641630867; _gat=1; __gads=ID=66279abc1ad9d914-226d4524bccf00f8:T=1641630868:RT=1641630868:S=ALNI_MbL7LSCkGI6VwO33W7V6VkOozebNg; __atuvc=1%7C1; __atuvs=61d94c9354d617a5000; __atssc=google%3B1",
 				origin: "https://snapsave.app",
-				referer: "https://snapsave.app/id",
+				referer: "https://snapsave.app/",
 				"user-agent":
 					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,like Gecko) Chrome/96.0.4664.110 Safari/537.36",
 			},
-			form: params,
-			searchParams: {
-				lang: "id",
-			},
-		})
-		.json();
-
-	if (res.error) throw new ScraperError(JSON.stringify(res));
+			form: params
+		}).text();
+	const decodeParams = res.split('))</script>')[0]
+		.split('decodeURIComponent(escape(r))}(')[1]
+		?.split(',')?.map(v => v.replace(/^"/, '')
+			.replace(/"$/, '').trim());
+	const decode = decodeSnapApp(...decodeParams);
+	const html = decode?.split('("download-section").innerHTML = "')[1]
+		?.split('; parent.document.getElementById("inputData").remove();')[0]
+		?.split('</style><section class=')[1].split('"> ')
+		?.slice(1)?.map(v => (v + '">').trim()).join()
+		?.split('</section><div class=')[0]?.replace(/\\(\\)?/g, '');
 	let result: FacebookDownloaderV2["result"] = [];
-	const $ = cheerio.load(res.data);
+	const $ = cheerio.load(html);
 	$("table.table > tbody > tr").each(function () {
 		const el = $(this).find("td");
-		if (/tidak/i.test(el.eq(1).text())) {
+		if (/tidak|no/i.test(el.eq(1).text())) {
 			const quality = el.eq(0).text().split("(")?.[0]?.trim();
 			const url = el.eq(2).find("a[href]").attr("href");
 			result.push({ quality, url });
@@ -110,7 +115,9 @@ export async function facebookdlv2(url: string): Promise<FacebookDownloaderV2> {
 		id: $("div.media-content > div.content > p > strong")
 			.text()
 			.split("#")?.[1]
-			?.trim(),
+			?.trim() || '',
+		title: $('div.media-content > div.content > p > strong').text(),
+		description: $('div.media-content > div.content > p > span.video-des').text(),
 		thumbnail: $("figure > p.image > img[src]").attr("src"),
 		result,
 	};

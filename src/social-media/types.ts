@@ -15,7 +15,9 @@ export interface FacebookDownloader {
 }
 
 export interface FacebookDownloaderV2 {
-	id: string;
+	id?: string;
+	title: string;
+	description: string;
 	thumbnail: string;
 	result: {
 		quality: string;
@@ -49,7 +51,7 @@ export interface GoogleIt {
 
 interface IinstagramDownloader { url: string }
 export type InstagramDownloader = IinstagramDownloader & {
-	thumbnail: Buffer
+	thumbnail: string;
 };
 export type InstagramDownloaderV2 = IinstagramDownloader & {
 	thumbnail: string;
@@ -328,4 +330,9 @@ export type YoutubeDownloaderV3 = {
 	title: string;
 	video: YoutubeVideoOrAudioV3;
 	audio: YoutubeVideoOrAudioV3;
+}
+
+export interface GroupWA {
+	url: string;
+	subject: string;
 }

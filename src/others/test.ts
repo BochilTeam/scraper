@@ -12,6 +12,7 @@ import {
     lyricsv2,
     kbbi,
     statusJava,
+    nameFreeFire
 } from './index'
 
 describe('Others', () => {
@@ -82,6 +83,8 @@ describe('Others', () => {
                 expect(res.url).to.be.a('string')
                 expect(res.url2).to.be.a('string')
                 expect(res.filename).to.be.a('string')
+                expect(res.filetype).to.be.a('string')
+                expect(res.ext).to.be.a('string')
                 expect(res.aploud).to.be.a('string')
                 expect(res.filesizeH).to.be.a('string')
                 expect(res.filesize).to.be.a('number')
@@ -202,6 +205,16 @@ describe('Others', () => {
                     (mean) => expect(mean).to.be.a('string')
                 )
             })
+
+            return done()
+        }).catch(done)
+    })
+
+    it('ID Free Fire', done => {
+        nameFreeFire('821587717').then(res => {
+            expect(res).to.be.an('object')
+            expect(res.username).to.be.a('string')
+            expect(res.id).to.be.a('string')
 
             return done()
         }).catch(done)

@@ -20,10 +20,11 @@ export interface Mediafire {
 	url: string;
 	url2: string;
 	filename: string;
+	filetype: string;
+	ext: string;
 	aploud: string;
 	filesizeH: string;
-	filesize: number
-
+	filesize: number;
 }
 
 export interface Gempa {
@@ -90,7 +91,7 @@ interface Iresponse {
 }
 
 export interface MinecraftJava {
-	// generate types from return function minecraftJava in minecraft.ts
+
 	ip: string;
 	port: number;
 	description: string;
@@ -107,4 +108,29 @@ export interface MinecraftJava {
 	favicon?: string;
 	ping: number;
 	originalResponse: Iresponse;
+}
+
+export interface NameFreeFire {
+	id: string;
+	username: string;
+}
+
+export interface BioskopNow {
+	title: string;
+	img: string;
+	url: string;
+	genre: string;
+	duration: string;
+	playingAt: string;
+}
+
+export interface Bioskop {
+	title: string;
+	img: string;
+	url: string;
+	genre: string;
+	duration: string;
+	release: string;
+	director: string;
+	cast: string;
 }

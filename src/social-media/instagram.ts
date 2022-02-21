@@ -8,7 +8,7 @@ import type {
 	InstagramStoryv2,
 	InstagramStalk
 } from "./types";
-import { ScraperError } from "../utils";
+import { ScraperError, decodeSnapApp } from "../utils";
 
 export async function instagramdl(url: string): Promise<InstagramDownloader[]> {
 	if (!/https?:\/\/www\.instagram\.com\/(reel|tv|p)\//i.test(url))
@@ -17,10 +17,11 @@ export async function instagramdl(url: string): Promise<InstagramDownloader[]> {
 	const data = await got
 		.post("https://snapinsta.app/action.php", {
 			form: {
-				url,
+				url: encodeURI(url),
 				action: "post",
 			},
 			headers: {
+				'content-type': 'application/x-www-form-urlencoded',
 				origin: "https://snapinsta.app",
 				referer: "https://snapinsta.app/",
 				"user-agent":
@@ -28,22 +29,28 @@ export async function instagramdl(url: string): Promise<InstagramDownloader[]> {
 			},
 		})
 		.text();
-	const $ = cheerio.load(data);
+	const params = data.split('))</script>')[0]
+		.split('decodeURIComponent(escape(r))}(')[1]
+		?.split(',').map(v => v.replace(/^"/, '')
+			.replace(/"$/, '').trim());
+	const decode = decodeSnapApp(...params)
+	const html = decode?.split('("div_download").innerHTML = "')?.[1]
+		.split('"; parent.document.getElementById("hero-section").remove();')[0]
+		.split('</style> <section class=')[1].split('"> ')[1]
+		?.split(' </section> ')[0].replace(/\\(\\)?/g, '');
+	const $ = cheerio.load(html);
 	let results: InstagramDownloader[] = [];
-	$(".row.download-box > div").each(function () {
-		const thumbnail = Buffer.from(
-			$(this)
-				.find(".download-items__thumb > img[src]")
-				.attr("src")
-				?.split(";base64,")[1],
-			"base64"
-		);
+	$(".row.download-box > div.col-md-4").each(function () {
+		let thumbnail = $(this)
+			.find(".download-items__thumb > img[src]")
+			.attr("src")
+		if (!/https?:\/\//i.test(thumbnail)) thumbnail = "https://snapinsta.app" + thumbnail
 		let url = $(this).find(".download-items__btn > a[href]").attr("href");
 		if (!/https?:\/\//i.test(url))
 			url = encodeURI("https://snapinsta.app" + url);
 		results.push({ thumbnail, url });
 	});
-	if (!results.length) throw new ScraperError(`Can't download!\n${$.html()}`)
+	if (!results.length) throw new ScraperError(`Can't download!\n${decode}`)
 	return results;
 }
 
@@ -120,7 +127,6 @@ export async function instagramdlv3(url: string): Promise<InstagramDownloaderV2[
 		submit: ""
 	}, headers: Headers = {
 		"content-type": "application/x-www-form-urlencoded",
-		// cookie: "",
 		origin: "https://instasave.website",
 		referer: "https://instasave.website/",
 		"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36"
@@ -193,13 +199,14 @@ export async function instagramdlv4(url: string): Promise<InstagramDownloaderV4[
 			"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36"
 		},
 		searchParams: new URLSearchParams(
-			Object.entries(payload) as string[][]
+			Object.entries(payload) as [string, string][]
 		),
 	}).json()
 	const json: {
 		images_links: InstagramDownloaderV4[];
 		videos_links: InstagramDownloaderV4[]
 	} = JSON.parse(data)
+	if (!(json.images_links.length || json.videos_links.length)) throw new ScraperError(`Can't download!\n${JSON.stringify(json, null, 2)}`)
 	return [
 		...json.images_links,
 		...json.videos_links
@@ -217,7 +224,7 @@ export async function instagramStory(name: string): Promise<InstagramStory> {
 		params.b = i
 		data = await got('https://www.insta-stories.net/data.php', {
 			searchParams: new URLSearchParams(
-				Object.entries(params) as string[][]
+				Object.entries(params) as [string, string][]
 			),
 			headers: {
 				Cookie: '__gads=ID=a0129f64c017a213-2229f80500d0003f:T=1642402102:RT=1642402102:S=ALNI_MYpfNSDYSzzQdpadtBXJczU1ZrfKQ; FCNEC=[["AKsRol8c44yP5_EyHSe8zIa4WwUMzK96oz8pPcTILK6NBeERGaGQTAoVdmG95d2DWhkj71HeAJEKMBmudTLabT_7FubgP2ES5eiqmI3458TB2AL6HSJtR0c7ZUiC3c8K-Da1kNJD5dKtON5UulOJWOsEO3tS1zERdA=="],null,[]]',

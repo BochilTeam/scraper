@@ -83,6 +83,7 @@ describe('Social media', () => {
 
     describe('Instagram', () => {
         it('Instagram Downloader', done => {
+            // https://www.instagram.com/p/CaHpoweBjmx/?utm_source=ig_web_copy_link
             instagramdl('https://www.instagram.com/reel/CXK49yFLtJ_/?utm_source=ig_web_copy_link').then(res => {
                 expect(res).to.be.an('array')
                 expect(res).to.have.lengthOf.at.least(1)
@@ -90,7 +91,7 @@ describe('Social media', () => {
                     thumbnail,
                     url
                 }) => {
-                    expect(thumbnail).instanceof(Buffer)
+                    expect(thumbnail).to.be.a('string')
                     expect(url).to.be.a('string')
                 })
 
@@ -234,6 +235,8 @@ describe('Social media', () => {
             facebookdlv2('https://fb.watch/9WktuN9j-z/').then(res => {
                 expect(res).to.be.an('object')
                 expect(res.id).to.be.a('string')
+                expect(res.title).to.be.a('string')
+                expect(res.description).to.be.a('string')
                 expect(res.thumbnail).to.be.a('string')
                 expect(res.result).to.be.an('array')
                 expect(res.result).to.have.lengthOf.at.least(1)
