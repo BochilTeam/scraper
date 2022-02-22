@@ -94,14 +94,17 @@ export async function facebookdlv2(url: string): Promise<FacebookDownloaderV2> {
 		.split('decodeURIComponent(escape(r))}(')[1]
 		?.split(',')?.map(v => v.replace(/^"/, '')
 			.replace(/"$/, '').trim());
-			console.log(decodeParams)
-	if (!Array.isArray(decodeParams) || decodeParams.length !== 6) throw new ScraperError(`Can't download!\n${res}`)
-	const decode = decodeSnapApp(...decodeParams);
-	const html = decode?.split('("download-section").innerHTML = "')[1]
-		?.split('; parent.document.getElementById("inputData").remove();')[0]
-		?.split('</style><section class=')[1].split('"> ')
-		?.slice(1)?.map(v => (v + '">').trim()).join()
-		?.split('</section><div class=')[0]?.replace(/\\(\\)?/g, '');
+	let html: string;
+	if (!Array.isArray(decodeParams) || decodeParams.length !== 6) html = JSON.parse(res)?.data;
+	else {
+		const decode = decodeSnapApp(...decodeParams);
+		html = decode?.split('("download-section").innerHTML = "')[1]
+			?.split('; parent.document.getElementById("inputData").remove();')[0]
+			?.split('</style><section class=')[1].split('"> ')
+			?.slice(1)?.map(v => (v + '">').trim()).join()
+			?.split('</section><div class=')[0]?.replace(/\\(\\)?/g, '');
+	}
+	if (!html) throw new ScraperError(`Can't parse encode params!\n${res}`)
 	let result: FacebookDownloaderV2["result"] = [];
 	const $ = cheerio.load(html);
 	$("table.table > tbody > tr").each(function () {
