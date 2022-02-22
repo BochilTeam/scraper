@@ -33,7 +33,6 @@ export async function instagramdl(url: string): Promise<InstagramDownloader[]> {
 		.split('decodeURIComponent(escape(r))}(')[1]
 		?.split(',').map(v => v.replace(/^"/, '')
 			.replace(/"$/, '').trim());
-	console.log(params)
 	if (!Array.isArray(params) || params.length !== 6) throw new ScraperError(`Can't parse encode params!\n${data}`)
 	const decode = decodeSnapApp(...params)
 	const html = decode?.split('("div_download").innerHTML = "')?.[1]
