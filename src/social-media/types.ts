@@ -6,7 +6,7 @@ export interface FacebookDownloader {
 		size?: string;
 		ext: string;
 		url: string;
-		quality: string;
+		quality?: string;
 		vcodec?: string;
 		fid: string;
 		isVideo: boolean;
@@ -26,9 +26,9 @@ export interface FacebookDownloaderV2 {
 }
 export interface FacebookDownloaderV3 {
 	title: string;
-	thumbnail: string;
+	thumbnail?: string;
 	result: {
-		quality: string;
+		quality?: string;
 		url: string;
 		isAudio: boolean;
 		isVideo: boolean;
@@ -60,35 +60,40 @@ export type InstagramDownloaderV2 = IinstagramDownloader & {
 export type InstagramDownloaderV4 = IinstagramDownloader & {
 	thumbnail: string;
 }
+export type InstagramDownloaderV5 = IinstagramDownloader & {
+	thumbnail: string;
+	ext: string;
+};
 interface IinstagramStory {
 	user: {
 		username: string;
+		profilePicUrl: string;
 	},
 	results: {
 		thumbnail: string;
 		url: string;
+		type: string;
 		isVideo: boolean;
 	}[]
 }
 export type InstagramStory = IinstagramStory
-export type InstagramStoryv2 = {
-	user: IinstagramStory['user'] & {
+export type InstagramStoryv2 = IinstagramStory & {
+	user: {
 		id: string;
 		fullName: string;
-		profilePicUrl: string;
 		biography: string;
 		followers: number;
 		following: number;
 	};
-	results: IinstagramStory['results'] & {
+	results: {
 		sourceUrl: string;
-		type: string;
 		fileType: string;
 	}[]
 }
 export type InstagramStalk = {
 	name: string;
 	username: string;
+	avatar: string;
 	description: string;
 	postsH: string;
 	posts: number;
@@ -100,9 +105,7 @@ export type InstagramStalk = {
 
 interface ItiktokDownloader {
 	author: {
-		unique_id: string;
 		nickname: string;
-		avatar: string;
 	};
 	video: {
 		[Key: string]: string;
@@ -111,13 +114,15 @@ interface ItiktokDownloader {
 export type TiktokDownloader = ItiktokDownloader & {
 	description: string;
 	video: {
-		with_watermark: string;
 		no_watermark: string;
-		no_watermark_raw: string;
-	};
-	music: string;
+		no_watermark2: string;
+	}
 }
 export type TiktokDownloaderv2 = ItiktokDownloader & {
+	author: {
+		unique_id: string;
+		avatar: string;
+	};
 	video: {
 		no_watermark: string;
 		no_watermark_hd: string
@@ -271,7 +276,7 @@ export interface YoutubeSearch {
 		duration: string;
 		viewH: string;
 		view: string;
-		type: "video";
+		type: 'video';
 	}[];
 	channel: {
 		channelId: string;
@@ -283,7 +288,7 @@ export interface YoutubeSearch {
 		subscriber: string;
 		videoCount: number;
 		description: string;
-		type: "channel";
+		type: 'channel';
 	}[];
 	playlist: {
 		playlistId: string;
@@ -295,7 +300,7 @@ export interface YoutubeSearch {
 			durationH: string;
 			duration: string;
 		}[];
-		type: "mix";
+		type: 'mix';
 	}[];
 }
 
@@ -304,7 +309,7 @@ export type YoutubeVideoOrAudio = {
 		quality: string;
 		fileSizeH: string;
 		fileSize: number;
-		download(): Promise<string>;
+		download (): Promise<string>;
 	};
 };
 export interface YoutubeDownloader {
@@ -321,7 +326,7 @@ export type YoutubeVideoOrAudioV3 = {
 		quality: string;
 		fileSizeH?: string;
 		fileSize?: number;
-		download(): Promise<string>;
+		download (): Promise<string>;
 	};
 };
 export type YoutubeDownloaderV3 = {
