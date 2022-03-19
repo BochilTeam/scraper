@@ -1,5 +1,5 @@
-import googleImage from "./google-image";
-import pinterest from "./pinterest";
-export * from "./sticker";
-export * from "./wallpaper";
-export { pinterest, googleImage };
+import googleImage from './google-image.js'
+import pinterest from './pinterest.js'
+export * from './sticker.js'
+export * from './wallpaper.js'
+export { pinterest, googleImage }

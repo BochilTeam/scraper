@@ -1,5 +1,5 @@
-import asmaulhusna, { asmaulhusnajson } from "./asmaulhusna";
-import jadwalsholat, { listJadwalSholat } from "./jadwalsholat";
+import asmaulhusna, { asmaulhusnajson } from './asmaulhusna.js'
+import jadwalsholat, { listJadwalSholat } from './jadwalsholat.js'
 
-export * from "./alquran";
-export { asmaulhusna, asmaulhusnajson, jadwalsholat, listJadwalSholat };
+export * from './alquran'
+export { asmaulhusna, asmaulhusnajson, jadwalsholat, listJadwalSholat }

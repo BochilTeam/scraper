@@ -1,11 +1,12 @@
 import cheerio from 'cheerio'
 import got from 'got'
-import { ScraperError } from '../utils'
+import { ScraperError } from '../utils.js'
 import {
   YoutubeDownloader,
   YoutubeVideoOrAudio,
   YoutubeDownloaderV3,
   YoutubeVideoOrAudioV3
+// eslint-disable-next-line import/extensions
 } from './types'
 import { sizeFormatter } from 'human-readable'
 
@@ -355,6 +356,7 @@ function convertv2 (
     if (results.statusCode === 200) return resolve(results.result)
     else if (results.statusCode === 300) {
       try {
+        // @ts-ignore
         const WebSocket = (await import('ws')).default
         const Url = new URL(server as string)
         const WSUrl = `${/https/i.test(Url.protocol) ? 'wss:' : 'ws:'}//${Url.host

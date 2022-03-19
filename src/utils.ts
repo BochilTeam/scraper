@@ -1,3 +1,7 @@
+import { accessSync } from 'fs'
+import { createRequire } from 'module'
+import { resolve } from 'path'
+
 export class ScraperError extends Error {
   readonly date: Date;
   constructor (message: any, options?: {}) {
@@ -63,4 +67,48 @@ export function decodeSnapApp (...args: string[] | number[]): string {
   }
   // @ts-ignore
   return _0xc60e(...args)
+}
+
+const fsAccess = (path: string) => {
+  try {
+    return accessSync(path)
+  } catch {
+    return false
+  }
+}
+
+// // https://github.com/sindresorhus/find-up/blob/main/index.js
+// const getPackageDirectory = (
+//   path: string = process.cwd(),
+//   checkDefaultDirectory: boolean = true,
+//   options: {
+//     limit: number, stopDir?: string
+//   } = { limit: 1 }
+// ) => {
+//   const stopDir = resolve(path, options.stopDir || parse(path).root)
+//   const foundPaths: string[] = []
+//   const pathBefore = dirname(path)
+//   console.log({ pathBefore })
+//   while (true) {
+//     const filename = resolve(path, 'package.json')
+//     console.log({ filename })
+//     if (fsAccess(filename)) if (!(checkDefaultDirectory && path === pathBefore)) foundPaths.push(path)
+
+//     if (path === stopDir || foundPaths.length >= options.limit) break
+//     path = dirname(path)
+//   }
+//   console.log({ foundPaths })
+//   return foundPaths
+// }
+
+export function getDirname () {
+  try {
+    const require = createRequire(process.cwd())
+    const dirname = resolve(require.resolve('.'))
+    console.log(dirname)
+    return dirname
+  } catch {
+    // @ts-ignore
+    return __dirname
+  }
 }

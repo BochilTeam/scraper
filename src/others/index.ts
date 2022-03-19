@@ -1,19 +1,19 @@
-import wikipedia from "./wikipedia";
-import jadwalTV, { jadwalTVNow, listJadwalTV } from "./jadwal-tv";
-import kbbi from "./KBBI";
-import nameFreeFire from "./idff";
+import wikipedia from './wikipedia.js'
+import jadwalTV, { jadwalTVNow, listJadwalTV } from './jadwal-tv.js'
+import kbbi from './KBBI.js'
+import nameFreeFire from './idff.js'
 
-export * from "./minecraft";
-export * from "./mediafire"
-export * from "./BMKG"
-export * from "./lyrics"
-export * from "./minecraft"
-export * from "./bioskop"
+export * from './minecraft.js'
+export * from './mediafire.js'
+export * from './BMKG.js'
+export * from './lyrics.js'
+export * from './minecraft.js'
+export * from './bioskop.js'
 // TODO: add cekResi
 // export * from "./cek-resi"
 export {
-    wikipedia,
-    jadwalTV, jadwalTVNow, listJadwalTV,
-    kbbi,
-    nameFreeFire,
-};
+  wikipedia,
+  jadwalTV, jadwalTVNow, listJadwalTV,
+  kbbi,
+  nameFreeFire
+}

@@ -12,7 +12,8 @@
         "sourceType": "module"
     },
     "plugins": [
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "import"
     ],
     "rules": {
         "no-tabs": 0,
@@ -21,6 +22,10 @@
             "smart-tabs"
         ],
         "camelcase": 0,
-        "no-async-promise-executor": 0
+        "no-async-promise-executor": 0,
+        "import/extensions": [
+            "error",
+            "ignorePackages"
+        ]
     }
 }

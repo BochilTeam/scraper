@@ -18,15 +18,15 @@ export interface NomerHoki {
 }
 
 export type Zodiac =
-	| "capricorn"
-	| "aquarius"
-	| "pisces"
-	| "aries"
-	| "taurus"
-	| "gemini"
-	| "cancer"
-	| "leo"
-	| "virgo"
-	| "libra"
-	| "scorpio"
-	| "sagitarius";
+	| 'capricorn'
+	| 'aquarius'
+	| 'pisces'
+	| 'aries'
+	| 'taurus'
+	| 'gemini'
+	| 'cancer'
+	| 'leo'
+	| 'virgo'
+	| 'libra'
+	| 'scorpio'
+	| 'sagitarius';

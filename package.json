@@ -2,20 +2,29 @@
   "name": "@bochilteam/scraper",
   "version": "1.0.5",
   "description": "scraper module",
-  "type": "module",
-  "module": "./lib/index.js",
-  "exports": "./lib/index.js",
-  "types": "./@types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/@types/index.d.ts",
+      "import": "./lib/esm/index.js",
+      "require": "./lib/cjs/index.js"
+    }
+  },
+  "main": "./lib/cjs/index.js",
+  "types": "./lib/@types/index.d.ts",
   "engines": {
     "node": ">= 12.20"
   },
   "scripts": {
-    "test": "npm run build:test && mocha --timeout 50000 ./lib/**/**/test.js",
-    "build": "npm run build:all && npm run build:types",
-    "build:all": "ttsc --p tsconfig.json",
-    "build:types": "ttsc --p tsconfig.types.json",
-    "build:test": "ttsc --p tsconfig.test.json",
-    "prepare": "npm run build"
+    "test": "npm run build && npm run test:cjs && npm run test:esm",
+    "test:cjs": "mocha --timeout 20000 ./lib/cjs/**/test.js",
+    "test:esm": "mocha --timeout 20000 ./lib/esm/**/test.js",
+    "build": "npm run clean && npm run build:cjs && npm run build:esm && npm run build:types",
+    "build:cjs": "tsc --p src/tsconfig.cjs.json",
+    "build:esm": "tsc --p src/tsconfig.esm.json",
+    "build:types": "tsc --p tsconfig.types.json",
+    "lint:fix": "npx eslint src/** --fix --ext .js,.ts",
+    "clean": "rimraf ./lib",
+    "prepare": "node compile-typescript"
   },
   "repository": {
     "type": "git",
@@ -42,7 +51,6 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.0",
     "mocha": "^9.2.0",
-    "ttypescript": "^1.5.13",
     "typescript": "^4.5.5"
   },
   "dependencies": {
@@ -52,10 +60,12 @@
     "human-readable": "^0.2.1"
   },
   "directories": {
-    "src": "src",
-    "test": "test",
     "lib": "lib"
   },
+  "files": [
+    "./lib/*",
+    "compile-typescript.js"
+  ],
   "optionalDependencies": {
     "ws": "^8.4.2"
   }

@@ -2,15 +2,18 @@ import cheerio from 'cheerio'
 import { readFileSync } from 'fs'
 import got from 'got'
 import { join, dirname } from 'path'
-import { ScraperError } from '../utils'
+import { ScraperError } from '../utils.js'
+// eslint-disable-next-line import/extensions
 import { JadwalSholat, JadwalSholatItem } from './types'
 
 import { fileURLToPath } from 'url'
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
+let _dirname
+// @ts-ignore
+try { _dirname = dirname(fileURLToPath(import.meta.url)) } catch { _dirname = __dirname }
 
 export const listJadwalSholat: JadwalSholatItem[] = JSON.parse(
-  readFileSync(join(__dirname, '../../data/jadwal-sholat.json'), 'utf-8')
+  readFileSync(join(_dirname, '../../data/jadwal-sholat.json'), 'utf-8')
 )
 export default async function jadwalsholat (
   kota: string

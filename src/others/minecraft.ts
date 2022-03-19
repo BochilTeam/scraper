@@ -2,7 +2,7 @@
 // import dgram, { Socket } from 'dgram'
 import EventEmitter from 'events'
 import net, { NetConnectOpts, Socket as TCPSocket } from 'net'
-import { ScraperError } from '../utils'
+import { ScraperError } from '../utils.js'
 import type { MinecraftJava } from './types'
 interface Options {
 	timeout: number;

@@ -1,6 +1,6 @@
 import got from 'got'
 import cheerio from 'cheerio'
-import { Mediafire } from './types'
+import { Mediafire } from './types.js'
 
 export async function mediafiredl (url: string): Promise<Mediafire> {
   if (!/https?:\/\/(www\.)?mediafire\.com/.test(url)) throw new Error('Invalid URL: ' + url)
