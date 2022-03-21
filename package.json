@@ -60,11 +60,12 @@
     "human-readable": "^0.2.1"
   },
   "directories": {
+    "lib": "lib",
     "src": "src",
     "scripts": "scripts"
   },
   "files": [
-    "./lib/*",
+    "lib/*",
     "scripts/*"
   ],
   "optionalDependencies": {
