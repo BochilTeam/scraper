@@ -3,7 +3,7 @@ import cheerio from 'cheerio'
 import type {
   Lyrics
 } from './types'
-import { ScraperError } from '../utils'
+import { ScraperError } from '../utils.js'
 
 export async function lyrics (query: string): Promise<Lyrics> {
   const data = await got(`https://www.musixmatch.com/search/${encodeURIComponent(query)}`).text()

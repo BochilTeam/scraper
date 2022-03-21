@@ -1,15 +1,15 @@
-import cnbindonesia from "./cnbcindonesia";
-import antaranews from "./antaranews";
-import kompas from "./kompas";
-import suaracom from "./suaracom";
-import liputan6 from "./liputan6";
-import merdeka from "./merdeka";
+import cnbindonesia from './cnbcindonesia.js'
+import antaranews from './antaranews.js'
+import kompas from './kompas.js'
+import suaracom from './suaracom.js'
+import liputan6 from './liputan6.js'
+import merdeka from './merdeka.js'
 
 export {
-    cnbindonesia,
-    antaranews,
-    kompas,
-    suaracom,
-    liputan6,
-    merdeka
+  cnbindonesia,
+  antaranews,
+  kompas,
+  suaracom,
+  liputan6,
+  merdeka
 }

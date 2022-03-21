@@ -1,7 +1,11 @@
 import cheerio from 'cheerio'
 import got from 'got'
-import { TwitterDownloader, TwitterDownloaderv2 } from './types'
-import { ScraperError } from '../utils'
+import {
+  TwitterDownloader,
+  TwitterDownloaderv2
+  // eslint-disable-next-line import/extensions
+} from './types'
+import { ScraperError } from '../utils.js'
 
 export async function twitterdl (
   url: string

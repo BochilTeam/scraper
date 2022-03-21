@@ -1,14 +1,15 @@
 import cheerio from 'cheerio'
 import got from 'got'
-import { randomBytes } from '../encryptions/crypto'
+import { randomBytes } from '../encryptions/crypto.js'
 import {
   ScraperError,
   decodeSnapApp
-} from '../utils'
+} from '../utils.js'
 import {
   FacebookDownloader,
   FacebookDownloaderV2,
   FacebookDownloaderV3
+// eslint-disable-next-line import/extensions
 } from './types'
 
 interface Ires {

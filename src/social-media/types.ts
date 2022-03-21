@@ -116,6 +116,7 @@ export type TiktokDownloader = ItiktokDownloader & {
 	video: {
 		no_watermark: string;
 		no_watermark2: string;
+		no_watermark_raw: string;
 	}
 }
 export type TiktokDownloaderv2 = ItiktokDownloader & {
@@ -128,10 +129,16 @@ export type TiktokDownloaderv2 = ItiktokDownloader & {
 		no_watermark_hd: string
 	};
 };
-export type TiktokDownloaderv3 = {
+export type TiktokDownloaderv3 = ItiktokDownloader & {
+	author: {
+		avatar: string;
+	};
+	description: string;
 	video: {
 		no_watermark: string;
-	}
+		no_watermark2: string;
+	};
+	music: string;
 }
 
 export interface TiktokFyp {
@@ -340,4 +347,23 @@ export type YoutubeDownloaderV3 = {
 export interface GroupWA {
 	url: string;
 	subject: string;
+}
+
+export interface Aiovideodl {
+	url: string;
+	title: string;
+	thumbnail: string;
+	duration?: null;
+	source: string;
+	medias?: {
+		url: string;
+		quality: string;
+		extension: string;
+		size: number;
+		formattedSize: string;
+		videoAvailable: boolean;
+		audioAvailable: boolean;
+		chunked: boolean;
+		cached: boolean;
+	}[] | null;
 }

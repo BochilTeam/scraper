@@ -1,14 +1,16 @@
-import youtubeSearch from './youtube-search'
-import { groupWA } from './groupWA'
+import youtubeSearch from './youtube-search.js'
+import { groupWA } from './groupWA.js'
+import aiovideodl from './aiovideodl.js'
 
-export * from './facebook'
-export * from './google-it'
-export * from './instagram'
-export * from './tiktok'
-export * from './twitter'
-export * from './youtube'
+export * from './facebook.js'
+export * from './google-it.js'
+export * from './instagram.js'
+export * from './tiktok.js'
+export * from './twitter.js'
+export * from './youtube.js'
 
 export {
   youtubeSearch,
-  groupWA
+  groupWA,
+  aiovideodl
 }

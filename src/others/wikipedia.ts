@@ -1,6 +1,6 @@
 import cheerio from 'cheerio'
 import got from 'got'
-import { ScraperError } from '../utils'
+import { ScraperError } from '../utils.js'
 import { Wikipedia } from './types'
 
 export default async function wikipedia (

@@ -30,5 +30,7 @@ jobs:
       run: npm install
     - name: 'Convert ts to js'
       run: npm run build
-    - name: 'Test'
-      run: npm run test
+    - name: 'Test ESM'
+      run: npm run test:esm
+    - name: 'Test CJS'
+      run: npm run test:cjs

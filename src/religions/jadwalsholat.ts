@@ -1,28 +1,22 @@
 import cheerio from 'cheerio'
-import { readFileSync } from 'fs'
 import got from 'got'
-import { join, dirname } from 'path'
-import { ScraperError } from '../utils'
+import { ScraperError } from '../utils.js'
+// eslint-disable-next-line import/extensions
 import { JadwalSholat, JadwalSholatItem } from './types'
 
-import { fileURLToPath } from 'url'
-
-const __dirname = dirname(fileURLToPath(import.meta.url))
-
-export const listJadwalSholat: JadwalSholatItem[] = JSON.parse(
-  readFileSync(join(__dirname, '../../data/jadwal-sholat.json'), 'utf-8')
-)
+export const listJadwalSholat: Promise<JadwalSholatItem[]> = (async () => got('https://raw.githubusercontent.com/BochilTeam/scraper/master/data/jadwal-sholat.json').json<JadwalSholatItem[]>())()
 export default async function jadwalsholat (
   kota: string
 ): Promise<JadwalSholat> {
+  const listJadwal: JadwalSholatItem[] = await listJadwalSholat
   let jadwal: JadwalSholatItem | undefined
   if (
-    !(jadwal = listJadwalSholat.find(({ kota: Kota }) =>
+    !(jadwal = listJadwal.find(({ kota: Kota }) =>
       new RegExp(Kota, 'ig').test(kota)
     ))
   ) {
     throw new ScraperError(
-      'List kota ' + listJadwalSholat.map(({ kota }) => kota)
+      'List kota ' + listJadwal.map(({ kota }) => kota)
     )
   }
   const today = await got(

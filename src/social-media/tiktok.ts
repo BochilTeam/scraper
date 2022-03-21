@@ -1,6 +1,6 @@
 import got from 'got'
 import cheerio from 'cheerio'
-import { ScraperError, decodeSnapApp } from '../utils'
+import { ScraperError, decodeSnapApp } from '../utils.js'
 import type {
   TiktokDownloader,
   TiktokDownloaderv2,
@@ -9,15 +9,19 @@ import type {
 } from './types'
 
 export async function tiktokdl (url: string): Promise<TiktokDownloader> {
+  const resToken = await got('https://snaptik.app/ID')
+  const cookie = resToken.headers['set-cookie']?.map(v => v.split(';')[0]).join('; ')
+  const $$ = cheerio.load(resToken.body)
   const html = await got('https://snaptik.app/abc.php', {
     headers: {
-      cookie: 'PHPSESSID=gphtms9fofqm2fikr9ofqrld25; current_language=ID; ref=google; __cflb=04dToWzoGizosSfR1ww5Ce8foMmhJkC5absiUehuAK; _ga=GA1.2.500024560.1646295641; _gid=GA1.2.786638280.1646295641; __gads=ID=2d9fb59650bbba88-22611414cbd0004a:T=1646295642:RT=1646295642:S=ALNI_MbDUnOcA1ZoJcH9yeqYgALtEC3W2w; ads_new=1; __cfruid=e4d99b4f4c1cabd9c94cc558b0c7eee4d7508448-1646295654; _gat=1',
+      cookie: cookie || 'PHPSESSID=gphtms9fofqm2fikr9ofqrld25; current_language=ID; ref=google; __cflb=04dToWzoGizosSfR1ww5Ce8foMmhJkC5absiUehuAK; _ga=GA1.2.500024560.1646295641; _gid=GA1.2.786638280.1646295641; __gads=ID=2d9fb59650bbba88-22611414cbd0004a:T=1646295642:RT=1646295642:S=ALNI_MbDUnOcA1ZoJcH9yeqYgALtEC3W2w; ads_new=1; __cfruid=e4d99b4f4c1cabd9c94cc558b0c7eee4d7508448-1646295654; _gat=1',
       referer: 'https://snaptik.app/ID',
       'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36'
     },
     searchParams: {
       url: encodeURI(url),
-      lang: 'ID'
+      lang: 'ID',
+      token: $$('input[name="token"]').val() as string
     }
   }).text()
   const decodeParams = html.split('))</script>')[0]
@@ -31,6 +35,8 @@ export async function tiktokdl (url: string): Promise<TiktokDownloader> {
   const $ = cheerio.load(result)
   const $snaptik_middle = $('.snaptikvid > div.snaptik-middle')
   const $a = $('#download-block > .abuttons').find('a')
+  let no_watermark2 = $a.eq(1).attr('href') as string
+  if (!/https?:\/\//.test(no_watermark2)) no_watermark2 = `https://snaptik.app${no_watermark2}`
   return {
     author: {
       nickname: $snaptik_middle.find('h3').text()
@@ -38,37 +44,38 @@ export async function tiktokdl (url: string): Promise<TiktokDownloader> {
     description: $snaptik_middle.find('span').text(),
     video: {
       no_watermark: $a.eq(0).attr('href') as string,
-      no_watermark2: $a.eq(1).attr('href') as string
+      no_watermark2,
+      no_watermark_raw: $a.eq(2).attr('href') as string
     }
   }
 }
 
 export async function tiktokdlv2 (url: string): Promise<TiktokDownloaderv2> {
   const data: {
-		author_avatar: string;
-		author_id: string;
-		author_name: string;
-		comment_count: number;
-		create_time: string;
-		id: string;
-		like_count: number;
-		share_count: number;
-		success: boolean;
-		token: string;
-	} = await got
-	  .post('https://api.tikmate.app/api/lookup', {
-	    headers: {
-	      accept: '*/*',
-	      'accept-language': 'en-US,en;q=0.9',
-	      'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-	      origin: 'https://tikmate.app',
-	      referer: 'https://tikmate.app/',
-	      'user-agent':
-					'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36'
-	    },
-	    form: { url }
-	  })
-	  .json()
+    author_avatar: string;
+    author_id: string;
+    author_name: string;
+    comment_count: number;
+    create_time: string;
+    id: string;
+    like_count: number;
+    share_count: number;
+    success: boolean;
+    token: string;
+  } = await got
+    .post('https://api.tikmate.app/api/lookup', {
+      headers: {
+        accept: '*/*',
+        'accept-language': 'en-US,en;q=0.9',
+        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        origin: 'https://tikmate.app',
+        referer: 'https://tikmate.app/',
+        'user-agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36'
+      },
+      form: { url }
+    })
+    .json()
   return {
     author: {
       unique_id: data.author_id,
@@ -83,29 +90,47 @@ export async function tiktokdlv2 (url: string): Promise<TiktokDownloaderv2> {
 }
 
 export async function tiktokdlv3 (url: string): Promise<TiktokDownloaderv3> {
-  const body = {
-    url: encodeURI(url)
-  }
-  const html = await got('https://www.expertsphp.com/tiktok-video-downloader.php', {
+  const resToken = await got('https://ssstik.io/id')
+  const cookie = resToken.headers['set-cookie']?.map(v => v.split(';')[0]).join('; ')
+  const $$ = cheerio.load(resToken.body)
+  const postUrl = $$('#_gcaptcha_pt').attr('hx-post') as string
+  const html = await got('https://ssstik.io' + postUrl, {
     method: 'POST',
     headers: {
-      accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-      'content-type': 'application/x-www-form-urlencoded',
-      origin: 'https://www.expertsphp.com',
-      referer: 'https://www.expertsphp.com/tiktok-video-downloader.php',
-      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36'
+      'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      cookie: cookie || 'PHPSESSID=gb6hgnvvpkfg28ulo80l1u2qrl; __cflb=02DiuEcwseaiqqyPC5pE7Qjdp2jcR2J5YEMX3jgTCHMYX; _ga=GA1.2.1294804934.1647840559; _gid=GA1.2.1211588131.1647840559; __gads=ID=3ba3f6d3a5959cb0-224bbeea15d100da:T=1647840559:RT=1647840559:S=ALNI_MYtTuJ9ICRAeHGfemUzb2rwyaT6lw; ga_show=2; _gat_UA-3524196-6=1',
+      'hx-current-url': 'https://ssstik.io/id',
+      'hx-request': 'true',
+      'hx-target': 'target',
+      'hx-trigger': ' _gcaptcha_pt',
+      origin: 'https://ssstik.io',
+      referer: 'https://ssstik.io/id',
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537'
     },
-    form: body
+    form: {
+      id: encodeURI(url),
+      locale: 'id',
+      gc: 0,
+      tt: 0,
+      ts: 0
+    }
   }).text()
   const $ = cheerio.load(html)
-  const no_watermark = $('table.table > tbody > tr').map((_, el) => {
-    return $(el).find('td').eq(0).find('a').attr('href')
-  }).get().find(v => v)
-  if (!no_watermark) throw new ScraperError('Failed to download tiktok video!')
+  const $img = $('img.u-round')
+  const $a = $('a.pure-button')
+  let no_watermark = $a.eq(0).attr('href') as string
+  if (!/https?:\/\//.test(no_watermark)) no_watermark = `https://ssstik.io${no_watermark}`
   return {
+    author: {
+      nickname: $img.attr('alt') as string,
+      avatar: $img.attr('src') as string
+    },
+    description: $('p.maintext').text(),
     video: {
-      no_watermark
-    }
+      no_watermark,
+      no_watermark2: $a.eq(1).attr('href') as string
+    },
+    music: $a.eq(2).attr('href') as string
   }
 }
 
