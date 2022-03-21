@@ -18,13 +18,13 @@
     "test": "npm run build && npm run test:cjs && npm run test:esm",
     "test:cjs": "mocha --timeout 20000 ./lib/cjs/**/test.js",
     "test:esm": "mocha --timeout 20000 ./lib/esm/**/test.js",
-    "build": "npm run clean && npm run build:cjs && npm run build:esm && npm run build:types",
+    "build": "npm run clean && npm run build:cjs && npm run build:esm && npm run build:types && node scripts/write-package.js",
     "build:cjs": "tsc --p src/tsconfig.cjs.json",
     "build:esm": "tsc --p src/tsconfig.esm.json",
     "build:types": "tsc --p tsconfig.types.json",
-    "lint:fix": "npx eslint src/** --fix --ext .js,.ts",
+    "lint:fix": "npx eslint src/** --fix --ignore-pattern src/*.json",
     "clean": "rimraf ./lib",
-    "prepare": "node compile-typescript"
+    "prepare": "node scripts/compile-typescript.js"
   },
   "repository": {
     "type": "git",
@@ -60,11 +60,12 @@
     "human-readable": "^0.2.1"
   },
   "directories": {
-    "lib": "lib"
+    "src": "src",
+    "scripts": "scripts"
   },
   "files": [
     "./lib/*",
-    "compile-typescript.js"
+    "scripts/*"
   ],
   "optionalDependencies": {
     "ws": "^8.4.2"

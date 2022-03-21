@@ -3,7 +3,7 @@ import {
   asmaulhusna, asmaulhusnajson,
   alquran,
   jadwalsholat, listJadwalSholat
-} from './index'
+} from './index.js'
 
 describe('Religions', () => {
   describe('Asmaul Husna', () => {
@@ -52,11 +52,11 @@ describe('Religions', () => {
     })
 
     it('List jadwal sholat', done => {
-      const res = listJadwalSholat
-      expect(res).to.be.an('array')
-      expect(res).to.have.lengthOf.at.least(316)
-
-      return done()
+      Promise.resolve(listJadwalSholat).then(res => {
+        expect(res).to.be.an('array')
+        expect(res).to.have.lengthOf.at.least(316)
+        return done()
+      }).catch(done)
     })
   })
 })

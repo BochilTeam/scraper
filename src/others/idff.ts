@@ -1,5 +1,5 @@
 import got from 'got'
-import { ScraperError } from '../utils'
+import { ScraperError } from '../utils.js'
 import type { NameFreeFire } from './types'
 
 export default async function nameFreeFire (id: string | number): Promise<NameFreeFire> {

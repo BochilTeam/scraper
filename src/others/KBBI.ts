@@ -16,7 +16,7 @@ export default async function kbbi (words: string): Promise<Kbbi[]> {
   if (!isExist) throw new ScraperError(`${words} does not exist!`)
   const results: Kbbi[] = []
   let isContent = false; let lastTitle: string
-  $('body > div.container.body-content').children().map((_, el) => {
+  $('body > div.container.body-content').children().each((_, el) => {
     const tag = el.tagName
     const elem = $(el)
     if (tag === 'hr') isContent = !isContent && !Object.keys(results).length
@@ -34,7 +34,7 @@ export default async function kbbi (words: string): Promise<Kbbi[]> {
       elem.find('li').each((_, el) => {
         const li = $(el).text().trim()
         const index = results.findIndex(
-          ({ title }) => title == lastTitle
+          ({ title }) => title === lastTitle
         )
         if (index !== -1) results[index].means.push(li)
         else console.log(li, lastTitle)

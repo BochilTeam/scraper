@@ -13,7 +13,7 @@ import {
   tebaklirik, tebaklirikjson,
   tebakkabupaten, tebakkabupatenjson,
   tebaktebakan, tebaktebakanjson
-} from './index'
+} from './index.js'
 describe('Games', () => {
   describe('Tebakgambar', () => {
     it('tebakgambar', done => {

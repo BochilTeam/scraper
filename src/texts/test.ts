@@ -5,7 +5,7 @@ import {
   bucin, bucinjson,
   dare, darejson,
   truth, truthjson
-} from './index'
+} from './index.js'
 describe('Texts', () => {
   describe('Aksara Jawa', () => {
     it('Latin to Aksara', done => {

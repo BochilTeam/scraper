@@ -9,7 +9,7 @@ import type {
   InstagramStoryv2,
   InstagramStalk
 } from './types'
-import { ScraperError, decodeSnapApp } from '../utils'
+import { ScraperError, decodeSnapApp } from '../utils.js'
 import Form from 'form-data'
 
 export async function instagramdl (url: string): Promise<InstagramDownloader[]> {
@@ -212,7 +212,7 @@ export async function instagramdlv4 (url: string): Promise<InstagramDownloaderV4
     images_links: InstagramDownloaderV4[];
     videos_links: InstagramDownloaderV4[]
   } = JSON.parse(data)
-  if (!(json.images_links.length || json.videos_links.length)) throw new ScraperError(`Can't download!\n${JSON.stringify(json, null, 2)}`)
+  if (!(json.images_links?.length || json.videos_links?.length)) throw new ScraperError(`Can't download!\n${JSON.stringify(json, null, 2)}`)
   return [
     ...json.images_links,
     ...json.videos_links
@@ -252,22 +252,22 @@ export async function instagramdlv4 (url: string): Promise<InstagramDownloaderV4
 // }
 
 export async function instagramStory (name: string): Promise<InstagramStory> {
-  const resKey = await got('https://storydownloader.net/en')
+  const resKey = await got('https://storydownloader.app/en')
   const $$ = cheerio.load(resKey.body)
   const _token = $$('input[name="_token"]').attr('value')
-  const cookie = (resKey.headers['set-cookie'] as string[]).map(v => v.split('; ')[0].trim()).join('; ')
+  const cookie = resKey.headers['set-cookie']?.map(v => v.split('; ')[0]).join('; ').trim()
   const headers: Headers = {
     accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-    cookie,
-    origin: 'https://storydownloader.net',
-    referer: 'https://storydownloader.net/en',
+    cookie: cookie || 'locale=eyJpdiI6IjE5VUJqZm1DdXl3ODhoQnV2SHJaMFE9PSIsInZhbHVlIjoiUnBqZTMvbDFUTWZLWVkvQy9rVjVhOUdrbjRWTVRCYmp2aTVaUlVsUnZZY0RWN2ZoVkdjMVNhemM1MFl6eWt2dCIsIm1hYyI6IjdlMTc4ZDZkMTYyMDVmMTcwZTc5Nzg3YTBjM2ZkOWEyNjRlODZmZDIwOGY5OTgyYzQzZjE3YTY3MjQ2NGNlYzQiLCJ0YWciOiIifQ%3D%3D; _ga_ZXS0LB5VTY=GS1.1.1647856609.1.0.1647856609.0; _ga=GA1.1.1392191220.1647856609; XSRF-TOKEN=eyJpdiI6IkhjVVdRMmRSZ0tOaklvUHlncWxqeVE9PSIsInZhbHVlIjoiTkZLTnFmUnpjM0Y0KzF3NmpxNnMyMTJQWmNPRXFPVjlKQW9la3poN3kySEN4UUw0TUd3TGIzZ0plT2RUWXJGTEp1bzF1NkN2R3FrQkdLbmJpa0o4cUZUM2EzS2N4QTY2aGVKdFM0ZWNhclZBQVBhMDV1cm4vcEZFMVB5NXRLL1UiLCJtYWMiOiI4MjQ1ZDJhYWE2NjQ1MGUyMmY5ZmQ0OTlkMDFhNjZjOWE2MGVjMTRlNmFjN2VjMmNkYzA0OGY5OTRkMDY3MjI3IiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6IjQ2RHJ3TUtRU1gxblhpbGtsNXRqamc9PSIsInZhbHVlIjoiTFl2bTg5QVhxcHBkZUN2THRPYkxhbnBmWEkyaWdBc0RFbDM0eUhhbGY0RCs2NFFmRXQ2NXBaNktUMkVpYk9wcDF2SE11SUQ0bW9zazJYaUdLQVZFbjJTaXZ3MmREUEJURnczb1c4ZE5uNDJzTVprNytjNzVCT3loS1ovKysyR1oiLCJtYWMiOiIzOTAyMDc5MDg1N2UxZjgwYmExODcwMjQ2ZWQzNGJjODM3YzkxOTI2MTkwMTEzMTFjNjExN2IzZjdkMmY0ODI4IiwidGFnIjoiIn0%3D',
+    origin: 'https://storydownloader.app',
+    referer: 'https://storydownloader.app/en',
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36',
     'X-CSRF-TOKEN': _token
   }
   const formData = new Form()
   formData.append('username', name)
   formData.append('_token', _token)
-  const res = await got('https://storydownloader.net/request', {
+  const res = await got('https://storydownloader.app/request', {
     method: 'POST',
     headers: {
       ...headers,

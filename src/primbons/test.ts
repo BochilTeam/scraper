@@ -4,7 +4,7 @@ import {
   artinama,
   nomorhoki,
   getZodiac
-} from './index'
+} from './index.js'
 
 describe('Primbon', () => {
   it('ArtiMimpi', done => {

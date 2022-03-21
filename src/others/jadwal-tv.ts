@@ -1,27 +1,20 @@
 import got from 'got'
 import cheerio from 'cheerio'
-import { join } from 'path'
-import { readFileSync } from 'fs'
 // eslint-disable-next-line import/extensions
 import { JadwalTV, JadwalTVNOW } from './types'
-import { getDirname, ScraperError } from '../utils.js'
-
-const _dirname = getDirname()
-console.log({ _dirname })
+import { ScraperError } from '../utils.js'
 
 type ListJadwalTV = {
   value: string;
   channel: string;
   isPay: boolean;
 }[]
-export const listJadwalTV: ListJadwalTV = JSON.parse(
-  readFileSync(
-    join(_dirname, '../../data/jadwal-tv.json'),
-    'utf8'
-  )
-)
+
+export const listJadwalTV: Promise<ListJadwalTV> = (async () => await got('https://raw.githubusercontent.com/BochilTeam/scraper/master/data/jadwal-tv.json').json<ListJadwalTV>())()
+
 export default async function jadwalTV (channel: string): Promise<JadwalTV> {
-  const data = listJadwalTV.find(
+  const list = await listJadwalTV
+  const data = list.find(
     ({ channel: name }) => (new RegExp(channel, 'ig')).test(name)
   )
   if (!data) throw new ScraperError(`List not found!!\n${JSON.stringify(listJadwalTV, null, 2)}`)

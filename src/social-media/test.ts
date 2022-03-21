@@ -2,9 +2,9 @@ import { expect } from 'chai'
 import {
   googleIt,
   tiktokdl,
-  //   tiktokdlv2,
+  tiktokdlv2,
   tiktokdlv3,
-  tiktokfyp,
+  // tiktokfyp,
   instagramdl,
   instagramdlv2,
   instagramdlv3,
@@ -21,8 +21,9 @@ import {
   youtubedlv2,
   youtubedlv3,
   youtubeSearch,
-  groupWA
-} from './index'
+  groupWA,
+  aiovideodl
+} from './index.js'
 
 describe('Social media', () => {
   describe('Tiktok scraper', function () {
@@ -30,39 +31,54 @@ describe('Social media', () => {
       tiktokdl('https://www.tiktok.com/@omagadsus/video/7025456384175017243?is_from_webapp=1&sender_device=pc&web_id6982004129280116226').then(function (res) {
         expect(res).to.be.an('object')
         expect(res.author).to.be.an('object')
+        expect(res.author.nickname).to.be.a('string')
         expect(res.description).to.be.a('string')
         expect(res.video).to.be.an('object')
+        expect(res.video.no_watermark).to.be.a('string')
+        expect(res.video.no_watermark2).to.be.a('string')
+        expect(res.video.no_watermark_raw).to.be.a('string')
 
         return done()
       }).catch(done)
     })
-    // it('tiktokdl v2', function (done) {
-    //     tiktokdlv2('https://www.tiktok.com/@omagadsus/video/7025456384175017243?is_from_webapp=1&sender_device=pc&web_id6982004129280116226').then(function (res) {
-    //         expect(res).to.be.an('object')
-    //         expect(res.author).to.be.an('object')
-    //         expect(res.video).to.be.an('object')
+    it('tiktokdl v2', function (done) {
+      tiktokdlv2('https://www.tiktok.com/@omagadsus/video/7025456384175017243?is_from_webapp=1&sender_device=pc&web_id6982004129280116226').then(function (res) {
+        expect(res).to.be.an('object')
+        expect(res.author).to.be.an('object')
+        expect(res.author.unique_id).to.be.a('string')
+        expect(res.author.nickname).to.be.a('string')
+        expect(res.author.avatar).to.be.a('string')
+        expect(res.video).to.be.an('object')
+        expect(res.video.no_watermark).to.be.a('string')
+        expect(res.video.no_watermark_hd).to.be.a('string')
 
-    //         return done()
-    //     }).catch(done)
-    // }) // Github action error!
+        return done()
+      }).catch(done)
+    })
     it('tiktokdl v3', function (done) {
       tiktokdlv3('https://www.tiktok.com/@omagadsus/video/7025456384175017243?is_from_webapp=1&sender_device=pc&web_id6982004129280116226').then(function (res) {
         expect(res).to.be.an('object')
+        expect(res.author).to.be.an('object')
+        expect(res.author.nickname).to.be.a('string')
+        expect(res.author.avatar).to.be.a('string')
+        expect(res.description).to.be.a('string')
         expect(res.video).to.be.an('object')
         expect(res.video.no_watermark).to.be.a('string')
+        expect(res.video.no_watermark2).to.be.a('string')
+        expect(res.music).to.be.a('string')
 
         return done()
       }).catch(done)
     })
 
-    it('tiktokfyp', function (done) {
-      tiktokfyp().then(function (res) {
-        expect(res).to.be.an('array')
-        expect(res.length).to.be.above(0)
+    // it('tiktokfyp', function (done) {
+    //   tiktokfyp().then(function (res) {
+    //     expect(res).to.be.an('array')
+    //     expect(res.length).to.be.above(0)
 
-        return done()
-      }).catch(done)
-    })
+    //     return done()
+    //   }).catch(done)
+    // })
 
     // it('tiktokstalk', function (done) {
     //     tiktokstalk('Tiktok').then(function (res) {
@@ -393,5 +409,34 @@ describe('Social media', () => {
 
       return done()
     }).catch(done)
+  })
+
+  describe('aiovideodl', () => {
+    it('Tiktok download', done => {
+      aiovideodl('https://www.tiktok.com/@omagadsus/video/7025456384175017243?is_from_webapp=1&sender_device=pc&web_id6982004129280116226').then(res => {
+        expect(res).to.be.an('object')
+        expect(res.medias).to.be.an('array')
+        expect(res.medias).to.have.lengthOf.at.least(1)
+        return done()
+      }).catch(done)
+    })
+
+    it('Facebook download', done => {
+      aiovideodl('https://fb.watch/9WktuN9j-z/').then(res => {
+        expect(res).to.be.an('object')
+        expect(res.medias).to.be.an('array')
+        expect(res.medias).to.have.lengthOf.at.least(1)
+        return done()
+      }).catch(done)
+    })
+
+    it('Twitter download', done => {
+      aiovideodl('https://twitter.com/jen_degen/status/1458167531869458440?s=20').then(res => {
+        expect(res).to.be.an('object')
+        expect(res.medias).to.be.an('array')
+        expect(res.medias).to.have.lengthOf.at.least(1)
+        return done()
+      }).catch(done)
+    })
   })
 })

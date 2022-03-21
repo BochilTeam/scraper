@@ -1,5 +1,6 @@
 import youtubeSearch from './youtube-search.js'
 import { groupWA } from './groupWA.js'
+import aiovideodl from './aiovideodl.js'
 
 export * from './facebook.js'
 export * from './google-it.js'
@@ -10,5 +11,6 @@ export * from './youtube.js'
 
 export {
   youtubeSearch,
-  groupWA
+  groupWA,
+  aiovideodl
 }

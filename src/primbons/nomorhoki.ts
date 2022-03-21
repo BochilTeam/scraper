@@ -1,5 +1,6 @@
 import got from 'got'
-import { ScraperError } from '../utils'
+import { ScraperError } from '../utils.js'
+// eslint-disable-next-line import/extensions
 import { NomerHoki } from './types'
 
 export default async function nomorhoki (
