@@ -22,7 +22,8 @@ import {
   youtubedlv3,
   youtubeSearch,
   groupWA,
-  aiovideodl
+  aiovideodl,
+  savefrom
 } from './index.js'
 
 describe('Social media', () => {
@@ -417,6 +418,7 @@ describe('Social media', () => {
         expect(res).to.be.an('object')
         expect(res.medias).to.be.an('array')
         expect(res.medias).to.have.lengthOf.at.least(1)
+        expect(res.source).to.be.eq('tiktok')
         return done()
       }).catch(done)
     })
@@ -426,6 +428,7 @@ describe('Social media', () => {
         expect(res).to.be.an('object')
         expect(res.medias).to.be.an('array')
         expect(res.medias).to.have.lengthOf.at.least(1)
+        expect(res.source).to.be.eq('facebook')
         return done()
       }).catch(done)
     })
@@ -435,6 +438,49 @@ describe('Social media', () => {
         expect(res).to.be.an('object')
         expect(res.medias).to.be.an('array')
         expect(res.medias).to.have.lengthOf.at.least(1)
+        expect(res.source).to.be.eq('twitter')
+        return done()
+      }).catch(done)
+    })
+  })
+
+  describe('Savefrom', () => {
+    it('Tiktok download', done => {
+      savefrom('https://www.tiktok.com/@omagadsus/video/7025456384175017243?is_from_webapp=1&sender_device=pc&web_id6982004129280116226').then(res => {
+        expect(res).to.be.an('object')
+        expect(res.url).to.be.an('array')
+        expect(res.url).to.have.lengthOf.at.least(1)
+        expect(res.hosting).to.be.eq('tiktok.com')
+        return done()
+      }).catch(done)
+    })
+
+    it('Facebook download', done => {
+      savefrom('https://fb.watch/9WktuN9j-z/').then(res => {
+        expect(res).to.be.an('object')
+        expect(res.url).to.be.an('array')
+        expect(res.url).to.have.lengthOf.at.least(1)
+        expect(res.hosting).to.be.eq('facebook.com')
+        return done()
+      }).catch(done)
+    })
+
+    it('Twitter download', done => {
+      savefrom('https://twitter.com/jen_degen/status/1458167531869458440?s=20').then(res => {
+        expect(res).to.be.an('object')
+        expect(res.url).to.be.an('array')
+        expect(res.url).to.have.lengthOf.at.least(1)
+        expect(res.hosting).to.be.eq('twitter.com')
+        return done()
+      }).catch(done)
+    })
+
+    it('Instagram download', done => {
+      savefrom('https://www.instagram.com/reel/CXK49yFLtJ_/?utm_source=ig_web_copy_link').then(res => {
+        expect(res).to.be.an('object')
+        expect(res.url).to.be.an('array')
+        expect(res.url).to.have.lengthOf.at.least(1)
+        expect(res.hosting).to.be.eq('instagram.com')
         return done()
       }).catch(done)
     })

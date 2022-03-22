@@ -367,3 +367,31 @@ export interface Aiovideodl {
 		cached: boolean;
 	}[] | null;
 }
+
+export interface Savefrom {
+	id?: string;
+	url: {
+		url: string;
+        name: string;
+        ext: string;
+        type: string;
+		quality?: number;
+        subname: string
+	}[];
+	meta: {
+		title: string;
+        source: string;
+        duration?: string;
+	};
+	thumb: string;
+	video_quality?: string[];
+	sd?: {
+		url: string;
+		format?: string;
+	};
+	hosting: string;
+	hd?: {
+		url: string;
+		format?: string;
+	};
+}
