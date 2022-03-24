@@ -4,7 +4,8 @@ import {
   aksaraToLatin,
   bucin, bucinjson,
   dare, darejson,
-  truth, truthjson
+  truth, truthjson,
+  textpro, textproList
 } from './index.js'
 describe('Texts', () => {
   describe('Aksara Jawa', () => {
@@ -78,6 +79,25 @@ describe('Texts', () => {
       expect(res).to.have.lengthOf.at.least(61)
 
       return done()
+    })
+  })
+
+  describe('TextPro', () => {
+    it('TextPro', done => {
+      textpro('neon', ['Hallo']).then(res => {
+        console.log(res)
+        
+        return done()
+      }).catch(done)
+    })
+
+    it('TextPro List', done => {
+      Promise.resolve(textproList).then(res => {
+        expect(res).to.be.an('array')
+        expect(res).to.have.lengthOf.at.least(1)
+
+        return done()
+      }).catch(done)
     })
   })
 })
