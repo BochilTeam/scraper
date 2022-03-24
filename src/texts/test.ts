@@ -85,8 +85,8 @@ describe('Texts', () => {
   describe('TextPro', () => {
     it('TextPro', done => {
       textpro('neon', ['Hallo']).then(res => {
-        console.log(res)
-        
+        expect(res).to.be.a('string')
+
         return done()
       }).catch(done)
     })
