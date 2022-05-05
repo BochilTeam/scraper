@@ -57,6 +57,44 @@ export async function instagramdl (url: string): Promise<InstagramDownloader[]> 
   return results
 }
 
+// export async function instagramdlv2 (url: string): Promise<InstagramDownloaderV2[]> {
+//   const headers = {
+//     Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+//     Host: 'igdownloader.com',
+//     Referer: 'https://www.google.com/',
+//     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36'
+//   }
+//   // const initRes = await got('https://igdownloader.com/', { headers })
+//   // const cookie = initRes.headers['set-cookie']?.join('; ')
+//   const payload = {
+//     link: encodeURI(url),
+//     downloader: 'photo'
+//   }
+//   const data: { error: boolean, html: string } = await got.post('https://igdownloader.com/ajax', {
+//     form: payload,
+//     headers: {
+//       ...headers,
+//       Accept: 'application/json, text/javascript, */*; q=0.01',
+//       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+//       Origin: 'https://igdownloader.com',
+//       Referer: 'https://igdownloader.com/',
+//       Cookie: 'PHPSESSID=u2npiqgusdpmn1qquvp1ehk527; _ga_ZK84BJGHBW=GS1.1.1651742918.1.1.1651744179.0; _ga=GA1.1.431177399.1651744179; __gads=ID=fe9f7f22482b2fb6-22aee78011d3003b:T=1651744181:RT=1651744181:S=ALNI_MZ3uEDkgqcDjKYEcG5S1wXkj5Xvhw'
+//     }
+//   }).json()
+//   if (data.error) throw new ScraperError('Can\'t download!\n' + data)
+//   const $ = cheerio.load(data.html)
+//   const results: InstagramDownloaderV2[] = []
+//   $('div.post-wrapper').each(function () {
+//     const thumbnail = ($(this)
+//       .find('img[src]')
+//       .attr('src') || $(this).find('div.post').attr('data-src')) as string
+//     const url = ($(this).find('a[href]').attr('href') || $(this).find('div.checkbox').attr('data-src')) as string
+//     const sourceUrl = $(this).find('div.checkbox').attr('data-src') || url || thumbnail
+//     if (thumbnail || url || sourceUrl) results.push({ thumbnail, url, sourceUrl })
+//   })
+//   return results
+// }
+
 export async function instagramdlv2 (
   url: string
 ): Promise<InstagramDownloaderV2[]> {
@@ -357,7 +395,7 @@ export async function instagramStoryv2 (name: string): Promise<InstagramStoryv2>
       referer: 'https://www.instagramsave.com/instagram-story-downloader.php'
     }
   }).json()
-  if (error || !results) throw new ScraperError(`Maybe user ${name} not have story!!\n${JSON.stringify({ user, results, payload }, null, 2)}`)
+  if (error || !results) throw new ScraperError(`Maybe user ${name} not have story!!\n${JSON.stringify({ error, user, results, payload }, null, 2)}`)
   return {
     user,
     results: results.map(({ preview, url, downloadUrl, type, fileType }) => ({

@@ -25,6 +25,8 @@ import {
   aiovideodl,
   savefrom
 } from './index.js'
+// eslint-disable-next-line import/extensions
+import { Savefrom } from './types'
 
 describe('Social media', () => {
   describe('Tiktok scraper', function () {
@@ -414,7 +416,7 @@ describe('Social media', () => {
 
   describe('aiovideodl', () => {
     it('Tiktok download', done => {
-      aiovideodl('https://www.tiktok.com/@omagadsus/video/7025456384175017243?is_from_webapp=1&sender_device=pc&web_id6982004129280116226').then(res => {
+      aiovideodl('https://www.tiktok.com/@omagadsus/video/7025456384175017243').then(res => {
         expect(res).to.be.an('object')
         expect(res.medias).to.be.an('array')
         expect(res.medias).to.have.lengthOf.at.least(1)
@@ -447,40 +449,44 @@ describe('Social media', () => {
   describe('Savefrom', () => {
     it('Tiktok download', done => {
       savefrom('https://www.tiktok.com/@omagadsus/video/7025456384175017243?is_from_webapp=1&sender_device=pc&web_id6982004129280116226').then(res => {
-        expect(res).to.be.an('object')
-        expect(res.url).to.be.an('array')
-        expect(res.url).to.have.lengthOf.at.least(1)
-        expect(res.hosting).to.be.eq('tiktok.com')
+        expect(res as Savefrom).to.be.an('object')
+        expect((res as Savefrom).url).to.be.an('array')
+        expect((res as Savefrom).url).to.have.lengthOf.at.least(1)
+        expect((res as Savefrom).hosting).to.be.eq('tiktok.com')
         return done()
       }).catch(done)
     })
 
     it('Facebook download', done => {
       savefrom('https://fb.watch/9WktuN9j-z/').then(res => {
-        expect(res).to.be.an('object')
-        expect(res.url).to.be.an('array')
-        expect(res.url).to.have.lengthOf.at.least(1)
-        expect(res.hosting).to.be.eq('facebook.com')
+        expect(res as Savefrom).to.be.an('object')
+        expect((res as Savefrom).url).to.be.an('array')
+        expect((res as Savefrom).url).to.have.lengthOf.at.least(1)
+        expect((res as Savefrom).hosting).to.be.eq('facebook.com')
         return done()
       }).catch(done)
     })
 
     it('Twitter download', done => {
       savefrom('https://twitter.com/jen_degen/status/1458167531869458440?s=20').then(res => {
-        expect(res).to.be.an('object')
-        expect(res.url).to.be.an('array')
-        expect(res.url).to.have.lengthOf.at.least(1)
-        expect(res.hosting).to.be.eq('twitter.com')
+        expect(res as Savefrom).to.be.an('object')
+        expect((res as Savefrom).url).to.be.an('array')
+        expect((res as Savefrom).url).to.have.lengthOf.at.least(1)
+        expect((res as Savefrom).hosting).to.be.eq('twitter.com')
         return done()
       }).catch(done)
     })
 
     it('Instagram download', done => {
       savefrom('https://www.instagram.com/reel/CXK49yFLtJ_/?utm_source=ig_web_copy_link').then(res => {
-        expect(res).to.be.an('object')
-        expect(res.url).to.be.an('array')
-        expect(res.url).to.have.lengthOf.at.least(1)
-        expect(res.hosting).to.be.eq('instagram.com')
+        expect(res as Savefrom[]).to.be.an('array')
+        for (const { url, meta, sd } of res as Savefrom[]) {
+          expect(url).to.be.an('array')
+          expect(url).to.have.lengthOf.at.least(1)
+          expect(meta).to.be.an('object')
+          expect(sd).to.be.an('object')
+          expect(sd.url).to.be.a('string')
+        }
         return done()
       }).catch(done)
     })

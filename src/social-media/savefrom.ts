@@ -4,7 +4,7 @@ import { ScraperError } from '../utils.js'
 // eslint-disable-next-line import/extensions
 import { Savefrom } from './types'
 
-export default async function savefrom (url: string): Promise<Savefrom> {
+export default async function savefrom (url: string): Promise<Savefrom | Savefrom[]> {
   let scriptJS = await got('https://worker.sf-tools.com/savefrom.php', {
     method: 'POST',
     headers: {
@@ -29,20 +29,29 @@ export default async function savefrom (url: string): Promise<Savefrom> {
   const executeCode = '[]["filter"]["constructor"](b).call(a);'
   if (scriptJS.indexOf(executeCode) === -1) throw new ScraperError(`Cannot find execute code\n${scriptJS}`)
   scriptJS = scriptJS.replace(executeCode, `
-try {
-  i++;
-  if (i === 2) scriptResult = ${executeCode.split('.call')[0]}.toString();
-  else (
-    ${executeCode.replace(/;/, '')}
-    );
-} catch {}
+try {const script = ${executeCode.split('.call')[0]}.toString();if (script.includes('function showResult')) scriptResult = script;else (${executeCode.replace(/;/, '')});} catch {}
 `)
   const context = {
     scriptResult: '',
-    i: 0
+    log: console.log
   }
   vm.createContext(context)
   new vm.Script(scriptJS).runInContext(context)
-  const json = JSON.parse(context.scriptResult.split('window.parent.sf.videoResult.show(')?.[1].split(');')?.[0])
+  const data = context.scriptResult.split('window.parent.sf.videoResult.show(')?.[1] || context.scriptResult.split('window.parent.sf.videoResult.showRows(')?.[1]
+  if (!data) throw new ScraperError(`Cannot find data ("${data}") from\n"${context.scriptResult}"`)
+  let json: Savefrom | Savefrom[] | null
+  try {
+    // @ts-ignore
+    if (context.scriptResult.includes('showRows')) {
+      const splits = data.split('],"')
+      const lastIndex = splits.findIndex(v => v.includes('window.parent.sf.enableElement'))
+      json = JSON.parse(splits.slice(0, lastIndex).join('],"') + ']')
+    } else {
+      json = JSON.parse(data.split(');')[0])
+    }
+  } catch (e) {
+    json = null
+  }
+  if (!json) throw new ScraperError(`Cannot parse data ("${data}") from\n"${context.scriptResult}"`)
   return json
 }

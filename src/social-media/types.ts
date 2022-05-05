@@ -369,29 +369,28 @@ export interface Aiovideodl {
 }
 
 export interface Savefrom {
-	id?: string;
-	url: {
+	id: string;
+	url?: ({
 		url: string;
-        name: string;
-        ext: string;
-        type: string;
+		ext: string;
+		type: string;
+		name: string;
 		quality?: number;
-        subname: string
-	}[];
+		subname?: string;
+	})[] | null;
 	meta: {
 		title: string;
-        source: string;
-        duration?: string;
+		source: string;
 	};
+	video_quality?: (string)[] | null;
 	thumb: string;
-	video_quality?: string[];
-	sd?: {
+	sd: {
 		url: string;
 		format?: string;
 	};
-	hosting: string;
 	hd?: {
 		url: string;
-		format?: string;
+		format: string;
 	};
+	hosting: string;
 }
