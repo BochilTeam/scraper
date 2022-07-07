@@ -1,5 +1,6 @@
 import cheerio from 'cheerio'
 import got from 'got'
+// eslint-disable-next-line import/extensions
 import { YoutubeSearch } from './types'
 
 type Ithumbnails = { url: string; width: number; height: number };

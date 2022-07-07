@@ -1,12 +1,14 @@
 import cheerio from 'cheerio'
 import got from 'got'
 import { ScraperError } from '../utils.js'
-import { Wikipedia } from './types'
+import { Wikipedia, WikipediaArgsSchema, WikipediaSchema } from './types.js'
 
 export default async function wikipedia (
   query: string,
   lang: 'en' | 'id' = 'id'
 ): Promise<Wikipedia> {
+  WikipediaArgsSchema.parse(arguments)
+
   const html = await getHtml(lang, query)
   const $ = cheerio.load(html)
   const title = $('#firstHeading > i').text().trim()
@@ -58,11 +60,12 @@ export default async function wikipedia (
       return true
     })
 
-  return {
+  const res = {
     title,
     img,
     articles: articles.join('\n\n')
-  } as Wikipedia
+  }
+  return WikipediaSchema.parse(res)
 }
 
 function isSupportLang (lang: string): boolean {
@@ -76,8 +79,8 @@ async function getHtml (lang: string, query: string): Promise<string> {
   let res = await got(defaultLink + '/wiki/' + query)
   if (!(res.statusCode === 404)) return res.body
   const link = `${defaultLink}/w/index.php?${lang === 'id'
-      ? `title=Istimewa:Pencarian&search=${query}&fulltext=1&ns0=1`
-      : `search=${query}&title=Special:Search&profile=advanced&fulltext=1&ns0=1`
+    ? `title=Istimewa:Pencarian&search=${query}&fulltext=1&ns0=1`
+    : `search=${query}&title=Special:Search&profile=advanced&fulltext=1&ns0=1`
     }`
   res = await got(link)
   const html = res.body

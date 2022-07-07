@@ -3,14 +3,18 @@ import got from 'got'
 import { randomBytes } from '../encryptions/crypto.js'
 import {
   ScraperError,
-  decodeSnapApp
+  decodeSnapApp,
+  getEncodedSnapApp
 } from '../utils.js'
 import {
+  FacebookDownloaderArgsSchema,
+  FacebookDownloaderSchema,
   FacebookDownloader,
+  FacebookDownloaderV2Schema,
   FacebookDownloaderV2,
+  FacebookDownloaderV3Schema,
   FacebookDownloaderV3
-// eslint-disable-next-line import/extensions
-} from './types'
+} from './types.js'
 
 interface Ires {
   size?: string;
@@ -23,6 +27,7 @@ interface Ires {
 
 // only support download video yet
 export async function facebookdl (url: string): Promise<FacebookDownloader> {
+  FacebookDownloaderArgsSchema.parse(arguments)
   /* eslint no-mixed-spaces-and-tabs: ["error", "smart-tabs"] */
   const {
     data: { id, thumbnail, duration, a, av, v }
@@ -64,15 +69,19 @@ export async function facebookdl (url: string): Promise<FacebookDownloader> {
       // ext webm video without audio
     })
   if (!result.length) throw new ScraperError(`Can't download!\n${JSON.stringify({ id, thumbnail, duration, a, av, v }, null, 2)}`)
-  return {
+
+  const res = {
     id,
     thumbnail,
     duration,
     result
   }
+  return FacebookDownloaderSchema.parse(res)
 }
 
 export async function facebookdlv2 (url: string): Promise<FacebookDownloaderV2> {
+  FacebookDownloaderArgsSchema.parse(arguments)
+
   const params: { url: string } = {
     url: encodeURI(url)
   }
@@ -89,14 +98,12 @@ export async function facebookdlv2 (url: string): Promise<FacebookDownloaderV2> 
       },
       form: params
     }).text()
-  const decodeParams = res.split('))</script>')[0]
-    .split('decodeURIComponent(escape(r))}(')[1]
-    ?.split(',')?.map(v => v.replace(/^"/, '')
-      .replace(/"$/, '').trim())
+  const decodeParams = getEncodedSnapApp(res)
   let html: string
   if (!Array.isArray(decodeParams) || decodeParams.length !== 6) html = (typeof res === 'string' ? JSON.parse(res) : res)?.data
   else {
     const decode = decodeSnapApp(...decodeParams)
+    // console.debug(decode)
     html = decode?.split('("download-section").innerHTML = "')[1]
       ?.split('; parent.document.getElementById("inputData").remove();')[0]
       ?.split('</style><section class=')[1].split('"> ')
@@ -115,7 +122,8 @@ export async function facebookdlv2 (url: string): Promise<FacebookDownloaderV2> 
     }
   })
   if (!result.length) throw new ScraperError(`Can't download!\n${$.html()}`)
-  return {
+
+  const data = {
     id: $('div.media-content > div.content > p > strong')
       .text()
       .split('#')?.[1]
@@ -125,9 +133,12 @@ export async function facebookdlv2 (url: string): Promise<FacebookDownloaderV2> 
     thumbnail: $('figure > p.image > img[src]').attr('src') as string,
     result
   }
+  return FacebookDownloaderV2Schema.parse(data)
 }
 
 export async function facebookdlv3 (url: string): Promise<FacebookDownloaderV3> {
+  FacebookDownloaderArgsSchema.parse(arguments)
+
   const payload = {
     url
   }
@@ -168,9 +179,11 @@ export async function facebookdlv3 (url: string): Promise<FacebookDownloaderV3> 
     }
   })
   if (!result.length) throw new ScraperError(`Can't download!\n${$.html()}`)
-  return {
-    title: $('#title_video').val() as string,
+
+  const res = {
+    title: $('#title_video').val()!,
     thumbnail,
     result
   }
+  return FacebookDownloaderV3Schema.parse(res)
 }

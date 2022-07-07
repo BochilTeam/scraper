@@ -1,10 +1,11 @@
 import got from 'got'
 import vm from 'vm'
 import { ScraperError } from '../utils.js'
-// eslint-disable-next-line import/extensions
-import { Savefrom } from './types'
+import { SaveFromArgsSchema, Savefrom, SaveFromSchema } from './types.js'
 
-export default async function savefrom (url: string): Promise<Savefrom | Savefrom[]> {
+export default async function savefrom (url: string): Promise<Savefrom[]> {
+  SaveFromArgsSchema.parse(arguments)
+
   let scriptJS = await got('https://worker.sf-tools.com/savefrom.php', {
     method: 'POST',
     headers: {
@@ -39,7 +40,7 @@ try {const script = ${executeCode.split('.call')[0]}.toString();if (script.inclu
   new vm.Script(scriptJS).runInContext(context)
   const data = context.scriptResult.split('window.parent.sf.videoResult.show(')?.[1] || context.scriptResult.split('window.parent.sf.videoResult.showRows(')?.[1]
   if (!data) throw new ScraperError(`Cannot find data ("${data}") from\n"${context.scriptResult}"`)
-  let json: Savefrom | Savefrom[] | null
+  let json: Savefrom[] | null
   try {
     // @ts-ignore
     if (context.scriptResult.includes('showRows')) {
@@ -47,11 +48,11 @@ try {const script = ${executeCode.split('.call')[0]}.toString();if (script.inclu
       const lastIndex = splits.findIndex(v => v.includes('window.parent.sf.enableElement'))
       json = JSON.parse(splits.slice(0, lastIndex).join('],"') + ']')
     } else {
-      json = JSON.parse(data.split(');')[0])
+      json = [JSON.parse(data.split(');')[0])]
     }
   } catch (e) {
     json = null
   }
-  if (!json) throw new ScraperError(`Cannot parse data ("${data}") from\n"${context.scriptResult}"`)
-  return json
+  if (!json?.length) throw new ScraperError(`Cannot parse data ("${data}") from\n"${context.scriptResult}"`)
+  return json.map(v => SaveFromSchema.parse(v))
 }

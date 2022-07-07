@@ -1,9 +1,12 @@
 import got from 'got'
 import cheerio from 'cheerio'
-import { Mediafire } from './types.js'
+import { Mediafire, MediafireArgsSchema, MediafireSchema } from './types.js'
 
 export async function mediafiredl (url: string): Promise<Mediafire> {
-  if (!/https?:\/\/(www\.)?mediafire\.com/.test(url)) throw new Error('Invalid URL: ' + url)
+  MediafireArgsSchema.parse(arguments)
+
+  // if (!/https?:\/\/(www\.)?mediafire\.com/.test(url)) throw new Error('Invalid URL: ' + url)
+
   const data = await got(url).text()
   const $ = cheerio.load(data)
   const Url = ($('#downloadButton').attr('href') || '').trim()
@@ -26,8 +29,9 @@ export async function mediafiredl (url: string): Promise<Mediafire> {
             ? 0.1
             : 0
   )
-  return {
-    url: Url,
+
+  const result = {
+    url: Url || url2,
     url2,
     filename,
     filetype,
@@ -36,4 +40,5 @@ export async function mediafiredl (url: string): Promise<Mediafire> {
     filesizeH,
     filesize
   }
+  return MediafireSchema.parse(result)
 }

@@ -1,15 +1,17 @@
 import cheerio from 'cheerio'
 import got from 'got'
-import { GoogleIt } from './types'
+import { GoogleItArgsSchema, GoogleItSchema, GoogleIt } from './types.js'
 
 export async function googleIt (query: string): Promise<GoogleIt> {
+  GoogleItArgsSchema.parse(arguments)
+
   const body = await got('https://www.google.com/search', {
     searchParams: {
       q: query
     },
     headers: {
       'User-Agent':
-				'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36'
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36'
     }
   }).text()
   const $ = cheerio.load(body)
@@ -45,7 +47,7 @@ export async function googleIt (query: string): Promise<GoogleIt> {
     const title = el.find('div.yuRUbf > a > h3').text()
     const url = el.find('div.yuRUbf > a[href]').attr('href')
     const description =
-			el.find('div.VwiC3b > span').text() || el.find('div.VwiC3b').text()
+      el.find('div.VwiC3b > span').text() || el.find('div.VwiC3b').text()
     if (el.length && url) {
       articles.push({
         header: header,
@@ -55,8 +57,10 @@ export async function googleIt (query: string): Promise<GoogleIt> {
       })
     }
   })
-  return {
+
+  const res = {
     info,
     articles
   }
+  return GoogleItSchema.parse(res)
 }

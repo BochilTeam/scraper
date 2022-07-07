@@ -1,7 +1,12 @@
 import got from 'got'
 import cheerio from 'cheerio'
-// eslint-disable-next-line import/extensions
-import { JadwalTV, JadwalTVNOW } from './types'
+import {
+  JadwalTV,
+  JadwalTVArgsSchema,
+  JadwalTVNOW,
+  JadwalTVNOWSchema,
+  JadwalTVSchema
+} from './types.js'
 import { ScraperError } from '../utils.js'
 
 type ListJadwalTV = {
@@ -13,6 +18,8 @@ type ListJadwalTV = {
 export const listJadwalTV: Promise<ListJadwalTV> = (async () => await got('https://raw.githubusercontent.com/BochilTeam/scraper/master/data/jadwal-tv.json').json<ListJadwalTV>())()
 
 export default async function jadwalTV (channel: string): Promise<JadwalTV> {
+  JadwalTVArgsSchema.parse(arguments)
+
   const list = await listJadwalTV
   const data = list.find(
     ({ channel: name }) => (new RegExp(channel, 'ig')).test(name)
@@ -36,10 +43,12 @@ export default async function jadwalTV (channel: string): Promise<JadwalTV> {
         }
       })
   })
-  return {
+
+  const res = {
     channel: data.channel,
     result
   }
+  return JadwalTVSchema.parse(res)
 }
 
 export async function jadwalTVNow (): Promise<JadwalTVNOW> {
@@ -52,7 +61,7 @@ export async function jadwalTVNow (): Promise<JadwalTVNOW> {
       .slice(1).each(function () {
         const el = $(this).find('td')
         const channel = el.eq(0).find('strong > a[href]')
-          .text().trim().toLowerCase()
+          .text()!.trim().toLowerCase()
         if (channel) {
           prevChannel = channel
           result[channel] = []
@@ -66,5 +75,5 @@ export async function jadwalTVNow (): Promise<JadwalTVNOW> {
         }
       })
   })
-  return result
+  return JadwalTVNOWSchema.parse(result)
 }

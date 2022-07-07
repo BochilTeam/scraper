@@ -1,20 +1,22 @@
+/* eslint-disable no-undef */
 import { expect } from 'chai'
 import {
   wikipedia,
   jadwalTV,
   jadwalTVNow,
-  listJadwalTV,
+  // listJadwalTV,
   mediafiredl,
   gempa,
   gempaNow,
   tsunami,
   lyrics,
-  lyricsv2,
+  // lyricsv2,
   kbbi,
-  statusJava,
+  // statusJava,
   nameFreeFire,
   bioskopNow,
-  bioskop
+  bioskop,
+  chord
 } from './index.js'
 
 describe('Others', () => {
@@ -266,6 +268,16 @@ describe('Others', () => {
           expect(director).to.be.a('string')
           expect(cast).to.be.an('string')
         })
+
+        return done()
+      }).catch(done)
+    })
+  })
+
+  describe('Chord', () => {
+    it('Chord', done => {
+      chord('Until i found you').then(res => {
+        // console.log(res)
 
         return done()
       }).catch(done)

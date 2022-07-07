@@ -1,18 +1,37 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 import cheerio from 'cheerio'
-import got, { Headers, Response } from 'got'
-import type {
+import got, { Headers } from 'got'
+import Form from 'form-data'
+import {
+  InstagramDownloaderArgsSchema,
   InstagramDownloader,
   InstagramDownloaderV2,
-  InstagramDownloaderV4,
   InstagramStory,
-  InstagramStoryv2,
-  InstagramStalk
-} from './types'
-import { ScraperError, decodeSnapApp } from '../utils.js'
-import Form from 'form-data'
+  InstagramStoryV2,
+  InstagramStalk,
+  InstagramDownloaderSchema,
+  InstagramDownloaderV2Schema,
+  InstagramStoryArgsSchema,
+  IinstagramStorySchema,
+  InstagramStoryV2Schema,
+  InstagramStalkArgsSchema,
+  InstagramStalkSchema,
+  InstagramDownloaderV3,
+  InstagramDownloaderV3Schema
+} from './types.js'
+import {
+  ScraperError,
+  decodeSnapApp,
+  getEncodedSnapApp,
+  stringifyCookies
+  // stringifyCookies,
+  // parseCookies
+} from '../utils.js'
+import { snapsave } from './index.js'
 
 export async function instagramdl (url: string): Promise<InstagramDownloader[]> {
+  InstagramDownloaderArgsSchema.parse(arguments)
+
   if (!/https?:\/\/www\.instagram\.com\/(reel|tv|p)\//i.test(url)) {
     throw new ScraperError('Invalid url!!')
   }
@@ -32,10 +51,7 @@ export async function instagramdl (url: string): Promise<InstagramDownloader[]> 
       }
     })
     .text()
-  const params = data.split('))</script>')[0]
-    .split('decodeURIComponent(escape(r))}(')[1]
-    ?.split(',').map(v => v.replace(/^"/, '')
-      .replace(/"$/, '').trim())
+  const params = getEncodedSnapApp(data)
   if (!Array.isArray(params) || params.length !== 6) throw new ScraperError(`Can't parse decode parameters!\n${data}`)
   const decode = decodeSnapApp(...params)
   const html = decode?.split('("div_download").innerHTML = "')?.[1]
@@ -57,184 +73,45 @@ export async function instagramdl (url: string): Promise<InstagramDownloader[]> 
   return results
 }
 
-// export async function instagramdlv2 (url: string): Promise<InstagramDownloaderV2[]> {
-//   const headers = {
-//     Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-//     Host: 'igdownloader.com',
-//     Referer: 'https://www.google.com/',
-//     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36'
-//   }
-//   // const initRes = await got('https://igdownloader.com/', { headers })
-//   // const cookie = initRes.headers['set-cookie']?.join('; ')
-//   const payload = {
-//     link: encodeURI(url),
-//     downloader: 'photo'
-//   }
-//   const data: { error: boolean, html: string } = await got.post('https://igdownloader.com/ajax', {
-//     form: payload,
-//     headers: {
-//       ...headers,
-//       Accept: 'application/json, text/javascript, */*; q=0.01',
-//       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-//       Origin: 'https://igdownloader.com',
-//       Referer: 'https://igdownloader.com/',
-//       Cookie: 'PHPSESSID=u2npiqgusdpmn1qquvp1ehk527; _ga_ZK84BJGHBW=GS1.1.1651742918.1.1.1651744179.0; _ga=GA1.1.431177399.1651744179; __gads=ID=fe9f7f22482b2fb6-22aee78011d3003b:T=1651744181:RT=1651744181:S=ALNI_MZ3uEDkgqcDjKYEcG5S1wXkj5Xvhw'
-//     }
-//   }).json()
-//   if (data.error) throw new ScraperError('Can\'t download!\n' + data)
-//   const $ = cheerio.load(data.html)
-//   const results: InstagramDownloaderV2[] = []
-//   $('div.post-wrapper').each(function () {
-//     const thumbnail = ($(this)
-//       .find('img[src]')
-//       .attr('src') || $(this).find('div.post').attr('data-src')) as string
-//     const url = ($(this).find('a[href]').attr('href') || $(this).find('div.checkbox').attr('data-src')) as string
-//     const sourceUrl = $(this).find('div.checkbox').attr('data-src') || url || thumbnail
-//     if (thumbnail || url || sourceUrl) results.push({ thumbnail, url, sourceUrl })
-//   })
-//   return results
-// }
+export async function instagramdlv2 (url: string): Promise<InstagramDownloaderV2[]> {
+  InstagramDownloaderArgsSchema.parse(arguments)
 
-export async function instagramdlv2 (
-  url: string
-): Promise<InstagramDownloaderV2[]> {
-  if (!/https?:\/\/www\.instagram\.com\/(reel|tv|p)\//i.test(url)) {
-    throw new ScraperError('Invalid url!!')
-  }
-  const payload = {
-    url: url,
-    submit: ' '
-  }
-  const data = await got
-    .post('https://downloadgram.org/', {
-      form: payload,
-      headers: {
-        'content-type': 'application/x-www-form-urlencoded',
-        cookie:
-          '_ga=GA1.2.654346005.1642149344; _gid=GA1.2.1562255413.1642149344; _gat_gtag_UA_142480840_1=1; __atuvc=1%7C2; __atuvs=61e135df10258fab000; __gads=ID=b4c9d2019034e5ed-227b64f3e5cf003a:T=1642149344:RT=1642149344:S=ALNI_MbtRULwcpAb_-lCLCSUPN5m5rd54A',
-        origin: 'https://downloadgram.org',
-        referer: 'https://downloadgram.org/',
-        'user-agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36'
-      }
-    })
-    .text()
+  const res = await snapsave(url)
+  if (!res.length) throw new ScraperError(`Can't download!\n${res}`)
 
-  const $ = cheerio.load(data)
-  let results: InstagramDownloaderV2[] = []
-  if ($('#downloadBox > a').length) {
-    const temp: {
-      thumbnail?: string;
-      sourceUrl?: string;
-      index: number;
-      url?: string;
-    }[] = []
-    $('#downloadBox > video').each(function (i) {
-      const thumbnail = $(this).attr('poster')
-      const sourceUrl = $(this).find('source[src]').attr('src')
-      if (thumbnail) {
-        temp.push({
-          thumbnail,
-          sourceUrl,
-          index: i
-        })
-      }
-    })
-
-    $('#downloadBox > img').each(function (i) {
-      const j = temp.findIndex(({ index }) => index === i)
-      const thumbnail = $(this).attr('src')
-      if (thumbnail) {
-        if (j !== -1) temp[j].thumbnail = thumbnail
-        else temp.push({ thumbnail, index: i })
-      }
-    })
-    $('#downloadBox > a').each(function (i) {
-      const j = temp.findIndex(({ index }) => index === i)
-      const url = $(this).attr('href')
-      if (j !== -1) temp[j].url = url
-      else temp.push({ url, index: i })
-    })
-    results = temp.map((tmp) => ({
-      thumbnail: tmp.thumbnail as string,
-      sourceUrl: tmp.sourceUrl as string,
-      url: tmp.url as string
-    }))
-  }
-  if (!results.length) throw new ScraperError(`Can't download!\n${$.html()}`)
-  return results
+  return res.map(v => InstagramDownloaderV2Schema.parse(v))
 }
 
-export async function instagramdlv3 (url: string): Promise<InstagramDownloaderV2[]> {
-  const payload = {
-    link: url,
-    submit: ''
-  }; const headers: Headers = {
-    'content-type': 'application/x-www-form-urlencoded',
-    origin: 'https://instasave.website',
-    referer: 'https://instasave.website/',
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36'
-  }
+// Inpired by https://github.com/xfar05/xfarr-api/blob/cc0b16819bdecb5351471f81c3de30673d7c657b/lib/downloader.js#L198
+export async function instagramdlv3 (url: string): Promise<InstagramDownloaderV3> {
+  InstagramDownloaderArgsSchema.parse(arguments)
 
-  const body: Response<string> = await got('https://instasave.website/', {
-    form: payload,
-    method: 'POST',
-    headers: headers
-  }).catch(async (_) => await got('https://server.instasave.website/', {
-    form: payload,
-    method: 'POST',
+  const resTmp = await got('https://downvideo.quora-wiki.com/instagram-video-downloader')
+
+  const $ = cheerio.load(resTmp.body)
+  const token = $('#token').val() as string
+  const cookie = resTmp.headers['set-cookie'] && stringifyCookies(resTmp.headers['set-cookie']!)
+
+  const form = new Form()
+  form.append('url', url)
+  form.append('token', token)
+
+  const json = await got.post('https://downvideo.quora-wiki.com/system/action.php', {
     headers: {
-      ...headers,
-      origin: 'https://server.instasave.website',
-      referer: 'https://server.instasave.website'
+      'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      origin: 'https://downvideo.quora-wiki.com',
+      referer: 'https://downvideo.quora-wiki.com/instagram-video-downloader',
+      cookie: cookie || '__gads=ID=1486982c1c054fed-22e9af1484d30013:T=1657169758:RT=1657169758:S=ALNI_MZmuLRHBE2CSCqpTePuuKgRkzZCYQ; __gpi=UID=0000076ec7622ead:T=1657169758:RT=1657169758:S=ALNI_MYrP2FgjawbEhlJWKhnBeMtgQptoQ; fpestid=5T9wUIsSvP8tUpvF-F1zV-Y5RtY0Z8zuAxoIPdJFTXD56TYw2lATC9l1robj4kb26G0AuQ; PHPSESSID=8ib0bnko459rarg31p8c6v5rpp',
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
     }
-  }))
-  const $ = cheerio.load(body.body)
-  let results: InstagramDownloaderV2[] = []
-  if ($('#downloadBox > a').length) {
-    const temp: {
-      thumbnail?: string;
-      sourceUrl?: string;
-      index: number;
-      url?: string;
-    }[] = []
-    $('#downloadBox > video').each(function (i) {
-      const thumbnail = $(this).attr('poster')
-      const sourceUrl = $(this).find('source[src]').attr('src')
-      if (thumbnail) {
-        temp.push({
-          thumbnail,
-          sourceUrl,
-          index: i
-        })
-      }
-    })
+  }).json()
 
-    $('#downloadBox > img').each(function (i) {
-      const j = temp.findIndex(({ index }) => index === i)
-      const thumbnail = $(this).attr('src')
-      if (thumbnail) {
-        if (j !== -1) temp[j].thumbnail = thumbnail
-        else temp.push({ thumbnail, index: i })
-      }
-    })
-    $('#downloadBox > a').each(function (i) {
-      const j = temp.findIndex(({ index }) => index === i)
-      const url = $(this).attr('href')
-      if (j !== -1) temp[j].url = url
-      else temp.push({ url, index: i })
-    })
-    results = temp.map((tmp) => ({
-      thumbnail: tmp.thumbnail as string,
-      sourceUrl: tmp.sourceUrl as string,
-      url: tmp.url as string
-    }))
-  }
-  if (!results.length) throw new ScraperError(`Can't download!\n${$.html()}`)
-  return results
+  return InstagramDownloaderV3Schema.parse(json)
 }
 
-export async function instagramdlv4 (url: string): Promise<InstagramDownloaderV4[]> {
+export async function instagramdlv4 (url: string): Promise<InstagramDownloader[]> {
+  InstagramDownloaderArgsSchema.parse(arguments)
+
   const payload = {
     url: encodeURIComponent(url)
   }
@@ -247,49 +124,19 @@ export async function instagramdlv4 (url: string): Promise<InstagramDownloaderV4
     searchParams: payload
   }).json()
   const json: {
-    images_links: InstagramDownloaderV4[];
-    videos_links: InstagramDownloaderV4[]
+    images_links: InstagramDownloader[];
+    videos_links: InstagramDownloader[]
   } = JSON.parse(data)
   if (!(json.images_links?.length || json.videos_links?.length)) throw new ScraperError(`Can't download!\n${JSON.stringify(json, null, 2)}`)
-  return [
+  return ([
     ...json.images_links,
     ...json.videos_links
-  ] as InstagramDownloaderV4[]
+  ] as InstagramDownloader[]).map((result) => InstagramDownloaderSchema.parse(result))
 }
 
-// export async function instagramdlv5 (url: string): Promise<InstagramDownloaderV5[]> {
-//   const json: {
-//     url: {
-//       url: string;
-//       name: string;
-//       type: string;
-//       ext: string;
-//     }[];
-//     meta: {
-//       title: string;
-//       source: string;
-//     }
-//     thumb: string;
-//     [Key: string]: any
-//   } = await got('https://api.savefrom.biz/api/convert', {
-//     method: 'POST',
-//     headers: {
-//       'content-type': 'application/json',
-//       origin: 'https://savefrom.biz',
-//       referer: 'https://savefrom.biz/',
-//       'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36'
-//     },
-//     json: {
-//       url
-//     }
-//   }).json()
-//   return json.url.map(({ url, ext }) => ({
-//     url: `https://savefrom.biz${encodeURIComponent(url)}`,
-//     ext
-//   })) as InstagramDownloaderV5[]
-// }
-
 export async function instagramStory (name: string): Promise<InstagramStory> {
+  InstagramStoryArgsSchema.parse(arguments)
+
   const resKey = await got('https://storydownloader.app/en')
   const $$ = cheerio.load(resKey.body)
   const _token = $$('input[name="_token"]').attr('value')
@@ -337,16 +184,20 @@ export async function instagramStory (name: string): Promise<InstagramStory> {
       })
     }
   })
-  return {
+
+  const data = {
     user: {
       username,
       profilePicUrl
     },
     results
   }
+  return IinstagramStorySchema.parse(data)
 }
 
-export async function instagramStoryv2 (name: string): Promise<InstagramStoryv2> {
+export async function instagramStoryv2 (name: string): Promise<InstagramStoryV2> {
+  InstagramStoryArgsSchema.parse(arguments)
+
   const headers: Headers = {
     accept: '*/*',
     cookie: '_ga=GA1.2.1814586753.1642307018; _gid=GA1.2.136857157.1642307018; __gads=ID=6f5ca6608dd8b1e9-22e4ea18ffcf0077:T=1642307019:RT=1642307019:S=ALNI_MZA7NeGtOEcSPXyFhf4LY8w7Myg9g; PHPSESSID=1i9dscs75l6v2h17cvdtd587b4; _gat=1; FCNEC=[["AKsRol9R3FQaOjrrETFMIMIvWtuoY3xRHpQEPHMujRWOd_nxuLgWCSyYK9lLC3ev0L5V8fuaSIjhupCtaReRepP4qNvch536pzvrcU13Gh8CRHSEIh8O3zM42ASwGUQfjoKbxkTV1L15EA6O7FLZ-Qh3Fy1rvh_h8w=="],null,[]]',
@@ -396,7 +247,8 @@ export async function instagramStoryv2 (name: string): Promise<InstagramStoryv2>
     }
   }).json()
   if (error || !results) throw new ScraperError(`Maybe user ${name} not have story!!\n${JSON.stringify({ error, user, results, payload }, null, 2)}`)
-  return {
+
+  const res = {
     user,
     results: results.map(({ preview, url, downloadUrl, type, fileType }) => ({
       thumbnail: preview,
@@ -407,9 +259,12 @@ export async function instagramStoryv2 (name: string): Promise<InstagramStoryv2>
       isVideo: type === 'video'
     }))
   }
+  return InstagramStoryV2Schema.parse(res)
 }
 
 export async function instagramStalk (username: string): Promise<InstagramStalk> {
+  InstagramStalkArgsSchema.parse(arguments)
+
   const data = await got(`https://dumpor.com/search?query=${encodeURIComponent(username).replace(/%20/g, '+')}`).text()
   const $ = cheerio.load(data)
   const accounts: { url: string, avatar: string, username: string }[] = []
@@ -449,7 +304,8 @@ export async function instagramStalk (username: string): Promise<InstagramStalk>
     list.eq(2).text().replace(/Following/i, '')
       ?.trim()?.replace(/\s/g, '')
   )
-  return {
+
+  const res = {
     name,
     username: Uname,
     avatar: accounts[0].avatar,
@@ -461,4 +317,5 @@ export async function instagramStalk (username: string): Promise<InstagramStalk>
     followingH,
     following
   }
+  return InstagramStalkSchema.parse(res)
 }

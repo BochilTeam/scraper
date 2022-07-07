@@ -1,11 +1,13 @@
 import got from 'got'
 import cheerio from 'cheerio'
-import type {
-  Lyrics
-} from './types'
+import {
+  Lyrics, LyricsArgsSchema, LyricsSchema
+} from './types.js'
 import { ScraperError } from '../utils.js'
 
 export async function lyrics (query: string): Promise<Lyrics> {
+  LyricsArgsSchema.parse(arguments)
+
   const data = await got(`https://www.musixmatch.com/search/${encodeURIComponent(query)}`).text()
   const $ = cheerio.load(data)
   const results: {
@@ -28,7 +30,8 @@ export async function lyrics (query: string): Promise<Lyrics> {
   const { link, title, author } = results[0]
   const html = await got(link).text()
   const $$ = cheerio.load(html)
-  return {
+
+  const result = {
     title,
     author,
     lyrics: $$('p.mxm-lyrics__content > span.lyrics__content__ok').map(
@@ -36,9 +39,12 @@ export async function lyrics (query: string): Promise<Lyrics> {
     ).toArray().filter(v => v).join('\n'),
     link
   }
+  return LyricsSchema.parse(result)
 }
 
 export async function lyricsv2 (query: string): Promise<Lyrics> {
+  LyricsArgsSchema.parse(arguments)
+
   const data: {
     meta: {
       status: number
@@ -89,10 +95,12 @@ export async function lyricsv2 (query: string): Promise<Lyrics> {
     const element = $(($(el).html() || '').replace(/<br>/g, '\n')).text().trim()
     if (element) results += element
   })
-  return {
+
+  const res = {
     title,
     author: artist_names,
     lyrics: results.trim(),
     link: url
   }
+  return LyricsSchema.parse(res)
 }

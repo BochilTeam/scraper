@@ -1,8 +1,10 @@
 import got from 'got'
 import { ScraperError } from '../utils.js'
-import type { NameFreeFire } from './types'
+import { NameFreeFire, NameFreeFireArgsSchema, NameFreeFireSchema } from './types.js'
 
 export default async function nameFreeFire (id: string | number): Promise<NameFreeFire> {
+  NameFreeFireArgsSchema.parse(arguments)
+
   id = id.toString()
   const json: any = await got('https://api.duniagames.co.id/api/transaction/v1/top-up/inquiry/store', {
     headers: {
@@ -24,8 +26,10 @@ export default async function nameFreeFire (id: string | number): Promise<NameFr
     method: 'POST'
   }).json()
   if (json.status.message !== 'success') throw new ScraperError(`Can't get nameFreeFire for id ${id}\n${JSON.stringify(json, null, 2)}`)
-  return {
+
+  const result = {
     id: json.data.gameId,
     username: json.data.userNameGame
   }
+  return NameFreeFireSchema.parse(result)
 }

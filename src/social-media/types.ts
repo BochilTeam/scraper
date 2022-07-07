@@ -1,396 +1,502 @@
-export interface FacebookDownloader {
-	id: string;
-	thumbnail: string;
-	duration: number;
-	result: {
-		size?: string;
-		ext: string;
-		url: string;
-		quality?: string;
-		vcodec?: string;
-		fid: string;
-		isVideo: boolean;
-		isAudio: boolean;
-	}[];
-}
+import { z } from 'zod'
+import { ERROR_ARGS } from '../constant.js'
 
-export interface FacebookDownloaderV2 {
-	id?: string;
-	title: string;
-	description: string;
-	thumbnail: string;
-	result: {
-		quality: string;
-		url: string;
-	}[];
-}
-export interface FacebookDownloaderV3 {
-	title: string;
-	thumbnail?: string;
-	result: {
-		quality?: string;
-		url: string;
-		isAudio: boolean;
-		isVideo: boolean;
-	}[];
-}
-export interface GoogleIt {
-	info: {
-		title?: string;
-		type?: string;
-		description?: string;
-		image?: string[];
-	};
-	articles: {
-		header: string;
-		title: string;
-		url: string;
-		description: string;
-	}[];
-}
+export const FacebookDownloaderArgsSchema = z.object({
+  0: z.string(ERROR_ARGS.URL).url()
+})
 
-interface IinstagramDownloader { url: string }
-export type InstagramDownloader = IinstagramDownloader & {
-	thumbnail: string;
-};
-export type InstagramDownloaderV2 = IinstagramDownloader & {
-	thumbnail: string;
-	sourceUrl?: string
-};
-export type InstagramDownloaderV4 = IinstagramDownloader & {
-	thumbnail: string;
-}
-export type InstagramDownloaderV5 = IinstagramDownloader & {
-	thumbnail: string;
-	ext: string;
-};
-interface IinstagramStory {
-	user: {
-		username: string;
-		profilePicUrl: string;
-	},
-	results: {
-		thumbnail: string;
-		url: string;
-		type: string;
-		isVideo: boolean;
-	}[]
-}
+export const FacebookDownloaderSchema = z.object({
+  id: z.string(),
+  thumbnail: z.string(),
+  duration: z.number(),
+  result: z.object({
+    size: z.string().optional(),
+    ext: z.string(),
+    url: z.string(),
+    quality: z.string().optional(),
+    vcodec: z.string().optional(),
+    fid: z.string(),
+    isVideo: z.boolean(),
+    isAudio: z.boolean()
+  }).array().min(1).optional()
+})
+
+export const FacebookDownloaderV2Schema = z.object({
+  id: z.string().optional(),
+  title: z.string(),
+  description: z.string(),
+  thumbnail: z.string(),
+  result: z.object({
+    quality: z.string(),
+    url: z.string()
+  }).array().min(1)
+})
+
+export const FacebookDownloaderV3Schema = z.object({
+  title: z.string(),
+  thumbnail: z.string().optional(),
+  result: z.object({
+    quality: z.string().optional(),
+    url: z.string(),
+    isAudio: z.boolean(),
+    isVideo: z.boolean()
+  }).array().min(1)
+})
+
+export type FacebookDownloaderArgs = z.infer<typeof FacebookDownloaderArgsSchema>
+export type FacebookDownloader = z.infer<typeof FacebookDownloaderSchema>
+export type FacebookDownloaderV2 = z.infer<typeof FacebookDownloaderV2Schema>
+export type FacebookDownloaderV3 = z.infer<typeof FacebookDownloaderV3Schema>
+
+export const InstagramDownloaderArgsSchema = z.object({
+  0: z.string(ERROR_ARGS.URL).url()
+})
+export const IinstagramDownloaderSchema = z.object({
+  url: z.string()
+})
+export const InstagramDownloaderSchema = z.object({
+  thumbnail: z.string()
+}).and(IinstagramDownloaderSchema)
+export const InstagramDownloaderV2Schema = IinstagramDownloaderSchema.extend({
+  thumbnail: z.string().optional(),
+  resolution: z.string().optional()
+})
+export const InstagramDownloaderV3Schema = z.object({
+  url: z.string().url(),
+  title: z.string(),
+  thumbnail: z.string().url(),
+  duration: z.string(),
+  source: z.string(),
+  medias: z.object({
+    url: z.string().url(),
+    quality: z.string(),
+    formattedSize: z.string(),
+    extension: z.string(),
+    audioAvailable: z.boolean(),
+    videoAvailable: z.boolean(),
+    cached: z.boolean(),
+    chunked: z.boolean()
+  }).array().min(1)
+})
+
+export type IinstagramDownloader = z.infer<typeof IinstagramDownloaderSchema>
+export type InstagramDownloaderArgs = z.infer<typeof InstagramDownloaderArgsSchema>
+export type InstagramDownloader = z.infer<typeof InstagramDownloaderSchema>
+export type InstagramDownloaderV2 = z.infer<typeof InstagramDownloaderV2Schema>
+export type InstagramDownloaderV3 = z.infer<typeof InstagramDownloaderV3Schema>
+
+export const IinstagramStorySchema = z.object({
+  user: z.object({
+    username: z.string(),
+    profilePicUrl: z.string()
+  }),
+  results: z.object({
+    thumbnail: z.string(),
+    url: z.string(),
+    type: z.string(),
+    isVideo: z.boolean()
+  }).array().min(1)
+})
+
+export const InstagramStoryArgsSchema = z.object({
+  0: z.string(ERROR_ARGS.QUERY)
+})
+
+export const InstagramStoryV2Schema = z.object({
+  user: z.object({
+    username: z.string(),
+    profilePicUrl: z.string(),
+    id: z.string(),
+    fullName: z.string(),
+    biography: z.string(),
+    followers: z.number(),
+    following: z.number()
+  }),
+  results: z.object({
+    thumbnail: z.string(),
+    url: z.string(),
+    type: z.string(),
+    isVideo: z.boolean(),
+    sourceUrl: z.string(),
+    fileType: z.string()
+  }).array().min(1)
+})
+
+export type IinstagramStory = z.infer<typeof IinstagramStorySchema>
+export type InstagramStoryArgs = z.infer<typeof InstagramStoryArgsSchema>
 export type InstagramStory = IinstagramStory
-export type InstagramStoryv2 = IinstagramStory & {
-	user: {
-		id: string;
-		fullName: string;
-		biography: string;
-		followers: number;
-		following: number;
-	};
-	results: {
-		sourceUrl: string;
-		fileType: string;
-	}[]
-}
-export type InstagramStalk = {
-	name: string;
-	username: string;
-	avatar: string;
-	description: string;
-	postsH: string;
-	posts: number;
-	followersH: string;
-	followers: number;
-	followingH: string;
-	following: number;
-}
+export type InstagramStoryV2 = z.infer<typeof InstagramStoryV2Schema>
 
-interface ItiktokDownloader {
-	author: {
-		nickname: string;
-	};
-	video: {
-		[Key: string]: string;
-	}
-}
-export type TiktokDownloader = ItiktokDownloader & {
-	description: string;
-	video: {
-		no_watermark: string;
-		no_watermark2: string;
-		no_watermark_raw: string;
-	}
-}
-export type TiktokDownloaderv2 = ItiktokDownloader & {
-	author: {
-		unique_id: string;
-		avatar: string;
-	};
-	video: {
-		no_watermark: string;
-		no_watermark_hd: string
-	};
-};
-export type TiktokDownloaderv3 = ItiktokDownloader & {
-	author: {
-		avatar: string;
-	};
-	description: string;
-	video: {
-		no_watermark: string;
-		no_watermark2: string;
-	};
-	music: string;
-}
+export const InstagramStalkArgsSchema = InstagramStoryArgsSchema
+
+export const InstagramStalkSchema = z.object({
+  name: z.string(),
+  username: z.string(),
+  avatar: z.string().optional(),
+  description: z.string(),
+  postsH: z.string(),
+  posts: z.number(),
+  followersH: z.string(),
+  followers: z.number(),
+  followingH: z.string(),
+  following: z.number()
+})
+
+export type InstagramStalkArgs = z.infer<typeof InstagramStalkArgsSchema>
+export type InstagramStalk = z.infer<typeof InstagramStalkSchema>
+
+export const TiktokDownloaderArgsSchema = z.object({
+  0: z.string(ERROR_ARGS.URL).url()
+})
+
+export const TiktokDownloaderSchema = z.object({
+  author: z.object({
+    nickname: z.string()
+  }),
+  description: z.string(),
+  video: z.object({
+    no_watermark: z.string(),
+    no_watermark2: z.string(),
+    no_watermark_raw: z.string()
+  })
+})
+
+export const TiktokDownloaderV2Schema = z.object({
+  author: z.object({
+    nickname: z.string(),
+    unique_id: z.string(),
+    avatar: z.string()
+  }),
+  video: z.object({
+    no_watermark: z.string(),
+    no_watermark_hd: z.string()
+  })
+})
+
+export const TiktokDownloaderV3Schema = z.object({
+  author: z.object({
+    nickname: z.string(),
+    avatar: z.string()
+  }),
+  description: z.string(),
+  video: z.object({
+    no_watermark: z.string(),
+    no_watermark2: z.string()
+  }),
+  music: z.string()
+})
+
+export type TiktokDownloaderArgs = z.infer<typeof TiktokDownloaderArgsSchema>
+export type TiktokDownloader = z.infer<typeof TiktokDownloaderSchema>
+export type TiktokDownloaderV2 = z.infer<typeof TiktokDownloaderV2Schema>
+export type TiktokDownloaderV3 = z.infer<typeof TiktokDownloaderV3Schema>
 
 export interface TiktokFyp {
-	id: string;
-	desc: string;
-	createdTime: Date;
-	video: {
-		id: string;
-		height: number;
-		width: number;
-		duration: number;
-		ratio: string;
-		cover: string;
-		originCover: string;
-		dynamicCover: string;
-		playAddr: string;
-		downloadAddr: string;
-		shareCover: string[];
-		reflowCover: string;
-		bitrate: number;
-		encodedType: string;
-		format: string;
-		videoQuality: string;
-		encodeUserTag: string;
-		codecType: string;
-		definition: string;
-	};
-	author: {
-		id: string;
-		uniqueId: string;
-		nickname: string;
-		avatarThumb: string;
-		avatarMedium: string;
-		avatarLarger: string;
-		signature: string;
-		verified: boolean;
-		secUid: string;
-		secret: boolean;
-		ftc: boolean;
-		relation: number;
-		openFavorite: boolean;
-		commentSetting: number;
-		duetSetting: number;
-		stitchSetting: number;
-		privateAccount: boolean;
-		isADVirtual: boolean;
-	};
-	music: {
-		id: string;
-		title: string;
-		playUrl: string;
-		coverThumb: string;
-		coverMedium: string;
-		coverLarge: string;
-		authorName: string;
-		original: boolean;
-		duration: number;
-		album: string;
-	};
-	challenges?: {
-		id: string;
-		title: string;
-		desc: string;
-		profileThumb: string;
-		profileMedium: string;
-		profileLarger: string;
-		coverThumb: string;
-		coverMedium: string;
-		coverLarger: string;
-		isCommerce: boolean;
-	}[];
-	stats: {
-		diggCount: number;
-		shareCount: number;
-		commentCount: number;
-		playCount: number;
-	};
-	duetInfo: {
-		duetFromId: string;
-	};
-	originalItem: boolean;
-	officalItem: boolean;
-	textExtra?: {
-		awemeId: string;
-		start: number;
-		end: number;
-		hashtagName: string;
-		hashtagId: string;
-		type: 1;
-		userId: string;
-		isCommerce: boolean;
-		userUniqueId: string;
-		secUid: string;
-		subType: number;
-	}[];
-	secret: boolean;
-	forFriend: boolean;
-	digged: boolean;
-	itemCommentStatus: number;
-	showNotPass: boolean;
-	vl1: boolean;
-	itemMute: boolean;
-	authorStats: {
-		followingCount: number;
-		followerCount: number;
-		heartCount: number;
-		videoCount: number;
-		diggCount: number;
-		heart: number;
-	};
-	privateItem: boolean;
-	duetEnabled: boolean;
-	stitchEnabled: boolean;
-	shareEnabled: boolean;
-	isAd: boolean;
-	duetDisplay: number;
-	stitchDisplay: number;
+  id: string;
+  desc: string;
+  createdTime: Date;
+  video: {
+    id: string;
+    height: number;
+    width: number;
+    duration: number;
+    ratio: string;
+    cover: string;
+    originCover: string;
+    dynamicCover: string;
+    playAddr: string;
+    downloadAddr: string;
+    shareCover: string[];
+    reflowCover: string;
+    bitrate: number;
+    encodedType: string;
+    format: string;
+    videoQuality: string;
+    encodeUserTag: string;
+    codecType: string;
+    definition: string;
+  };
+  author: {
+    id: string;
+    uniqueId: string;
+    nickname: string;
+    avatarThumb: string;
+    avatarMedium: string;
+    avatarLarger: string;
+    signature: string;
+    verified: boolean;
+    secUid: string;
+    secret: boolean;
+    ftc: boolean;
+    relation: number;
+    openFavorite: boolean;
+    commentSetting: number;
+    duetSetting: number;
+    stitchSetting: number;
+    privateAccount: boolean;
+    isADVirtual: boolean;
+  };
+  music: {
+    id: string;
+    title: string;
+    playUrl: string;
+    coverThumb: string;
+    coverMedium: string;
+    coverLarge: string;
+    authorName: string;
+    original: boolean;
+    duration: number;
+    album: string;
+  };
+  challenges?: {
+    id: string;
+    title: string;
+    desc: string;
+    profileThumb: string;
+    profileMedium: string;
+    profileLarger: string;
+    coverThumb: string;
+    coverMedium: string;
+    coverLarger: string;
+    isCommerce: boolean;
+  }[];
+  stats: {
+    diggCount: number;
+    shareCount: number;
+    commentCount: number;
+    playCount: number;
+  };
+  duetInfo: {
+    duetFromId: string;
+  };
+  originalItem: boolean;
+  officalItem: boolean;
+  textExtra?: {
+    awemeId: string;
+    start: number;
+    end: number;
+    hashtagName: string;
+    hashtagId: string;
+    type: 1;
+    userId: string;
+    isCommerce: boolean;
+    userUniqueId: string;
+    secUid: string;
+    subType: number;
+  }[];
+  secret: boolean;
+  forFriend: boolean;
+  digged: boolean;
+  itemCommentStatus: number;
+  showNotPass: boolean;
+  vl1: boolean;
+  itemMute: boolean;
+  authorStats: {
+    followingCount: number;
+    followerCount: number;
+    heartCount: number;
+    videoCount: number;
+    diggCount: number;
+    heart: number;
+  };
+  privateItem: boolean;
+  duetEnabled: boolean;
+  stitchEnabled: boolean;
+  shareEnabled: boolean;
+  isAd: boolean;
+  duetDisplay: number;
+  stitchDisplay: number;
 }
 
-interface ItwitterDownloader {
-	quality: string;
-	type: string;
-	url: string;
-}
-export type TwitterDownloader = ItwitterDownloader & {
-	isVideo: boolean;
-}
-export type TwitterDownloaderv2 = ItwitterDownloader
+export const GoogleItArgsSchema = z.object({
+  0: z.string(ERROR_ARGS.QUERY)
+})
+export const GoogleItSchema = z.object({
+  info: z.object({
+    title: z.string().optional(),
+    type: z.string().optional(),
+    description: z.string().optional(),
+    image: z.string().array().optional()
+  }),
+  articles: z.object({
+    header: z.string(),
+    title: z.string(),
+    url: z.string(),
+    description: z.string()
+  }).array()
+})
+export type GoogleItArgs = z.infer<typeof GoogleItArgsSchema>
+export type GoogleIt = z.infer<typeof GoogleItSchema>
+
+export const TwitterDownloaderArgsSchema = z.object({
+  0: z.string(ERROR_ARGS.URL).url()
+})
+export const ItwitterDownloaderSchema = z.object({
+  quality: z.string(),
+  type: z.string(),
+  url: z.string().url()
+})
+export const TwitterDownloaderSchema = z.object({
+  isVideo: z.boolean()
+}).and(ItwitterDownloaderSchema)
+export const TwitterDownloaderV2Schema = ItwitterDownloaderSchema
+
+export type TwitterDownloaderArgs = z.infer<typeof TwitterDownloaderArgsSchema>
+export type ItwitterDownloader = z.infer<typeof ItwitterDownloaderSchema>
+export type TwitterDownloader = z.infer<typeof TwitterDownloaderSchema>
+export type TwitterDownloaderV2 = ItwitterDownloader
 
 export interface YoutubeSearch {
-	video: {
-		authorName: string;
-		authorAvatar?: string;
-		videoId: string;
-		url: string;
-		thumbnail: string;
-		title: string;
-		description?: string;
-		publishedTime: string;
-		durationH: string;
-		durationS: number;
-		duration: string;
-		viewH: string;
-		view: string;
-		type: 'video';
-	}[];
-	channel: {
-		channelId: string;
-		url: string;
-		channelName: string;
-		avatar: string;
-		isVerified: boolean;
-		subscriberH: string;
-		subscriber: string;
-		videoCount: number;
-		description: string;
-		type: 'channel';
-	}[];
-	playlist: {
-		playlistId: string;
-		title: string;
-		thumbnail: string;
-		video: {
-			videoId: string;
-			title: string;
-			durationH: string;
-			duration: string;
-		}[];
-		type: 'mix';
-	}[];
+  video: {
+    authorName: string;
+    authorAvatar?: string;
+    videoId: string;
+    url: string;
+    thumbnail: string;
+    title: string;
+    description?: string;
+    publishedTime: string;
+    durationH: string;
+    durationS: number;
+    duration: string;
+    viewH: string;
+    view: string;
+    type: 'video';
+  }[];
+  channel: {
+    channelId: string;
+    url: string;
+    channelName: string;
+    avatar: string;
+    isVerified: boolean;
+    subscriberH: string;
+    subscriber: string;
+    videoCount: number;
+    description: string;
+    type: 'channel';
+  }[];
+  playlist: {
+    playlistId: string;
+    title: string;
+    thumbnail: string;
+    video: {
+      videoId: string;
+      title: string;
+      durationH: string;
+      duration: string;
+    }[];
+    type: 'mix';
+  }[];
 }
 
 export type YoutubeVideoOrAudio = {
-	[key: string]: {
-		quality: string;
-		fileSizeH: string;
-		fileSize: number;
-		download (): Promise<string>;
-	};
+  [key: string]: {
+    quality: string;
+    fileSizeH: string;
+    fileSize: number;
+    download (): Promise<string>;
+  };
 };
 export interface YoutubeDownloader {
-	id: string;
-	v_id?: string;
-	thumbnail: string;
-	title: string;
-	video: YoutubeVideoOrAudio;
-	audio: YoutubeVideoOrAudio;
+  id: string;
+  v_id?: string;
+  thumbnail: string;
+  title: string;
+  video: YoutubeVideoOrAudio;
+  audio: YoutubeVideoOrAudio;
 }
 
 export type YoutubeVideoOrAudioV3 = {
-	[key: string]: {
-		quality: string;
-		fileSizeH?: string;
-		fileSize?: number;
-		download (): Promise<string>;
-	};
+  [key: string]: {
+    quality: string;
+    fileSizeH?: string;
+    fileSize?: number;
+    download (): Promise<string>;
+  };
 };
 export type YoutubeDownloaderV3 = {
-	id: string;
-	thumbnail: string;
-	title: string;
-	video: YoutubeVideoOrAudioV3;
-	audio: YoutubeVideoOrAudioV3;
+  id: string;
+  thumbnail: string;
+  title: string;
+  video: YoutubeVideoOrAudioV3;
+  audio: YoutubeVideoOrAudioV3;
 }
 
 export interface GroupWA {
-	url: string;
-	subject: string;
+  url: string;
+  subject: string;
 }
 
-export interface Aiovideodl {
-	url: string;
-	title: string;
-	thumbnail: string;
-	duration?: null;
-	source: string;
-	medias?: {
-		url: string;
-		quality: string;
-		extension: string;
-		size: number;
-		formattedSize: string;
-		videoAvailable: boolean;
-		audioAvailable: boolean;
-		chunked: boolean;
-		cached: boolean;
-	}[] | null;
-}
+export const AiovideodlArgsSchema = z.object({
+  0: z.string(ERROR_ARGS.URL).url()
+})
 
-export interface Savefrom {
-	id: string;
-	url?: ({
-		url: string;
-		ext: string;
-		type: string;
-		name: string;
-		quality?: number;
-		subname?: string;
-	})[] | null;
-	meta: {
-		title: string;
-		source: string;
-	};
-	video_quality?: (string)[] | null;
-	thumb: string;
-	sd: {
-		url: string;
-		format?: string;
-	};
-	hd?: {
-		url: string;
-		format: string;
-	};
-	hosting: string;
-}
+export const AiovideodlSchema = z.object({
+  url: z.string(),
+  title: z.string(),
+  thumbnail: z.string(),
+  duration: z.string().optional(),
+  source: z.string(),
+  medias: z.object({
+    url: z.string(),
+    quality: z.string(),
+    extension: z.string(),
+    size: z.number(),
+    formattedSize: z.string(),
+    videoAvailable: z.boolean(),
+    audioAvailable: z.boolean(),
+    chunked: z.boolean(),
+    cached: z.boolean()
+  }).array().optional()
+})
+
+export type AiovideodlArgs = z.infer<typeof AiovideodlArgsSchema>
+export type Aiovideodl = z.infer<typeof AiovideodlSchema>
+
+export const SaveFromArgsSchema = z.object({
+  0: z.string(ERROR_ARGS.URL).url()
+})
+
+export const SaveFromSchema = z.object({
+  id: z.string().optional(),
+  url: z.object({
+    url: z.string().url(),
+    ext: z.string(),
+    type: z.string(),
+    name: z.string(),
+    quality: z.number().optional(),
+    subname: z.string().optional()
+  }).array().min(1).optional(),
+  meta: z.object({
+    title: z.string(),
+    source: z.string().url().optional(),
+    duration: z.string().optional()
+  }),
+  video_quality: z.string().array().optional(),
+  thumb: z.string(),
+  sd: z.object({
+    url: z.string().url(),
+    format: z.string().optional()
+  }).nullable(),
+  hd: z.object({
+    url: z.string().url(),
+    format: z.string().optional()
+  }).nullable(),
+  hosting: z.string()
+})
+
+export type SaveFromArgs = z.infer<typeof SaveFromArgsSchema>
+export type Savefrom = z.infer<typeof SaveFromSchema>
+
+// TODO: create a schema for function and validate args
+export const SnapSaveArgsSchema = z.object({
+  0: z.string(ERROR_ARGS.URL).url()
+})
+export const SnapSaveSchema = z.object({
+  resolution: z.string().optional(),
+  thumbnail: z.string().url().optional(),
+  url: z.string().url()
+})
+
+export type SnapSaveArgs = z.infer<typeof SnapSaveArgsSchema>
+export type SnapSave = z.infer<typeof SnapSaveSchema>

@@ -1,14 +1,20 @@
 import got from 'got'
 import cheerio from 'cheerio'
 import { ScraperError, decodeSnapApp } from '../utils.js'
-import type {
+import {
   TiktokDownloader,
-  TiktokDownloaderv2,
-  TiktokDownloaderv3,
-  TiktokFyp
-} from './types'
+  TiktokDownloaderV2,
+  TiktokDownloaderV3,
+  TiktokFyp,
+  TiktokDownloaderArgsSchema,
+  TiktokDownloaderSchema,
+  TiktokDownloaderV2Schema,
+  TiktokDownloaderV3Schema
+} from './types.js'
 
 export async function tiktokdl (url: string): Promise<TiktokDownloader> {
+  TiktokDownloaderArgsSchema.parse(arguments)
+
   const resToken = await got('https://snaptik.app/ID')
   const cookie = resToken.headers['set-cookie']?.map(v => v.split(';')[0]).join('; ')
   const $$ = cheerio.load(resToken.body)
@@ -37,20 +43,25 @@ export async function tiktokdl (url: string): Promise<TiktokDownloader> {
   const $a = $('#download-block > .abuttons').find('a')
   let no_watermark2 = $a.eq(1).attr('href') as string
   if (!/https?:\/\//.test(no_watermark2)) no_watermark2 = `https://snaptik.app${no_watermark2}`
-  return {
+  let no_watermark_raw = $a.eq(2).attr('href')!
+  if (!no_watermark_raw.includes('snaptik.app')) no_watermark_raw = `https://snaptik.app${no_watermark_raw}`
+  const res = {
     author: {
       nickname: $snaptik_middle.find('h3').text()
     },
     description: $snaptik_middle.find('span').text(),
     video: {
-      no_watermark: $a.eq(0).attr('href') as string,
+      no_watermark: $a.eq(0).attr('href')!,
       no_watermark2,
-      no_watermark_raw: $a.eq(2).attr('href') as string
+      no_watermark_raw
     }
   }
+  return TiktokDownloaderSchema.parse(res)
 }
 
-export async function tiktokdlv2 (url: string): Promise<TiktokDownloaderv2> {
+export async function tiktokdlv2 (url: string): Promise<TiktokDownloaderV2> {
+  TiktokDownloaderArgsSchema.parse(arguments)
+
   const data: {
     author_avatar: string;
     author_id: string;
@@ -76,7 +87,8 @@ export async function tiktokdlv2 (url: string): Promise<TiktokDownloaderv2> {
       form: { url }
     })
     .json()
-  return {
+
+  const res = {
     author: {
       unique_id: data.author_id,
       nickname: data.author_name,
@@ -87,9 +99,12 @@ export async function tiktokdlv2 (url: string): Promise<TiktokDownloaderv2> {
       no_watermark_hd: `https://tikmate.app/download/${data.token}/${data.id}.mp4?hd=1`
     }
   }
+  return TiktokDownloaderV2Schema.parse(res)
 }
 
-export async function tiktokdlv3 (url: string): Promise<TiktokDownloaderv3> {
+export async function tiktokdlv3 (url: string): Promise<TiktokDownloaderV3> {
+  TiktokDownloaderArgsSchema.parse(arguments)
+
   const resToken = await got('https://ssstik.io/id')
   const cookie = resToken.headers['set-cookie']?.map(v => v.split(';')[0]).join('; ')
   const $$ = cheerio.load(resToken.body)
@@ -120,18 +135,20 @@ export async function tiktokdlv3 (url: string): Promise<TiktokDownloaderv3> {
   const $a = $('a.pure-button')
   let no_watermark = $a.eq(0).attr('href') as string
   if (!/https?:\/\//.test(no_watermark)) no_watermark = `https://ssstik.io${no_watermark}`
-  return {
+
+  const res = {
     author: {
-      nickname: $img.attr('alt') as string,
-      avatar: $img.attr('src') as string
+      nickname: $img.attr('alt')!,
+      avatar: $img.attr('src')!
     },
     description: $('p.maintext').text(),
     video: {
       no_watermark,
-      no_watermark2: $a.eq(1).attr('href') as string
+      no_watermark2: $a.eq(1).attr('href')!
     },
-    music: $a.eq(2).attr('href') as string
+    music: $a.eq(2).attr('href')!
   }
+  return TiktokDownloaderV3Schema.parse(res)
 }
 
 export async function tiktokfyp (): Promise<TiktokFyp[] | []> {

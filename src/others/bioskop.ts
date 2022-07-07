@@ -1,6 +1,13 @@
 import got from 'got'
 import cheerio from 'cheerio'
-import type { Bioskop, BioskopNow } from './types'
+import {
+  Bioskop,
+  BioskopArgsSchema,
+  BioskopNow,
+  BioskopSchema,
+  BioskopNowSchema
+} from './types.js'
+import { ScraperError } from '../utils.js'
 
 export async function bioskopNow (): Promise<BioskopNow[]> {
   const url = 'https://jadwalnonton.com/now-playing/'
@@ -34,10 +41,13 @@ export async function bioskopNow (): Promise<BioskopNow[]> {
       })
     }
   })
-  return results
+  if (results.length === 0) throw new ScraperError(`No results for ${url}\n\n${response}`)
+  return results.map(res => BioskopNowSchema.parse(res))
 }
 
 export async function bioskop (page: number | string = 1): Promise<Bioskop[]> {
+  BioskopArgsSchema.parse(arguments)
+
   page = Math.min(4, Math.max(1, parseInt(page as string)))
   const response = await got(
     `https://jadwalnonton.com/comingsoon/?page=${page}`, {
@@ -74,5 +84,6 @@ export async function bioskop (page: number | string = 1): Promise<Bioskop[]> {
       })
     }
   })
-  return results
+  if (results.length === 0) throw new ScraperError(`No results for page ${page}\n\n${response}`)
+  return results.map(res => BioskopSchema.parse(res))
 }

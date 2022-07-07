@@ -1,17 +1,21 @@
 import got from 'got'
 import { load } from 'cheerio'
-// eslint-disable-next-line import/extensions
-import { Aiovideodl } from './types'
+import { AiovideodlArgsSchema, Aiovideodl, AiovideodlSchema } from './types.js'
 
 export default async function aiovideodl (url: string): Promise<Aiovideodl> {
+  AiovideodlArgsSchema.parse(arguments)
+
   const resToken = await got('https://aiovideodl.ml/')
-  const cookie = resToken.headers['set-cookie']?.map(v => v.split(';')[0]).join('; ').trim()
+
   const $$ = load(resToken.body)
   const token = $$('#token').val() as string
+  const cookie = resToken.headers['set-cookie']?.map(v => v.split(';')[0]).join('; ').trim()
+
   const body = new URLSearchParams()
   body.append('url', url)
   body.append('token', token)
-  return await got('https://aiovideodl.ml/wp-json/aio-dl/video-data/', {
+
+  const json = await got('https://aiovideodl.ml/wp-json/aio-dl/video-data/', {
     method: 'post',
     headers: {
       'content-type': 'application/x-www-form-urlencoded',
@@ -22,4 +26,6 @@ export default async function aiovideodl (url: string): Promise<Aiovideodl> {
     },
     body: body.toString()
   }).json<Aiovideodl>()
+
+  return AiovideodlSchema.parse(json)
 }

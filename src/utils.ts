@@ -9,9 +9,20 @@ export class ScraperError extends Error {
       '\n\nIf this is bug pls report to https://github.com/BochilTeam/scraper'
   }
 
-  static createError (message: any, options: {}): ScraperError {
+  static createError (message: any, options?: {}): ScraperError {
     return new ScraperError(message, options)
   }
+
+  static createErrorArgs (message: any, options?: {}): ScraperError {
+    return new ScraperError('Invalid input args: ' + message, options)
+  }
+}
+
+export function getEncodedSnapApp (data: string): string[] {
+  return data.split('decodeURIComponent(escape(r))}(')[1]
+    .split('))</script>')[0]
+    .split(',')
+    .map(v => v.replace(/"/g, '').trim())
 }
 
 export function decodeSnapApp (...args: string[] | number[]): string {
@@ -40,7 +51,7 @@ export function decodeSnapApp (...args: string[] | number[]): string {
 
   function _0xc60e (
     h: string,
-    u: unknown,
+    u: number,
     n: string,
     t: number,
     e: string | number,
@@ -63,4 +74,31 @@ export function decodeSnapApp (...args: string[] | number[]): string {
   }
   // @ts-ignore
   return _0xc60e(...args)
+}
+
+export function getDecodedSnapSave (data: string): string {
+  return data.split('"download-section").innerHTML = "')[1]
+    .split('"; parent.document.getElementById("inputData").remove();')[0]
+    .replace(/\\(\\)?/g, '')
+}
+
+export function decryptSnapSave (data: string): string {
+  return getDecodedSnapSave(decodeSnapApp(...getEncodedSnapApp(data)))
+}
+
+export function stringifyCookies (cookies: string[]): string {
+  return cookies.map(cookie => {
+    const [name, _value] = cookie.split('=')
+    const [value] = _value.split(';')
+    return `${name}=${value}`
+  }).join('; ')
+}
+
+export function parseCookies (cookieString: string): { [key: string]: string } {
+  const cookies: { [key: string]: string } = {}
+  cookieString.split(';').forEach(cookie => {
+    const [key, value] = cookie.split('=')
+    cookies[key.trim()] = value.trim()
+  })
+  return cookies
 }

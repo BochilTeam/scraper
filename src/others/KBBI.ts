@@ -1,6 +1,6 @@
 import got from 'got'
 import cheerio from 'cheerio'
-import type { Kbbi } from './types'
+import { Kbbi, KbbiArgsSchema, KbbiSchema } from './types.js'
 import { ScraperError } from '../utils.js'
 /**
  * p = Partikel: kelas kata yang meliputi kata depan, kata sambung, kata seru, kata sandang, ucapan salam
@@ -8,6 +8,8 @@ import { ScraperError } from '../utils.js'
  * n = Nomina: kata benda
  */
 export default async function kbbi (words: string): Promise<Kbbi[]> {
+  KbbiArgsSchema.parse(arguments)
+
   const html = await got(`https://kbbi.kemdikbud.go.id/entri/${encodeURIComponent(words)}`).text()
   const $ = cheerio.load(html)
   const isExist = !/tidak ditemukan/i.test(
@@ -42,5 +44,7 @@ export default async function kbbi (words: string): Promise<Kbbi[]> {
       lastTitle = ''
     }
   })
-  return results
+
+  if (results.length === 0) throw new ScraperError(`${words} does not exist!\n\n${html}`)
+  return results.map(res => KbbiSchema.parse(res))
 }

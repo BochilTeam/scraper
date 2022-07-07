@@ -1,31 +1,35 @@
 import cheerio from 'cheerio'
 import got from 'got'
 import {
+  TwitterDownloaderArgsSchema,
+  TwitterDownloaderSchema,
+  TwitterDownloaderV2Schema,
   TwitterDownloader,
-  TwitterDownloaderv2
-  // eslint-disable-next-line import/extensions
-} from './types'
+  TwitterDownloaderV2
+} from './types.js'
 import { ScraperError } from '../utils.js'
 
 export async function twitterdl (
   url: string
 ): Promise<TwitterDownloader[] | []> {
+  TwitterDownloaderArgsSchema.parse(arguments)
+
   if (!/https:\/\/twitter\.com\//i.test(url)) throw new ScraperError('URL invalid!')
   const payload: { url: string } = { url }
   const res = await got(
     'https://www.expertsphp.com/instagram-reels-downloader.php',
     {
       method: 'POST',
-      searchParams: new URLSearchParams(Object.entries(payload)),
       headers: {
         'content-type': 'application/x-www-form-urlencoded',
         cookie:
-					'_ga=GA1.2.783835709.1637038175; __gads=ID=5b4991618655cd86-22e2c7aeadce00ae:T=1637038176:RT=1637038176:S=ALNI_MaCe3McPrVVswzBEqcQlgnVZXtZ1g; _gid=GA1.2.1817576486.1639614645; _gat_gtag_UA_120752274_1=1',
+					'_ga_D1XX1R246W=GS1.1.1657161630.1.0.1657161630.0; _ga=GA1.2.455889464.1657161630; _gid=GA1.2.61886294.1657161630; _gat_gtag_UA_120752274_1=1; __gads=ID=4284cc8ed886151d-22665a9c12d500cf:T=1657161632:RT=1657161632:S=ALNI_MbWHK3mOfl2Cl9lUWNL-CFcWyfQHA; __gpi=UID=0000063f22273fd9:T=1657161632:RT=1657161632:S=ALNI_MbLxYvwu_u8kpWkhRT4WbeBDkBZPQ',
         origin: 'https://www.expertsphp.com',
-        referer: 'https://www.expertsphp.com/twitter-video-downloader.html',
+        referer: 'https://www.expertsphp.com/instagram-reels-downloader.php',
         'user-agent':
 					'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36'
-      }
+      },
+      form: payload
     }
   ).text()
   const $ = cheerio.load(res)
@@ -44,10 +48,14 @@ export async function twitterdl (
       })
     }
   })
-  return results
+
+  if (results.length === 0) throw new ScraperError(`No results found!\n\n${res}`)
+  return results.map(res => TwitterDownloaderSchema.parse(res))
 }
 
-export async function twitterdlv2 (url: string): Promise<TwitterDownloaderv2[]> {
+export async function twitterdlv2 (url: string): Promise<TwitterDownloaderV2[]> {
+  TwitterDownloaderArgsSchema.parse(arguments)
+
   const resToken = await got('https://twittervideodownloader.com/', {
     headers: {
       accept:
@@ -81,7 +89,7 @@ export async function twitterdlv2 (url: string): Promise<TwitterDownloaderv2[]> 
       }
     })
     .text()
-  const results: TwitterDownloaderv2[] = []
+  const results: TwitterDownloaderV2[] = []
   const $$ = cheerio.load(res)
   $$('div.row.body-container > div > center > div.row').each(function () {
     const el = $(this).find('div')
@@ -89,7 +97,8 @@ export async function twitterdlv2 (url: string): Promise<TwitterDownloaderv2[]> 
     const quality = _quality?.[0]?.trim()
     const type = _quality?.[1]?.trim()
     const url = el.eq(0).find('a[download]').attr('href')
-    results.push({ quality, type, url } as TwitterDownloaderv2)
+    results.push({ quality, type, url } as TwitterDownloaderV2)
   })
-  return results
+  if (results.length === 0) throw new ScraperError(`No results found!\n\n${res}`)
+  return results.map(res => TwitterDownloaderV2Schema.parse(res))
 }

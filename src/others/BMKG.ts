@@ -1,10 +1,14 @@
 import got from 'got'
 import cheerio from 'cheerio'
-import type {
+import {
   Gempa,
   GempaNow,
-  Tsunami
-} from './types'
+  GempaNowSchema,
+  GempaSchema,
+  Tsunami,
+  TsunamiSchema
+} from './types.js'
+import { ScraperError } from '../utils.js'
 
 export async function gempa (): Promise<Gempa[]> {
   const html = await got('https://www.bmkg.go.id/gempabumi/gempabumi-dirasakan.bmkg').text()
@@ -29,7 +33,8 @@ export async function gempa (): Promise<Gempa[]> {
       warning
     })
   })
-  return results
+  if (results.length === 0) throw new ScraperError(`Gempa not found\n\n${html}`)
+  return results.map(res => GempaSchema.parse(res))
 }
 
 export async function gempaNow (): Promise<GempaNow[]> {
@@ -53,7 +58,8 @@ export async function gempaNow (): Promise<GempaNow[]> {
       location
     })
   })
-  return results
+  if (results.length === 0) throw new ScraperError(`Gempa Now not found\n\n${html}`)
+  return results.map(res => GempaNowSchema.parse(res))
 }
 
 export async function tsunami (): Promise<Tsunami[]> {
@@ -75,5 +81,6 @@ export async function tsunami (): Promise<Tsunami[]> {
       location
     })
   })
-  return results
+  if (results.length === 0) throw new ScraperError(`Tsunami not found\n\n${html}`)
+  return results.map(res => TsunamiSchema.parse(res))
 }
