@@ -1,8 +1,11 @@
 import got from 'got'
 import cheerio from 'cheerio'
-import type { GroupWA } from './types'
+import { GroupWA, GroupWAArgsSchema, GroupWASchema } from './types.js'
+import { ScraperError } from '../utils.js'
 
 export async function groupWA (query: string): Promise<GroupWA[]> {
+  GroupWAArgsSchema.parse(arguments)
+
   const html = await got(
     `http://ngarang.com/link-grup-wa/daftar-link-grup-wa.php?search=${encodeURIComponent(query).replace(/%20/g, '+')}&searchby=name`
   ).text()
@@ -21,5 +24,9 @@ export async function groupWA (query: string): Promise<GroupWA[]> {
       })
     }
   })
-  return results
+
+  if (results.length === 0) {
+    throw new ScraperError(`No results for ${query}\n\n${html}`)
+  }
+  return results.map(res => GroupWASchema.parse(res))
 }

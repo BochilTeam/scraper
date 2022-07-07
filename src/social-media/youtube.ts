@@ -5,9 +5,13 @@ import {
   YoutubeDownloader,
   YoutubeVideoOrAudio,
   YoutubeDownloaderV3,
-  YoutubeVideoOrAudioV3
-// eslint-disable-next-line import/extensions
-} from './types'
+  YoutubeVideoOrAudioV3,
+  YoutubeDownloaderArgsSchema,
+  YoutubeDonwloaderSchema,
+  YoutubeDownloaderV2ArgsSchema,
+  YoutubeDownloaderV3ArgsSchema,
+  YoutubeDonwloaderV3Schema
+} from './types.js'
 import { sizeFormatter } from 'human-readable'
 
 const toFormat = sizeFormatter({
@@ -28,6 +32,8 @@ export async function youtubedl (
   url: string,
   server: string = 'en163'
 ): Promise<YoutubeDownloader> {
+  YoutubeDownloaderArgsSchema.parse(arguments)
+
   if (!servers.includes(server)) server = servers[0]
   const params: { url: string; q_auto: number; ajax: number } = {
     url: url,
@@ -57,11 +63,12 @@ export async function youtubedl (
     const _quality = el.eq(0).find('a').text()
     const quality = _quality.split('(')?.[0]?.trim()?.toLowerCase()
     const fileSizeH = el.eq(1).text()
+    const fileSize = parseFloat(fileSizeH) * (/MB$/.test(fileSizeH) ? 1000 : 1)
     if (!/\.3gp/i.test(_quality)) {
       video[quality] = {
         quality,
         fileSizeH,
-        fileSize: parseFloat(fileSizeH) * (/MB$/.test(fileSizeH) ? 1000 : 1),
+        fileSize: isNaN(fileSize) ? 0 : fileSize,
         download: convert.bind(
           null,
           id,
@@ -81,10 +88,11 @@ export async function youtubedl (
       ?.trim()
       ?.toLowerCase()
     const fileSizeH = el.eq(1).text()
+    const fileSize = parseFloat(fileSizeH) * (/MB$/.test(fileSizeH) ? 1000 : 1)
     audio[quality] = {
       quality,
       fileSizeH,
-      fileSize: parseFloat(fileSizeH) * (/MB$/.test(fileSizeH) ? 1000 : 1),
+      fileSize: isNaN(fileSize) ? 0 : fileSize,
       download: convert.bind(
         null,
         id,
@@ -94,7 +102,8 @@ export async function youtubedl (
       )
     }
   })
-  return {
+
+  const res = {
     id,
     v_id,
     thumbnail,
@@ -102,6 +111,7 @@ export async function youtubedl (
     video,
     audio
   }
+  return YoutubeDonwloaderSchema.parse(res)
 }
 
 interface IresLinks {
@@ -114,6 +124,8 @@ interface IresLinks {
 }
 
 export async function youtubedlv2 (url: string): Promise<YoutubeDownloader> {
+  YoutubeDownloaderV2ArgsSchema.parse(arguments)
+
   const html = await got('https://yt5s.com/en32').text()
   const urlAjax = (/k_url_search="(.*?)"/.exec(html) || ['', ''])[1]
   const urlConvert = (/k_url_convert="(.*?)"/.exec(html) || ['', ''])[1]
@@ -183,16 +195,20 @@ export async function youtubedlv2 (url: string): Promise<YoutubeDownloader> {
       )
     }
   })
-  return {
+
+  const res = {
     id: json.vid,
     title: json.title,
     thumbnail: `https://i.ytimg.com/vi/${json.vid}/0.jpg`,
     video,
     audio
   }
+  return YoutubeDonwloaderSchema.parse(res)
 }
 
 export async function youtubedlv3 (url: string): Promise<YoutubeDownloaderV3> {
+  YoutubeDownloaderV3ArgsSchema.parse(arguments)
+
   const payload = {
     url
   }
@@ -261,13 +277,15 @@ export async function youtubedlv3 (url: string): Promise<YoutubeDownloaderV3> {
         }
       }
     })
-  return {
+  const res = {
     id,
     title,
     thumbnail: thumb,
     video,
     audio: audioArray
   }
+
+  return YoutubeDonwloaderV3Schema.parse(res)
 }
 
 async function convert (
