@@ -181,7 +181,7 @@ export async function facebookdlv3 (url: string): Promise<FacebookDownloaderV3> 
   if (!result.length) throw new ScraperError(`Can't download!\n${$.html()}`)
 
   const res = {
-    title: $('#title_video').val()!,
+    title: $('#title_video').val() as string,
     thumbnail,
     result
   }

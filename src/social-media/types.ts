@@ -105,20 +105,19 @@ export const InstagramStoryArgsSchema = z.object({
 export const InstagramStoryV2Schema = z.object({
   user: z.object({
     username: z.string(),
-    profilePicUrl: z.string(),
-    id: z.string(),
+    profilePicUrl: z.string().url(),
+    isVerified: z.boolean(),
     fullName: z.string(),
-    biography: z.string(),
-    followers: z.number(),
-    following: z.number()
+    followersH: z.string(),
+    followers: z.number()
   }),
   results: z.object({
-    thumbnail: z.string(),
-    url: z.string(),
+    thumbnail: z.string().url(),
+    url: z.string().url(),
     type: z.string(),
     isVideo: z.boolean(),
-    sourceUrl: z.string(),
-    fileType: z.string()
+    // timestampH: z.string(),
+    timestamp: z.number()
   }).array().min(1)
 })
 

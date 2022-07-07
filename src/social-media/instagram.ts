@@ -198,68 +198,66 @@ export async function instagramStory (name: string): Promise<InstagramStory> {
 export async function instagramStoryv2 (name: string): Promise<InstagramStoryV2> {
   InstagramStoryArgsSchema.parse(arguments)
 
-  const headers: Headers = {
-    accept: '*/*',
-    cookie: '_ga=GA1.2.1814586753.1642307018; _gid=GA1.2.136857157.1642307018; __gads=ID=6f5ca6608dd8b1e9-22e4ea18ffcf0077:T=1642307019:RT=1642307019:S=ALNI_MZA7NeGtOEcSPXyFhf4LY8w7Myg9g; PHPSESSID=1i9dscs75l6v2h17cvdtd587b4; _gat=1; FCNEC=[["AKsRol9R3FQaOjrrETFMIMIvWtuoY3xRHpQEPHMujRWOd_nxuLgWCSyYK9lLC3ev0L5V8fuaSIjhupCtaReRepP4qNvch536pzvrcU13Gh8CRHSEIh8O3zM42ASwGUQfjoKbxkTV1L15EA6O7FLZ-Qh3Fy1rvh_h8w=="],null,[]]',
-    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36'
-  }
-  const data = await got('https://www.instagramsave.com/instagram-story-downloader.php', {
-    headers: {
-      ...headers,
-      accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-      referer: 'https://www.google.com/'
-    }
+  const form = new Form()
+  form.append('instagram_url', name)
+  form.append('type', 'story')
+  form.append('resource', 'save')
 
+  const html = await got.post(`https://www.instadp.com/instagram-tools/story-downloader/${name}`, {
+    headers: {
+      Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+      Cookie: '_ga=GA1.2.1918010286.1657182726; _gid=GA1.2.1095292599.1657182726; __gads=ID=a5e195199dcf10ef-22f6fcd613d50055:T=1657182727:RT=1657182727:S=ALNI_MZ1qb2rA7xiR6LmkJQBN5vKLnZmYg; __gpi=UID=00000770d2242d3d:T=1657182727:RT=1657182727:S=ALNI_MZbi-jFQXD4uiBEiard7EV8bpeAuQ; PHPSESSID=a805b59ebea8fc13cef187639cace9b6; history:instagram:story=%5B%7B%22id%22%3A1918078581%2C%22picture%22%3A%22https%3A%5C%2F%5C%2Fscontent-iad3-2.cdninstagram.com%5C%2Fv%5C%2Ft51.2885-19%5C%2F79644808_579618249494254_8417463853742292992_n.jpg%3Fstp%3Ddst-jpg_s150x150%26_nc_ht%3Dscontent-iad3-2.cdninstagram.com%26_nc_cat%3D1%26_nc_ohc%3DdimXP7d0BF4AX_P0fIU%26edm%3DAKralEIBAAAA%26ccb%3D7-5%26oh%3D00_AT8h-t3lll4Fp_Q1AmEOK9vqaGpY4KHB4otwjgRtaDneSw%26oe%3D62CD104D%26_nc_sid%3D5e3072%22%2C%22username%22%3A%22raffinagita1717%22%2C%22verified%22%3Atrue%2C%22fullname%22%3A%22Raffi%20Ahmad%20and%20Nagita%20Slavina%22%7D%5D',
+      Host: 'www.instadp.com',
+      Referer: 'https://www.instadp.com/instagram-tools/story-downloader',
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'
+    },
+    form
   }).text()
-  const $ = cheerio.load(data)
-  const payload = {
-    url: 'https://www.instagram.com/' + name,
-    action: 'story',
-    token: $('#token').val() as string,
-    json: ''
-  }
-  const { user, medias: results, error }: {
-    user: {
-      id: string;
-      username: string;
-      fullName: string;
-      profilePicUrl: string;
-      biography: string;
-      followers: number;
-      following: number;
-    }
-    medias: {
-      type: string;
-      fileType: string;
-      url: string;
-      downloadUrl: string;
-      preview: string;
-    }[];
-    error?: string;
-  } = await got('https://www.instagramsave.com/system/action.php', {
-    form: payload,
-    method: 'POST',
-    headers: {
-      ...headers,
-      'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-      origin: 'https://www.instagramsave.com',
-      referer: 'https://www.instagramsave.com/instagram-story-downloader.php'
-    }
-  }).json()
-  if (error || !results) throw new ScraperError(`Maybe user ${name} not have story!!\n${JSON.stringify({ error, user, results, payload }, null, 2)}`)
+  const $ = cheerio.load(html)
 
-  const res = {
-    user,
-    results: results.map(({ preview, url, downloadUrl, type, fileType }) => ({
-      thumbnail: preview,
-      url: downloadUrl,
-      sourceUrl: url,
-      type,
-      fileType,
-      isVideo: type === 'video'
-    }))
+  const $username = $('div.user > div.info > span.username')
+  const username = $username.text()
+  const fullName = $('div.user > div.info > span.text').text()
+  const isVerified = !!$username.find('i.verified').length
+  let profilePicUrl = $('div.user > div.avatar > img.img').attr('src')!
+  if (!profilePicUrl.includes('instadp.com')) profilePicUrl = `https://www.instadp.com/${profilePicUrl}`
+  const followersH = $('div.user > div.info > span.followers').text().replace(/Followers/i, '').trim()
+  const followers = parseInt(followersH.replace(/,/g, ''))
+
+  const results: InstagramStoryV2['results'] = []
+  $('div.active-stories > div.story').each((_, el) => {
+    const $el = $(el)
+    const type = $el.find('a.video-link').length ? 'video' : 'image'
+    const url = $el.find('a.video-link').attr('href') || $el.find('a.download-btn').attr('href')
+    let thumbnail = $el.find('img.video-thumbnail').attr('src') || $el.find('img.story-image').attr('src')
+    if (!thumbnail?.includes('instadp.com')) thumbnail = `https://www.instadp.com/${thumbnail}`
+    const $timestamp = $el.find('div.timestamp')
+    // const timestampH = $timestamp.text().replace(/\s+/g, ' ').trim()
+    const timestamp = parseInt($timestamp.attr('data-date')!)
+    if (url && thumbnail) {
+      results.push({
+        url,
+        thumbnail,
+        // timestampH,
+        timestamp,
+        type,
+        isVideo: type === 'video'
+      })
+    }
+  })
+
+  const data = {
+    user: {
+      username,
+      fullName,
+      isVerified,
+      profilePicUrl,
+      followersH,
+      followers
+    },
+    results
   }
-  return InstagramStoryV2Schema.parse(res)
+  return InstagramStoryV2Schema.parse(data)
 }
 
 export async function instagramStalk (username: string): Promise<InstagramStalk> {

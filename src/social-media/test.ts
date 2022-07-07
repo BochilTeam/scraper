@@ -162,20 +162,6 @@ describe('Social media', () => {
       instagramStoryv2('raffinagita1717').then(res => {
         // console.log(res)
 
-        expect(res).to.be.an('object')
-        expect(res.user).to.be.an('object')
-        expect(res.results).to.be.an('array')
-        expect(res.results).to.have.lengthOf.at.least(1)
-        res.results.forEach(({
-          thumbnail,
-          isVideo,
-          url
-        }) => {
-          expect(thumbnail).to.be.a('string')
-          expect(isVideo).to.be.a('boolean')
-          expect(url).to.be.a('string')
-        })
-
         return done()
       }).catch(done)
     })
