@@ -44,8 +44,8 @@ export const AlQuranSchema = z.object({
     ruku: z.number(),
     hizbQuarter: z.number(),
     sajda: z.object({
-      recomended: z.boolean(),
-      obligatory: z.boolean().optional()
+      recomended: z.boolean().optional(),
+      obligatory: z.boolean()
     }),
     text: z.object({
       ar: z.string(),

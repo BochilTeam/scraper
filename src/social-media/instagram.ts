@@ -220,7 +220,7 @@ export async function instagramStoryv2 (name: string): Promise<InstagramStoryV2>
   const fullName = $('div.user > div.info > span.text').text()
   const isVerified = !!$username.find('i.verified').length
   let profilePicUrl = $('div.user > div.avatar > img.img').attr('src')!
-  if (!profilePicUrl.includes('instadp.com')) profilePicUrl = `https://www.instadp.com/${profilePicUrl}`
+  if (profilePicUrl && !profilePicUrl.includes('instadp.com')) profilePicUrl = `https://www.instadp.com/${profilePicUrl}`
   const followersH = $('div.user > div.info > span.followers').text().replace(/Followers/i, '').trim()
   const followers = parseInt(followersH.replace(/,/g, ''))
 
@@ -230,7 +230,7 @@ export async function instagramStoryv2 (name: string): Promise<InstagramStoryV2>
     const type = $el.find('a.video-link').length ? 'video' : 'image'
     const url = $el.find('a.video-link').attr('href') || $el.find('a.download-btn').attr('href')
     let thumbnail = $el.find('img.video-thumbnail').attr('src') || $el.find('img.story-image').attr('src')
-    if (!thumbnail?.includes('instadp.com')) thumbnail = `https://www.instadp.com/${thumbnail}`
+    if (thumbnail && !thumbnail.includes('instadp.com')) thumbnail = `https://www.instadp.com/${thumbnail}`
     const $timestamp = $el.find('div.timestamp')
     // const timestampH = $timestamp.text().replace(/\s+/g, ' ').trim()
     const timestamp = parseInt($timestamp.attr('data-date')!)

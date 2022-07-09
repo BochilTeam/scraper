@@ -10,7 +10,7 @@ export const FacebookDownloaderSchema = z.object({
   thumbnail: z.string(),
   duration: z.number(),
   result: z.object({
-    size: z.number().optional(),
+    size: z.string().or(z.number()).optional(),
     ext: z.string(),
     url: z.string(),
     quality: z.string().optional(),
