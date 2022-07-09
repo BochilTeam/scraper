@@ -1,26 +1,35 @@
 import cheerio from 'cheerio'
 import got from 'got'
+import didyoumean from '../tools/didyoumean.js'
 import { ScraperError } from '../utils.js'
-// eslint-disable-next-line import/extensions
-import { JadwalSholat, JadwalSholatItem } from './types'
+import {
+  JadwalSholat,
+  JadwalSholatArgsSchema,
+  JadwalSholatItem,
+  JadwalSholatItemSchema,
+  JadwalSholatSchema
+} from './types.js'
 
 export const listJadwalSholat: Promise<JadwalSholatItem[]> = (async () => got('https://raw.githubusercontent.com/BochilTeam/scraper/master/data/jadwal-sholat.json').json<JadwalSholatItem[]>())()
 export default async function jadwalsholat (
   kota: string
 ): Promise<JadwalSholat> {
+  JadwalSholatArgsSchema.parse(arguments)
+
   const listJadwal: JadwalSholatItem[] = await listJadwalSholat
-  let jadwal: JadwalSholatItem | undefined
-  if (
-    !(jadwal = listJadwal.find(({ kota: Kota }) =>
-      new RegExp(Kota, 'ig').test(kota)
-    ))
-  ) {
+  const cities = listJadwal.map(item => item.kota)
+  const prediction = didyoumean(kota, cities)
+  const precisionPredection = didyoumean(kota, cities, { threshold: 0.85 })[0]
+  if (!precisionPredection) {
     throw new ScraperError(
-      'List kota ' + listJadwal.map(({ kota }) => kota)
+      `Did you mean ${prediction.map(item => item.query).join(', ')}?\n\nList of cities: ${cities.join(', ')}`
     )
   }
+  const jadwal = listJadwal[precisionPredection.index]
+  JadwalSholatItemSchema.parse(jadwal)
+
   const today = await got(
-		`https://www.jadwalsholat.org/adzan/ajax/ajax.daily1.php?id=${jadwal.value}`
+    `https://www.jadwalsholat.org/adzan/ajax/ajax.daily1.php?id=${jadwal.value}`
   ).text()
   const sholatToday: JadwalSholat['today'] = {}
   const $ = cheerio.load(today)
@@ -33,7 +42,7 @@ export default async function jadwalsholat (
       sholatToday[sholat] = time
     })
   const data = await got(
-		`https://jadwalsholat.org/jadwal-sholat/monthly.php?id=${jadwal.value}`
+    `https://jadwalsholat.org/jadwal-sholat/monthly.php?id=${jadwal.value}`
   ).text()
   const list: JadwalSholat['list'] = []
   const $$ = cheerio.load(data)
@@ -62,9 +71,11 @@ export default async function jadwalsholat (
         isyak
       })
     })
-  return {
+
+  const result = {
     date: $$('tr.table_title > td > h2.h2_edit').text().trim(),
     today: sholatToday,
     list
   }
+  return JadwalSholatSchema.parse(result)
 }

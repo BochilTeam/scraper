@@ -1,74 +1,99 @@
-export interface AlQuran {
-	number: number;
-	ayatCount: number;
-	sequence: number;
-	asma: {
-		ar: { short: string; long: string };
-		en: { short: string; long: string };
-		id: { short: string; long: string };
-		translation: { en: string; id: string };
-	};
-	preBismillah?: boolean;
-	type: { ar: string; id: string; en: string };
-	tafsir: {
-		id: string;
-		en?: string;
-	};
-	recitation: {
-		full: string;
-	};
-	ayahs: {
-		number: { inquran: number; insurah: number };
-		juz: number;
-		manzil: number;
-		page: number;
-		ruku: number;
-		hizbQuarter: number;
-		sajda: { recommended: boolean; obligatory: boolean };
-		text: {
-			ar: string;
-			read: string;
-		};
-		translation: {
-			en: string;
-			id: string;
-		};
-		tafsir: {
-			id: string;
-			en?: string;
-		};
-		audio: {
-			url: string;
-		};
-	}[];
-}
+import { z } from 'zod'
+import { ERROR_ARGS } from '../constant.js'
 
-export interface AsmaulHusna {
-	index: number;
-	latin: string;
-	arabic: string;
-	translation_id: string;
-	translation_en: string;
-}
-export interface JadwalSholatItem {
-	value: string;
-	kota: string;
-}
+const AlQuranTranslationSchema = z.object({
+  en: z.string(),
+  id: z.string()
+})
+const AlQuranTafsirSchema = z.object({
+  id: z.string(),
+  en: z.string().nullable()
+})
+const AlQuranAsmaSchema = z.object({
+  short: z.string(),
+  long: z.string()
+})
+export const AlQuranSchema = z.object({
+  number: z.number(),
+  ayatCount: z.number().optional(),
+  sequence: z.number(),
+  asma: z.object({
+    ar: AlQuranAsmaSchema,
+    en: AlQuranAsmaSchema,
+    id: AlQuranAsmaSchema,
+    translation: AlQuranTranslationSchema
+  }),
+  preBismillah: z.boolean().nullable(),
+  type: z.object({
+    ar: z.string(),
+    id: z.string(),
+    en: z.string()
+  }),
+  tafsir: AlQuranTafsirSchema,
+  recitation: z.object({
+    full: z.string()
+  }),
+  ayahs: z.array(z.object({
+    number: z.object({
+      inquran: z.number(),
+      insurah: z.number()
+    }),
+    juz: z.number(),
+    manzil: z.number(),
+    page: z.number(),
+    ruku: z.number(),
+    hizbQuarter: z.number(),
+    sajda: z.object({
+      recomended: z.boolean(),
+      obligatory: z.boolean()
+    }),
+    text: z.object({
+      ar: z.string(),
+      read: z.string()
+    }),
+    translation: AlQuranTranslationSchema,
+    tafsir: AlQuranTafsirSchema,
+    audio: z.object({
+      url: z.string().url()
+    })
+  }))
+})
+export type AlQuran = z.infer<typeof AlQuranSchema>
 
-export interface JadwalSholat {
-	date: string;
-	today: {
-		[Key: string]: string;
-	};
-	list: {
-		date: string;
-		imsyak: string;
-		shubuh: string;
-		terbit: string;
-		dhuha: string;
-		dzuhur: string;
-		ashr: string;
-		magrib: string;
-		isyak: string;
-	}[];
-}
+export const AsmaulHusnaArgsSchema = z.object({
+  0: z.number().min(1).max(99).optional()
+})
+export const AsmaulHusnaSchema = z.object({
+  index: z.number(),
+  latin: z.string(),
+  arabic: z.string(),
+  translation_id: z.string(),
+  translation_en: z.string()
+})
+export type AsmaulHusna = z.infer<typeof AsmaulHusnaSchema>
+
+export const JadwalSholatArgsSchema = z.object({
+  0: z.string(ERROR_ARGS.QUERY)
+})
+export const JadwalSholatItemSchema = z.object({
+  value: z.string(),
+  kota: z.string()
+})
+export const JadwalSholatSchema = z.object({
+  date: z.string(),
+  today: z.record(z.string()),
+  list: z.object({
+    date: z.string(),
+    imsyak: z.string(),
+    shubuh: z.string(),
+    terbit: z.string(),
+    dhuha: z.string(),
+    dzuhur: z.string(),
+    ashr: z.string(),
+    magrib: z.string(),
+    isyak: z.string()
+  }).array()
+})
+
+export type JadwalSholatItem = z.infer<typeof JadwalSholatItemSchema>
+export type JadwalSholat = z.infer<typeof JadwalSholatSchema>

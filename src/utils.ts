@@ -1,3 +1,5 @@
+// import { z } from 'zod'
+
 export class ScraperError extends Error {
   readonly date: Date;
   constructor (message: any, options?: {}) {
@@ -102,3 +104,19 @@ export function parseCookies (cookieString: string): { [key: string]: string } {
   })
   return cookies
 }
+
+// // https://github.com/microsoft/TypeScript/issues/13298#issuecomment-885980381
+// type UnionToIntersection<U> = (
+//   U extends never ? never : (arg: U) => never
+// ) extends (arg: infer I) => void
+//   ? I
+//   : never;
+// type UnionToTuple<T> = UnionToIntersection<
+//   T extends never ? never : (t: T) => T
+// > extends (_: never) => infer W
+//   ? [...UnionToTuple<Exclude<T, W>>, W]
+//   : [];
+
+// export function zodObjectToZodTuples<T extends ReturnType<typeof z.object>> (obj: T): z.ZodTuple<UnionToTuple<T['_shape'][keyof T['_shape']]>> {
+
+// }
