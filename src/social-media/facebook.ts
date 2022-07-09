@@ -57,7 +57,7 @@ export async function facebookdl (url: string): Promise<FacebookDownloader> {
       const isVideo = ext === 'mp4'
       const isWebm = ext === 'webm'
       return {
-        size,
+        size: parseInt(size!),
         ext,
         url,
         quality,
@@ -68,7 +68,7 @@ export async function facebookdl (url: string): Promise<FacebookDownloader> {
       }
       // ext webm video without audio
     })
-  if (!result.length) throw new ScraperError(`Can't download!\n${JSON.stringify({ id, thumbnail, duration, a, av, v }, null, 2)}`)
+  if (!result?.length) throw new ScraperError(`Can't download!\n${JSON.stringify({ id, thumbnail, duration, a, av, v }, null, 2)}`)
 
   const res = {
     id,

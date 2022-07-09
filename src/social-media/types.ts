@@ -10,7 +10,7 @@ export const FacebookDownloaderSchema = z.object({
   thumbnail: z.string(),
   duration: z.number(),
   result: z.object({
-    size: z.string().optional(),
+    size: z.number().optional(),
     ext: z.string(),
     url: z.string(),
     quality: z.string().optional(),
@@ -18,7 +18,7 @@ export const FacebookDownloaderSchema = z.object({
     fid: z.string(),
     isVideo: z.boolean(),
     isAudio: z.boolean()
-  }).array().min(1).optional()
+  }).array().min(1)
 })
 
 export const FacebookDownloaderV2Schema = z.object({
