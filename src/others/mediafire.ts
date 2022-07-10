@@ -1,6 +1,7 @@
 import got from 'got'
 import cheerio from 'cheerio'
 import { Mediafire, MediafireArgsSchema, MediafireSchema } from './types.js'
+import { parseFileSize } from '../utils.js'
 
 export async function mediafiredl (url: string): Promise<Mediafire> {
   MediafireArgsSchema.parse(arguments)
@@ -18,17 +19,7 @@ export async function mediafiredl (url: string): Promise<Mediafire> {
   const $li = $('div.dl-info > ul.details > li')
   const aploud = $li.eq(1).find('span').text().trim()
   const filesizeH = $li.eq(0).find('span').text().trim()
-  const filesize = parseFloat(filesizeH) * (
-    /GB/i.test(filesizeH)
-      ? 1000000
-      : /MB/i.test(filesizeH)
-        ? 1000
-        : /KB/i.test(filesizeH)
-          ? 1
-          : /B/i.test(filesizeH)
-            ? 0.1
-            : 0
-  )
+  const filesize = parseFileSize(filesizeH)
 
   const result = {
     url: Url || url2,

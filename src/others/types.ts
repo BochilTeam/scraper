@@ -197,3 +197,19 @@ export const ChordSchema = z.object({
 
 export type ChordArgs = z.infer<typeof ChordArgsSchema>
 export type Chord = z.infer<typeof ChordSchema>
+
+export const ZippyShareArgsSchema = z.object({
+  0: z.string(ERROR_ARGS.URL).url()
+})
+export const ZippyShareSchema = z.object({
+  url: z.string().url(),
+  // url2: z.string().url(),
+  filename: z.string(),
+  filesizeH: z.string(),
+  filesize: z.number(),
+  aploud: z.string(),
+  lastDownload: z.string()
+})
+
+export type ZippyShareArgs = z.infer<typeof ZippyShareArgsSchema>
+export type ZippyShare = z.infer<typeof ZippyShareSchema>

@@ -105,6 +105,23 @@ export function parseCookies (cookieString: string): { [key: string]: string } {
   return cookies
 }
 
+/**
+ * @returns is a kilobyte
+ */
+export function parseFileSize (size: string): number {
+  return parseFloat(size) * (
+    /GB/i.test(size)
+      ? 1000000
+      : /MB/i.test(size)
+        ? 1000
+        : /KB/i.test(size)
+          ? 1
+          : /B/i.test(size)
+            ? 0.1
+            : 0
+  )
+}
+
 // // https://github.com/microsoft/TypeScript/issues/13298#issuecomment-885980381
 // type UnionToIntersection<U> = (
 //   U extends never ? never : (arg: U) => never

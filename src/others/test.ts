@@ -16,7 +16,8 @@ import {
   nameFreeFire,
   bioskopNow,
   bioskop,
-  chord
+  chord,
+  zippyshare
 } from './index.js'
 
 describe('Others', () => {
@@ -282,5 +283,16 @@ describe('Others', () => {
         return done()
       }).catch(done)
     })
+  })
+
+  it('ZippyShare', done => {
+    zippyshare('https://www53.zippyshare.com/v/Gajlfjd4/file.html').then(res => {
+      // console.log(res)
+
+      expect(res.filename).to.be.a('string').eq('ig.tmp.js')
+      expect(res.filesize).to.be.a('number').eq(10)
+
+      return done()
+    }).catch(done)
   })
 })
