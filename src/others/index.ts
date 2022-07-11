@@ -11,5 +11,6 @@ export * from './lyrics.js'
 export * from './minecraft.js'
 export * from './bioskop.js'
 export * from './chord.js'
+export * from './sfilemobi.js'
 // TODO: add cekResi
 // export * from "./cek-resi"

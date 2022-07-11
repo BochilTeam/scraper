@@ -213,3 +213,37 @@ export const ZippyShareSchema = z.object({
 
 export type ZippyShareArgs = z.infer<typeof ZippyShareArgsSchema>
 export type ZippyShare = z.infer<typeof ZippyShareSchema>
+
+export const SfileMobiSearchArgsSchema = z.object({
+  0: z.string(ERROR_ARGS.QUERY),
+  1: z.number().min(0).optional()
+})
+export const SfileMobiSearchSchema = z.object({
+  url: z.string().url(),
+  filename: z.string(),
+  icon: z.string().url(),
+  type: z.string(),
+  filesizeH: z.string(),
+  filesize: z.number()
+})
+export const SfileMobiArgsSchema = z.object({
+  0: z.string(ERROR_ARGS.URL).url()
+})
+export const SfileMobiSchema = z.object({
+  url: z.string().url(),
+  filename: z.string(),
+  icon: z.string(),
+  type: z.string(),
+  mimetype: z.string(),
+  aploud: z.string(),
+  aploudby: z.string(),
+  aploudbyUrl: z.string().url(),
+  aploudon: z.string(),
+  aploudonUrl: z.string().url(),
+  downloads: z.number(),
+  filesizeH: z.string(),
+  filesize: z.number()
+})
+
+export type SfileMobiSearch = z.infer<typeof SfileMobiSearchSchema>
+export type SfileMobi = z.infer<typeof SfileMobiSchema>

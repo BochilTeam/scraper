@@ -17,7 +17,9 @@ import {
   bioskopNow,
   bioskop,
   chord,
-  zippyshare
+  zippyshare,
+  sfilemobiSearch,
+  sfilemobi
 } from './index.js'
 
 describe('Others', () => {
@@ -294,5 +296,23 @@ describe('Others', () => {
 
       return done()
     }).catch(done)
+  })
+
+  describe('sfilemobi', () => {
+    it('sfilemobi search', done => {
+      sfilemobiSearch('minecraft').then(res => {
+        // console.log(res)
+
+        return done()
+      }).catch(done)
+    })
+
+    it('sfilemobi download', done => {
+      sfilemobi('https://sfile.mobi/oGm8kAIQCs7').then(res => {
+        // console.log(res)
+
+        return done()
+      }).catch(done)
+    })
   })
 })

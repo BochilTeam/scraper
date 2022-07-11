@@ -106,7 +106,7 @@ export function parseCookies (cookieString: string): { [key: string]: string } {
 }
 
 /**
- * @returns is a kilobyte
+ * @returns is a kilobit
  */
 export function parseFileSize (size: string): number {
   return parseFloat(size) * (
@@ -116,9 +116,11 @@ export function parseFileSize (size: string): number {
         ? 1000
         : /KB/i.test(size)
           ? 1
-          : /B/i.test(size)
-            ? 0.1
-            : 0
+          : /bytes?/i.test(size)
+            ? 0.001
+            : /B/i.test(size)
+              ? 0.1
+              : 0
   )
 }
 
