@@ -4,9 +4,13 @@ import EventEmitter from 'events'
 import net, { NetConnectOpts, Socket as TCPSocket } from 'net'
 import { ScraperError } from '../utils.js'
 import { MinecraftJava, MinecraftJavaArgsSchema, MinecraftJavaSchema } from './types.js'
+
 interface Options {
   timeout: number;
 }
+
+const SEGMENT_BITS = 0x7F
+const CONTINUE_BIT = 0x80
 
 // TODO
 export async function statusBedrock (
@@ -141,16 +145,23 @@ class TCPsocket extends EventEmitter {
   }
 
   writeVarInt (value: number, save = true) {
-    const buffer = Buffer.alloc(5)
-    let i = 0
-    do {
-      buffer[i++] = value & 0x7f | 0x80
-      value >>= 7
-    } while (value > 0)
-    buffer[i - 1] &= 0x7f
-    const result = buffer.slice(0, i)
-    if (save) this.write(result)
-    return result
+    let results = Buffer.alloc(0)
+    while (true) {
+      if ((value & ~SEGMENT_BITS) === 0) {
+        // console.debug('writeVarInt value:', value)
+        results = Buffer.concat([results, Buffer.from([value])])
+        break
+      }
+
+      const segment = (value & SEGMENT_BITS) | CONTINUE_BIT
+      // console.debug('writeVarInt segmen:', segment)
+      results = Buffer.concat([results, Buffer.from([segment])])
+
+      // Note: >>> means that the sign bit is shifted with the rest of the number rather than being left alone
+      value >>>= 7
+    }
+    if (save) this.write(results)
+    return results
   }
 
   writeVarLong (value: number) {
@@ -176,15 +187,22 @@ class TCPsocket extends EventEmitter {
   }
 
   readVarInt () {
-    let result = 0
-    let i = 0
-    let b: number
-    do {
-      b = this.response[i++]
-      result |= (b & 0x7f) << (7 * i)
-    } while (b & 0x80)
-    this.response = this.response.slice(i)
-    return result
+    let value = 0
+    let length = 0
+    let currentByte = 0
+
+    while (true) {
+      currentByte = this.response[length]
+      value |= (currentByte & SEGMENT_BITS) << (length * 7)
+
+      if ((currentByte & CONTINUE_BIT) === 0) break
+
+      length++
+
+      if ((length * 7) >= 32) throw new Error('VarInt is too big')
+    }
+
+    return value
   }
 
   readVarLong () {

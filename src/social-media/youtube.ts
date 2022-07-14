@@ -26,6 +26,7 @@ interface IresFetch {
   result: string;
 }
 
+// TODO: Fix "Refresh to try again.  (code 02)", example link have that error: https://youtu.be/JFC3tYYW_UI
 // https://github.com/BochilGaming/games-wabot/blob/main/lib/y2mate.js
 const servers = ['en163', 'id90', 'en172']
 export async function youtubedl (

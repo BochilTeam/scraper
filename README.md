@@ -4,11 +4,24 @@ Install package
 ```sh
 npm i @bochilteam/scraper
 ```
+Install latest version from github (not recommended)
+```sh
+npm i github:bochilteam/scraper
+```
+
+## What's updated?
+- Using [zod](https://www.npmjs.com/package/zod) to validate data input and output. (not finished yet)
+- Some bug fixes.
+- Breaking changes. see [this](#from-v200-to-v300)
+- Added `didyoumean` to search for similar words.
+- Added `snapsave`
+- Added `zippyshare`
+- Added `sfilemobi`
 
 ## Example use
 ```js
 // ESM 
-import scraper from '@bochilteam/scraper'
+import * as scraper from '@bochilteam/scraper'
 // CJS
 const scraper = require('@bochilteam/scraper')
 ```
@@ -36,10 +49,10 @@ console.log(story)
 ```
 - `instagramdl` use website https://snapinsta.app, 
 - `instagramdlv2` use website https://downloadgram.org
-- `instagramdlv3` use website https://instasave.website
+- `instagramdlv3` use website https://downvideo.quora-wiki.com
 - `instagramdlv4` use website https://instadownloader.co
 - `instagramStory` use website https://storydownloader.app
-- `instagramStoryv2` use website https://www.instagramsave.com
+- `instagramStoryv2` use website https://www.instadp.com [**not working**]
 
 
 ### Youtube Downloader
@@ -89,19 +102,27 @@ console.log(await tiktokdlv2(url).catch(console.error))
 ```js
 import {
     aiovideodl,
-    savefrom
+    savefrom,
+    snapsave
 } from '@bochilteam/scraper'
 // Facebook video downloader
 console.log(await aiovideodl('https://fb.watch/9WktuN9j-z/'))
 // Twitter video downloader
 console.log(await aiovideodl('https://twitter.com/jen_degen/status/1458167531869458440?s=20'))
+
 // Tiktok downloader
 console.log(await savefrom('https://www.tiktok.com/@omagadsus/video/7025456384175017243?is_from_webapp=1&sender_device=pc&web_id6982004129280116226'))
 // Instagram downloader
 console.log(await savefrom('https://www.instagram.com/reel/CXK49yFLtJ_/?utm_source=ig_web_copy_link'))
+
+// Instagram downloader
+console.log(await snapsave('https://www.instagram.com/reel/CXK49yFLtJ_/?utm_source=ig_web_copy_link'))
+// Facebook video downloader
+console.log(await snapsave('https://fb.watch/9WktuN9j-z/'))
 ```
-- `aiovideodl` use website https://aiovideodl.ml
+- `aiovideodl` use website https://aiovideodl.ml [**Not Working**]
 - `savefrom` use website https://id.savefrom.net
+- `snapsave` use website https://snapsave.app
 
 ### Aksara Jawa
 ```js
@@ -279,3 +300,40 @@ console.log(await bioskopNow())
 ```
 - `bioskop` use website https://jadwalnonton.com
 - `bioskopNow` use website https://jadwalnonton.com
+
+### Downloader 
+```js
+import {
+    mediafiredl,
+    sfilemobi,
+    sfilemobiSearch,
+    zippyshare
+} from '@bochilteam/scraper'
+// Mediafire
+console.log(await mediafiredl('https://www.mediafire.com/file/gpeiucmm1xo6ln0/hello_world.mp4/file'))
+// Sfilemobi
+console.log(await sfilemobi('https://sfile.mobi/oGm8kAIQCs7'))
+// Sfilemobi Search
+console.log(await sfilemobiSearch('minecraft'))
+// Zippyshare
+console.log(await zippyshare('https://www53.zippyshare.com/v/Gajlfjd4/file.html'))
+```
+- `mediafiredl` use website https://www.mediafire.com
+- `sfilemobi` use website https://www.sfilemobi.com
+- `sfilemobiSearch` use website https://www.sfilemobi.com
+- `zippyshare` use website https://www.zippyshare.com
+
+### Chord 
+```js
+import {
+    chord
+} from '@bochilteam/scraper'
+// Chord
+console.log(await chord('Until i found you'))
+```
+- `chord` use website https://www.gitagram.com
+
+## Breaking Changes
+### - from v2.0.0 to v3.0.0
+- `savefrom` now output array of object instead of object
+- `asmaulhusna` optionally can take `index` parameter to get the asmaulhusna of that index (default is random 1-99)
