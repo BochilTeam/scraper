@@ -511,6 +511,7 @@ export const SnapSaveArgsSchema = z.object({
   0: z.string(ERROR_ARGS.URL).url()
 })
 export const SnapSaveSchema = z.object({
+  filesize: z.number().optional(),
   resolution: z.string().optional(),
   thumbnail: z.string().url().optional(),
   url: z.string().url()

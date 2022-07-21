@@ -96,10 +96,10 @@ export type KbbiArgs = z.infer<typeof KbbiArgsSchema>
 export type Kbbi = z.infer<typeof KbbiSchema>
 
 export const MinecraftJavaArgsSchema = z.object({
-  0: z.string(ERROR_ARGS.IP).url(),
+  0: z.string(ERROR_ARGS.IP),
   1: z.number(ERROR_ARGS.PORT).min(0).max(65535),
   2: z.object({
-    timeout: z.number()
+    timeout: z.number().optional()
   }).optional()
 })
 export const IMinecraftResponseSchema = z.object({

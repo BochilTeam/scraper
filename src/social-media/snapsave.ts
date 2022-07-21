@@ -1,5 +1,5 @@
 import got from 'got'
-import { decryptSnapSave, ScraperError } from '../utils.js'
+import { decryptSnapSave, getRenderedSnapSaveUrl, ScraperError } from '../utils.js'
 import cheerio from 'cheerio'
 import { SnapSaveArgsSchema, SnapSaveSchema, SnapSave } from './types.js'
 
@@ -21,30 +21,49 @@ export default async function snapsave (url: string): Promise<SnapSave[]> {
   const decode = decryptSnapSave(html)
   const $ = cheerio.load(decode)
 
-  const results: SnapSave[] = []
+  // console.debug($.html())
 
-  if ($('table.table').length) {
-    $('table > tbody > tr').each((_, el) => {
+  const results: (SnapSave & { shouldRender?: boolean })[] = []
+
+  if ($('table.table').length || $('article.media > figure').length) {
+    const thumbnail = $('article.media > figure').find('img').attr('src')
+    $('tbody > tr').each((_, el) => {
       const $el = $(el)
       const $td = $el.find('td')
-      if ($td.eq(1).text().includes('Tidak')) {
-        const resolution = $td.eq(0).text()
-        const _url = $td.eq(2).find('a').attr('href')!
-        results.push({
-          resolution,
-          url: _url
-        })
+      const resolution = $td.eq(0).text()
+      let _url = $td.eq(2).find('a').attr('href') || $td.eq(2).find('button').attr('onclick')
+      const shouldRender = /get_progressApi/ig.test(_url || '')
+      if (shouldRender) {
+        _url = /get_progressApi\('(.*?)'\)/.exec(_url || '')?.[1] || _url
       }
+      results.push({
+        resolution,
+        thumbnail,
+        url: _url!,
+        shouldRender
+      })
     })
   } else {
     const thumbnail = $('div.download-items__thumb > img').attr('src')!
     let _url = $('div.download-items__btn > a').attr('href')!
-    if (!_url.includes('snapsave.app')) _url = `https://snapsave.app${_url}`
+    if (!/https?:\/\//.test(_url || '')) _url = `https://snapsave.app${_url}`
     results.push({
       thumbnail,
       url: _url
     })
   }
+
+  await Promise.all(results.map(async (result, i) => {
+    if (result.shouldRender) {
+      const url = result.url
+      const renderedUrl = await getRenderedSnapSaveUrl(url)
+      delete result.shouldRender
+      result.filesize = renderedUrl.file_size
+      result.url = renderedUrl.file_path
+      results[i] = result
+    }
+    return result
+  }))
 
   if (results.length === 0) throw new ScraperError(`No results found\n\n${decode}`)
 

@@ -5,6 +5,7 @@ import net, { NetConnectOpts, Socket as TCPSocket } from 'net'
 import { ScraperError } from '../utils.js'
 import { MinecraftJava, MinecraftJavaArgsSchema, MinecraftJavaSchema } from './types.js'
 
+process.on('unhandledRejection', console.error)
 interface Options {
   timeout: number;
 }
@@ -32,6 +33,7 @@ export function statusJava (
     setTimeout(() => reject(new ScraperError('timeout')), opts.timeout)
     // reference https://github.com/PassTheMayo/minecraft-server-util/blob/master/src/status.ts
     const socket = new TCPsocket(ip, port, opts, reject)
+    await socket.connect()
 
     // https://wiki.vg/Server_List_Ping#Handshake
     socket.writeVarInt(0x00)
@@ -113,30 +115,34 @@ class TCPsocket extends EventEmitter {
   }
 
   connect (opts?: NetConnectOpts) {
-    this.socket = net.createConnection({
-      host: this.ip,
-      port: this.port,
-      timeout: this.opts.timeout,
-      ...opts
-    })
-    this.socket.on('data', (data) => {
-      this.response = Buffer.concat([this.response, data])
-      this.emit('data', data, this.response)
-    })
-    this.socket.on('connect', () => {
-      this.emit('connect')
-    })
-    this.socket.on('close', () => {
-      // this.reject(new ScraperError('Connection closed'));
-      this.emit('close')
-    })
-    this.socket.on('error', () => {
-      this.reject(new ScraperError('Connection error'))
-      this.emit('error')
-    })
-    this.socket.on('timeout', () => {
-      this.reject(new ScraperError('Connection timeout'))
-      this.emit('timeout')
+    return new Promise<void>((resolve, reject) => {
+      this.socket = net.createConnection({
+        host: this.ip,
+        port: this.port,
+        timeout: this.opts.timeout,
+        ...opts
+      })
+      this.socket.on('data', (data) => {
+        this.response = Buffer.concat([this.response, data])
+        console.debug('TCPsocket data:', data)
+        this.emit('data', data, this.response)
+      })
+      this.socket.on('connect', () => {
+        this.emit('connect')
+        resolve()
+      })
+      this.socket.on('close', () => {
+        // this.reject(new ScraperError('Connection closed'));
+        this.emit('close')
+      })
+      this.socket.on('error', (error) => {
+        this.reject(new ScraperError(`Connection error\n${error}`))
+        this.emit('error')
+      })
+      this.socket.on('timeout', () => {
+        this.reject(new ScraperError('Connection timeout'))
+        this.emit('timeout')
+      })
     })
   }
 

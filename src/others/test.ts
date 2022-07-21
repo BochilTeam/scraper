@@ -12,7 +12,7 @@ import {
   lyrics,
   // lyricsv2,
   kbbi,
-  // statusJava,
+  statusJava,
   nameFreeFire,
   bioskopNow,
   bioskop,
@@ -25,25 +25,25 @@ import {
 describe('Others', () => {
   // TODO
   describe('Minecraft', () => {
-    // it('Minecraft java', done => {
-    //     statusJava('moelsmp2.mcalias.com', 25566).then(res => {
-    //         expect(res).to.be.an('object')
-    //         expect(res.ip).to.be.a('string')
-    //         expect(res.port).to.be.a('number')
-    //         expect(res.description).to.be.a('string')
-    //         expect(res.descriptionText).to.be.a('string')
-    //         expect(res.players).to.be.an('object')
-    //         expect(res.players.max).to.be.a('number')
-    //         expect(res.players.online).to.be.a('number')
-    //         expect(res.players.sample).to.be.an('array')
-    //         expect(res.version).to.be.an('object')
-    //         expect(res.version.name).to.be.a('string')
-    //         expect(res.version.protocol).to.be.a('number')
-    //         expect(res.favicon).to.be.a('string')
+    it('Minecraft java', done => {
+      statusJava('play.jackpotmc.com', 25565).then(res => {
+        expect(res).to.be.an('object')
+        expect(res.ip).to.be.a('string')
+        expect(res.port).to.be.a('number')
+        expect(res.description).to.be.a('string')
+        expect(res.descriptionText).to.be.a('string')
+        expect(res.players).to.be.an('object')
+        expect(res.players.max).to.be.a('number')
+        expect(res.players.online).to.be.a('number')
+        expect(res.players.sample).to.be.an('array')
+        expect(res.version).to.be.an('object')
+        expect(res.version.name).to.be.a('string')
+        expect(res.version.protocol).to.be.a('number')
+        expect(res.favicon).to.be.a('string')
 
-    //         return done()
-    //     }).catch(done)
-    // })
+        return done()
+      }).catch(done)
+    })
   })
 
   it('Wikipedia', (done) => {

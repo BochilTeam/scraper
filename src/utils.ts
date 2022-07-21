@@ -1,5 +1,7 @@
 // import { z } from 'zod'
 
+import got from 'got'
+
 export class ScraperError extends Error {
   readonly date: Date;
   constructor (message: any, options?: {}) {
@@ -86,6 +88,29 @@ export function getDecodedSnapSave (data: string): string {
 
 export function decryptSnapSave (data: string): string {
   return getDecodedSnapSave(decodeSnapApp(...getEncodedSnapApp(data)))
+}
+
+type JsonRenderedSnapSave = {
+  status: number,
+  data: {
+    identifier: string;
+    progress: number;
+    file_size: number;
+    file_path: string;
+  }
+}
+type RenderedSnapSave = Omit<JsonRenderedSnapSave['data'], 'identifier' | 'progress'>
+export async function getRenderedSnapSaveUrl (url: string): Promise<RenderedSnapSave> {
+  while (true) {
+    const json = await got(url).json<JsonRenderedSnapSave>()
+    if (json.status !== 1) throw new ScraperError(json.data.identifier)
+    if (json.data.progress === 100) {
+      return {
+        file_size: json.data.file_size,
+        file_path: json.data.file_path
+      }
+    }
+  }
 }
 
 export function stringifyCookies (cookies: string[]): string {
