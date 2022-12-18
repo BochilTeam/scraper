@@ -345,48 +345,49 @@ export type ItwitterDownloader = z.infer<typeof ItwitterDownloaderSchema>
 export type TwitterDownloader = z.infer<typeof TwitterDownloaderSchema>
 export type TwitterDownloaderV2 = ItwitterDownloader
 
-export interface YoutubeSearch {
-  video: {
-    authorName: string;
-    authorAvatar?: string;
-    videoId: string;
-    url: string;
-    thumbnail: string;
-    title: string;
-    description?: string;
-    publishedTime: string;
-    durationH: string;
-    durationS: number;
-    duration: string;
-    viewH: string;
-    view: string;
-    type: 'video';
-  }[];
-  channel: {
-    channelId: string;
-    url: string;
-    channelName: string;
-    avatar: string;
-    isVerified: boolean;
-    subscriberH: string;
-    subscriber: string;
-    videoCount: number;
-    description: string;
-    type: 'channel';
-  }[];
-  playlist: {
-    playlistId: string;
-    title: string;
-    thumbnail: string;
-    video: {
-      videoId: string;
-      title: string;
-      durationH: string;
-      duration: string;
-    }[];
-    type: 'mix';
-  }[];
-}
+export const YoutubeSearchSchema = z.object({
+  video: z.array(z.object({
+    authorName: z.string(),
+    authorAvatar: z.string(),
+    videoId: z.string(),
+    url: z.string().url(),
+    thumbnail: z.string().url(),
+    title: z.string(),
+    description: z.string(),
+    publishedTime: z.string(),
+    durationH: z.string(),
+    durationS: z.number(),
+    duration: z.string(),
+    viewH: z.string(),
+    view: z.string(),
+    type: z.literal('video')
+  })),
+  channel: z.array(z.object({
+    channelId: z.string(),
+    url: z.string().url(),
+    channelName: z.string(),
+    username: z.string(),
+    avatar: z.string(),
+    isVerified: z.boolean(),
+    subscriberH: z.string(),
+    subscriber: z.string(),
+    description: z.string(),
+    type: z.literal('channel')
+  })),
+  playlist: z.array(z.object({
+    playlistId: z.string(),
+    title: z.string(),
+    thumbnail: z.string(),
+    video: z.array(z.object({
+      videoId: z.string(),
+      title: z.string(),
+      durationH: z.string(),
+      duration: z.string(),
+    })),
+    type: z.literal('mix')
+  }))
+})
+export type YoutubeSearch = z.infer<typeof YoutubeSearchSchema>
 
 export const YoutubeDownloaderArgsSchema = z.object({
   0: z.string(ERROR_ARGS.URL).url(),

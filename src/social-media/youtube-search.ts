@@ -1,7 +1,7 @@
 import cheerio from 'cheerio'
 import got from 'got'
-// eslint-disable-next-line import/extensions
-import { YoutubeSearch } from './types'
+import { YoutubeSearch, YoutubeSearchSchema } from './types.js'
+import fs from 'fs'
 
 type Ithumbnails = { url: string; width: number; height: number };
 export default async function youtubeSearch (
@@ -29,103 +29,115 @@ export default async function youtubeSearch (
     return regex && sc
   })
   const results: YoutubeSearch = { video: [], channel: [], playlist: [] };
-  (
-    sc!.contents.twoColumnSearchResultsRenderer.primaryContents
-      .sectionListRenderer.contents[0].itemSectionRenderer.contents as any[]
-  ).forEach((v: { [Key: string]: any }) => {
-    const typeName = Object.keys(v)[0]
-    const result = v[typeName]
-    if (['horizontalCardListRenderer', 'shelfRenderer'].includes(typeName)) { return } // Todo: add this result as results
+  const contents = sc!.contents.twoColumnSearchResultsRenderer.primaryContents.sectionListRenderer.contents[0].itemSectionRenderer.contents
+  for (const value of contents) {
+    const typeName = Object.keys(value)[0]
+    const result = value[typeName]
+    if (typeName === 'shelfRenderer') {
+      const items = result.content.verticalListRenderer.items
+      if (Array.isArray(items) && items.length) contents.push(...items)
+    }
+
     const isChannel = typeName === 'channelRenderer'
     const isVideo = typeName === 'videoRenderer'
     const isMix = typeName === 'radioRenderer'
 
     if (isVideo) {
-      const view: string =
-        result.viewCountText?.simpleText ||
-        result.shortViewCountText?.simpleText ||
-        result.shortViewCountText?.accessibility?.accessibilityData.label
-      const _duration = result.thumbnailOverlays?.find(
+      const videoId: string = result.videoId
+
+      const authorName: string = (
+        result.longBylineText?.runs[0]
+        || result.ownerText?.runs[0]
+        || result.shortBylineText?.runs[0]
+      ).text
+      const authorAvatar: string = result?.channelThumbnailSupportedRenderers?.channelThumbnailWithLinkRenderer?.thumbnail.thumbnails
+        .find((obj: Object) => 'url' in obj && typeof obj.url === 'string')
+        ?.url
+      const thumbnail: string = result.thumbnail.thumbnails.pop().url
+      const title: string = result.title.runs.find((obj: Object) => 'text' in obj && typeof obj.text === 'string')?.text
+        || result.title.accessibility?.accessibilityData.label
+      const description: string = result.detailedMetadataSnippets.find((obj: Object) => 'snippetText' in obj && obj.snippetText && typeof obj.snippetText === 'object' && 'runs' in obj.snippetText && Array.isArray(obj.snippetText.runs))?.snippetText.runs
+        .filter((run: Object) => 'text' in run && typeof run.text === 'string')
+        .map((run: { text: string }) => run.text)
+        .join('')
+
+
+      const viewH: string =
+        result.viewCountText?.simpleText
+        || result.shortViewCountText?.simpleText
+        || result.shortViewCountText?.accessibility?.accessibilityData.label
+      const view = (
+        (viewH?.indexOf('x') === -1
+          ? viewH?.split(' ')[0]
+          : viewH?.split('x')[0]) || viewH
+      ).trim()
+
+      const durationH: string = result.lengthText?.accessibility?.accessibilityData.label
+        || result.thumbnailOverlays?.find(
+          (v: { [Key: string]: any }) =>
+            Object.keys(v)[0] === 'thumbnailOverlayTimeStatusRenderer'
+        )?.thumbnailOverlayTimeStatusRenderer.text.accessibility?.accessibilityData.label
+      const duration: string = result.lengthText?.simpleText || result.thumbnailOverlays?.find(
         (v: { [Key: string]: any }) =>
           Object.keys(v)[0] === 'thumbnailOverlayTimeStatusRenderer'
-      )?.thumbnailOverlayTimeStatusRenderer.text
-      const videoId: string = result.videoId
-      const duration: string =
-        result.lengthText?.simpleText || _duration?.simpleText
-      let durationS: number = 0;
-      (
-        duration?.split('.').length && duration.indexOf(':') === -1
-          ? duration.split('.')
-          : duration?.split(':')
-      )?.forEach(
-        (v, i, arr) =>
-          (durationS +=
-          durationMultipliers[arr.length]['' + i] * parseInt(v))
-      )
+      )?.thumbnailOverlayTimeStatusRenderer.text.simpleText
+      let durationS: number = (duration.split('.').length && duration.indexOf(':') === -1 ?
+        duration.split('.')
+        : duration.split(':'))
+        .reduce((prev, curr, i, arr) => {
+          prev += durationMultipliers[arr.length]['' + i] * parseInt(curr)
+          return prev
+        }, 0)
+
+      const publishedTime = result.publishedTimeText.simpleText
       results.video.push({
-        authorName: (result.ownerText?.runs ||
-          result.longBylineText?.runs ||
-          [])[0]?.text,
-        authorAvatar:
-          result.channelThumbnailSupportedRenderers?.channelThumbnailWithLinkRenderer.thumbnail.thumbnails
-            ?.filter(({ url }: Ithumbnails) => url)
-            ?.pop().url,
+        authorName,
+        authorAvatar,
         videoId,
         url: encodeURI('https://www.youtube.com/watch?v=' + videoId),
-        thumbnail: result.thumbnail.thumbnails.pop().url,
-        title: (
-          result.title?.runs.find((v: { [Key: string]: any }) => v.text)?.text ||
-          result.title?.accessibility.accessibilityData.label
-        )?.trim(),
-        description: result.detailedMetadataSnippets?.[0]?.snippetText.runs
-          ?.filter(({ text }: { text: string }) => text)
-          ?.map(({ text }: { text: string }) => text)
-          ?.join(''),
-        publishedTime: result.publishedTimeText?.simpleText,
-        durationH:
-          result.lengthText?.accessibility.accessibilityData.label ||
-          _duration?.accessibility.accessibilityData.label,
+        thumbnail,
+        title,
+        description,
+        publishedTime,
+        durationH,
         durationS,
         duration,
-        viewH: view,
-        view: (
-          (view?.indexOf('x') === -1
-            ? view?.split(' ')[0]
-            : view?.split('x')[0]) || view
-        )?.trim(),
-        type: typeName.replace(/Renderer/i, '') as 'video'
+        viewH,
+        view,
+        type: 'video'
       })
     }
 
     if (isChannel) {
       const channelId: string = result.channelId
-      const _subscriber: string =
-        result.subscriberCountText?.accessibility.accessibilityData.label ||
-        result.subscriberCountText?.simpleText
+      // idk?
+      const subscriberH: string = (result.videoCountText.accessibility?.accessibilityData.label
+        || result.videoCountText.simpleText).trim()
+      const channelName: string = result.title.simpleText
+        || result.shortBylineText.runs.find((run: Object) => 'text' in run && typeof run.text === 'string')?.text
+      const username: string = result.subscriberCountText.simpleText
+      const avatar: string = result.thumbnail.thumbnails.pop().url
+      const description = result.descriptionSnippet.runs.filter((run: Object) => 'text' in run && typeof run.text === 'string')
+        .map((run: { text: string }) => run.text)
+        .join('')
+
+      const subscriber: string = subscriberH.split(' ')
+        .slice(0, subscriberH.split(' ').length - 1)
+        .join(' ')
+      const isVerified: boolean = result.ownerBadges.find((badge: Object) => 'metadataBadgeRenderer' in badge && badge.metadataBadgeRenderer && typeof badge.metadataBadgeRenderer === 'object')?.metadataBadgeRenderer.style === 'BADGE_STYLE_TYPE_VERIFIED'
+        || false
+
       results.channel.push({
         channelId,
         url: encodeURI('https://www.youtube.com/channel/' + channelId),
-        channelName:
-          result.title.simpleText ||
-          result.shortBylineText?.runs.find(
-            (v: { [Key: string]: any }) => v.text
-          )?.text,
-        avatar:
-          'https:' +
-          result.thumbnail.thumbnails
-            .filter(({ url }: Ithumbnails) => url)
-            ?.pop().url,
-        isVerified:
-          result.ownerBadges?.pop().metadataBadgeRenderer.style ===
-          'BADGE_STYLE_TYPE_VERIFIED',
-        subscriberH: _subscriber?.trim(),
-        subscriber: _subscriber?.split(' ')[0],
-        videoCount: parseInt(result.videoCountText?.runs[0]?.text),
-        description: result.descriptionSnippet?.runs
-          ?.filter(({ text }: { text: string }) => text)
-          ?.map(({ text }: { text: string }) => text)
-          ?.join(''),
-        type: typeName.replace(/Renderer/i, '') as 'channel'
+        channelName,
+        username,
+        avatar: encodeURI('https:' + avatar),
+        isVerified,
+        subscriberH,
+        subscriber,
+        description,
+        type: 'channel'
       })
     }
 
@@ -147,8 +159,8 @@ export default async function youtubeSearch (
         type: 'mix'
       })
     }
-  })
-  return results
+  }
+  return YoutubeSearchSchema.parse(results)
 }
 
 const durationMultipliers: { [key: string]: { [key: string]: number } } = {

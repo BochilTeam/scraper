@@ -321,9 +321,8 @@ describe('Social media', () => {
     })
 
     it('Youtube search', done => {
-      youtubeSearch('Minecraft').then(res => {
+      youtubeSearch('Mr Beast').then(res => {
         // console.log(res)
-
         expect(res).to.be.an('object')
         expect(res.video).to.be.an('array')
         expect(res.video).to.have.lengthOf.at.least(1)

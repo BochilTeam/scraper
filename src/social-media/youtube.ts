@@ -61,7 +61,7 @@ export async function youtubedl (
   const audio: YoutubeVideoOrAudio = {}
   $('#mp4 > table > tbody > tr').each(function () {
     const el = $(this).find('td')
-    const _quality = el.eq(0).find('a').text()
+    const _quality = el.eq(0).text()
     const quality = _quality.split('(')?.[0]?.trim()?.toLowerCase()
     const fileSizeH = el.eq(1).text()
     const fileSize = parseFloat(fileSizeH) * (/MB$/.test(fileSizeH) ? 1000 : 1)
@@ -82,7 +82,7 @@ export async function youtubedl (
   })
   $('#mp3 > table > tbody > tr').each(function () {
     const el = $(this).find('td')
-    const _quality = el.eq(0).find('a').text()
+    const _quality = el.eq(0).text()
     const quality = _quality
       .split('(')?.[1]
       ?.replace(')', '')
@@ -231,7 +231,7 @@ export async function youtubedlv3 (url: string): Promise<YoutubeDownloaderV3> {
       'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36'
     },
     body: JSON.stringify(payload)
-  }).json()
+  }).json<{ [key: string]: any }>()
   const video: YoutubeVideoOrAudioV3 = {}; const audioArray: YoutubeVideoOrAudioV3 = {}
   results.forEach(
     ({

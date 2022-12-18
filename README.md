@@ -337,3 +337,5 @@ console.log(await chord('Until i found you'))
 ### - from v2.0.0 to v3.0.0
 - `savefrom` now output array of object instead of object
 - `asmaulhusna` optionally can take `index` parameter to get the asmaulhusna of that index (default is random 1-99)
+### - from v3.0.0 to v4.0.0
+- `youtubeSearch` videoCount is not on the channel anymore (deleted)
