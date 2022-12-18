@@ -1,6 +1,6 @@
 {
   "name": "@bochilteam/scraper",
-  "version": "4.0.0-aplha",
+  "version": "4.0.0-alpha",
   "description": "scraper module",
   "exports": {
     ".": {
