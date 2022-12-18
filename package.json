@@ -1,6 +1,6 @@
 {
   "name": "@bochilteam/scraper",
-  "version": "4.0.0-alpha",
+  "version": "4.0.21-alpha",
   "description": "scraper module",
   "exports": {
     ".": {
@@ -10,6 +10,7 @@
     }
   },
   "main": "./lib/cjs/index.js",
+  "module": "./lib/esm/index.js",
   "types": "./lib/@types/index.d.ts",
   "engines": {
     "node": ">= 12.20"
@@ -67,8 +68,8 @@
     "scripts": "scripts"
   },
   "files": [
-    "lib/**.js",
-    "lib/**.d.ts",
+    "lib/**/*.js",
+    "lib/**/**.d.ts",
     "scripts/*"
   ],
   "optionalDependencies": {
