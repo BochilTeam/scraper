@@ -1,6 +1,6 @@
 {
   "name": "@bochilteam/scraper",
-  "version": "4.0.21-alpha",
+  "version": "4.0.22-alpha.0",
   "description": "scraper module",
   "exports": {
     ".": {
@@ -70,6 +70,7 @@
   "files": [
     "lib/**/*.js",
     "lib/**/**.d.ts",
+    "lib/**/package.json",
     "scripts/*"
   ],
   "optionalDependencies": {
