@@ -6,7 +6,7 @@
         "url": "git+https://github.com/BochilTeam/scraper.git"
     },
     "scripts": {
-        "compile": "turbo run compile --parallel"
+        "compile": "turbo run compile --parallel --color --ignore=\"packages/scraper\" && turbo run compile --color --filter=@bochilteam/scraper"
     },
     "devDependencies": {
         "turbo": "^1.6.3"
