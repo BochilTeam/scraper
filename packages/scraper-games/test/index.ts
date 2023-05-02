@@ -13,7 +13,7 @@ import {
     tebaklirik, tebaklirikjson,
     tebaktebakan, tebaktebakanjson,
     tekateki, tekatekijson
-} from '../src/index.js'
+} from '../index.js'
 import {
     AsahOtakSchema,
     CakLontongSchema,

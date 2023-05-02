@@ -4,6 +4,7 @@
         "outDir": "./lib/esm"
     },
     "include": [
+        "./index.ts",
         "./src/**/*.ts",
         "./test/*.ts"
     ],

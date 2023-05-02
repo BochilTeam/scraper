@@ -4,7 +4,7 @@ import {
   asmaulhusna, asmaulhusnajson,
   alquran,
   jadwalsholat, listJadwalSholat
-} from '../src/index.js'
+} from '../index.js'
 
 describe('Religions', () => {
   describe('Asmaul Husna', () => {

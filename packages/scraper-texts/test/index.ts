@@ -6,7 +6,7 @@ import {
   dare, darejson,
   truth, truthjson,
   textpro, textproList
-} from '../src/index.js'
+} from '../index.js'
 describe('Texts', () => {
   describe('Aksara Jawa', () => {
     it('Latin to Aksara', done => {

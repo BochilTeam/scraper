@@ -5,7 +5,7 @@ import {
     artimimpi,
     nomorhoki,
     getZodiac
-} from '../src/index.js'
+} from '../index.js'
 
 describe('Primbon', () => {
     it('Arti nama', (done) => {

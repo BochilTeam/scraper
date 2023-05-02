@@ -12,7 +12,7 @@ import {
   bioskopNow,
   bioskop,
   chord,
-} from '../src/index.js'
+} from '../index.js'
 
 describe('Others', () => {
 

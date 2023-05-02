@@ -2,7 +2,7 @@ import { describe, it } from 'mocha'
 import {
     mediafiredl,
     sfilemobiSearch, sfilemobi,
-} from '../src/index.js'
+} from '../index.js'
 
 describe('Downloader', () => {
     describe('Mediafire', () => {

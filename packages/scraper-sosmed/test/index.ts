@@ -16,7 +16,7 @@ import {
     aiovideodl,
     savefrom,
     snapsave
-} from '../src/index.js'
+} from '../index.js'
 
 describe('Social media', () => {
     describe('Tiktok scraper', function () {

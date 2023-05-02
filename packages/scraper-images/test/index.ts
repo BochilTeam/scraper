@@ -5,7 +5,7 @@ import {
     wallpaper,
     stickerLine,
     stickerTelegram
-} from '../src/index.js'
+} from '../index.js'
 
 describe('Images', () => {
     it('google-image', function (done)  {

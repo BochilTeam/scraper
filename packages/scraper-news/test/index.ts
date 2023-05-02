@@ -6,7 +6,7 @@ import {
     suaracom,
     liputan6,
     merdeka
-} from '../src/index.js'
+} from '../index.js'
 
 describe('News', () => {
     it('CNBC Indonesia', (done) => {
