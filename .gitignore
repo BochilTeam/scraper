@@ -106,5 +106,8 @@ dist
 # lib
 lib/
 
+# TurboRepo
+.turbo
+
 package-lock.json
 pnpm-lock.yaml

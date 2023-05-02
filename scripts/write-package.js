@@ -9,14 +9,17 @@ const fileExists = async (filePath) =>
     .then(() => true)
     .catch(() => false)
 
-const libPath = path.join(__dirname, '../lib')
+const cwd = process.cwd()
+const libPath = path.join(cwd, './lib')
 
-async function writePackageJson () {
+async function writePackageJson() {
   const libExists = await fileExists(libPath)
   if (!libExists) {
     console.error('@BochilTeam/scraper:', 'Lib folder not found after compiling TypeScript')
     process.exit(1)
   }
+  console.log('@BochilTeam/scraper:', 'Writing \'package.json\' file...')
+
   const libCjs = path.join(libPath, 'cjs')
   const libCjsExists = await fileExists(libCjs)
   if (libCjsExists) {

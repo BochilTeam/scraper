@@ -1,0 +1,12 @@
+{
+    "$schema": "https://turbo.build/schema.json",
+    "pipeline": {
+        "compile": {},
+        "build:esm": {},
+        "build:cjs": {},
+        "build:types": {},
+        "test": {
+            "dependsOn": ["compile"]
+        }
+    }
+}
