@@ -12,6 +12,7 @@
         "turbo": "^1.6.3"
     },
     "workspaces": [
+        "packages/scraper-bmkg",
         "packages/scraper-downloader",
         "packages/scraper-games",
         "packages/scraper-images",
