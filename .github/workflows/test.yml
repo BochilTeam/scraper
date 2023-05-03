@@ -28,8 +28,8 @@ jobs:
         # cache: 'npm'
     - name: 'Install package'
       run: npm install
-    - name: 'Generate TypeScript types files'
-      run: npm run build:types
+    - name: 'Compile TypeScript files'
+      run: npm run compile
     - name: 'Test ESM'
       run: npm run test:esm
     - name: 'Test CJS'

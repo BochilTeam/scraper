@@ -1,18 +1,77 @@
 {
     "$schema": "https://turbo.build/schema.json",
     "pipeline": {
-        "compile": {},
-        "build:esm": {},
-        "build:cjs": {},
-        "build:types": {},
+        "compile": {
+            "inputs": [
+                "src/**/*.ts",
+                "test/*.ts",
+                "index.ts"
+            ],
+            "outputs": [
+                "lib/esm/**",
+                "lib/cjs/**",
+                "lib/types/**"
+            ]
+        },
+        "build:esm": {
+            "inputs": [
+                "src/**/*.ts",
+                "test/*.ts",
+                "index.ts"
+            ],
+            "outputs": [
+                "lib/esm/**",
+                "lib/cjs/**",
+                "lib/types/**"
+            ]
+        },
+        "build:cjs": {
+            "inputs": [
+                "src/**/*.ts",
+                "test/*.ts",
+                "index.ts"
+            ],
+            "outputs": [
+                "lib/esm/**",
+                "lib/cjs/**",
+                "lib/types/**"
+            ]
+        },
+        "build:types": {
+            "inputs": [
+                "src/**/*.ts",
+                "test/*.ts",
+                "index.ts"
+            ],
+            "outputs": [
+                "lib/esm/**",
+                "lib/cjs/**",
+                "lib/types/**"
+            ]
+        },
+        "write:package": {
+            "persistent": true,
+            "dependsOn": [
+                "^build:esm",
+                "^build:cjs"
+            ]
+        },
         "test": {
-            "dependsOn": ["compile"]
+            "dependsOn": [
+                "compile"
+            ]
         },
         "test:esm": {
-            "dependsOn": ["build:esm"]
+            "dependsOn": [
+                "build:esm",
+                "write:package"
+            ]
         },
-        "test:cjs":  {
-            "dependsOn": ["build:cjs"]
+        "test:cjs": {
+            "dependsOn": [
+                "build:cjs",
+                "write:package"
+            ]
         }
     }
 }

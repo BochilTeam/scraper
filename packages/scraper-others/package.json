@@ -20,7 +20,8 @@
         "build:cjs": "tsc -p tsconfig.cjs.json",
         "build:esm": "tsc -p tsconfig.esm.json",
         "build:types": "tsc -p tsconfig.types.json",
-        "compile": "node ../../scripts/compile-typescript.js && node ../../scripts/write-package.js"
+        "compile": "node ../../scripts/compile-typescript.js && npm run write:package",
+        "write:package": "node ../../scripts/write-package.js"
     },
     "repository": {
         "type": "git",
