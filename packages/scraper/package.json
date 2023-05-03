@@ -36,6 +36,9 @@
     "web scraping",
     "http web scraping"
   ],
+  "files": [
+    "./lib/**/*.js"
+  ],
   "dependencies": {
     "@bochilteam/scraper-bmkg": "^1.0.0",
     "@bochilteam/scraper-downloader": "^1.0.0",
