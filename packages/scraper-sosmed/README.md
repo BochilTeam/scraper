@@ -2,6 +2,6 @@
 Scraper social media data
 
 ## Installation
-``sh
+```sh
 npm i @bochilteam/scraper-sosmed
 ```

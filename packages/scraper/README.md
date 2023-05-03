@@ -2,6 +2,6 @@
 All In One Scraper
 
 ## Installation
-``sh
+```sh
 npm i @bochilteam/scraper
 ```

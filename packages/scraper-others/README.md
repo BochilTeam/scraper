@@ -2,6 +2,6 @@
 Other.
 
 ## Installation
-``sh
+```sh
 npm i @bochilteam/scraper-others
 ```

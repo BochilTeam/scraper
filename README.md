@@ -28,16 +28,16 @@ console.log(data) // JSON
 
 
 ## Packages
-- [BMKG Scraper](./packages/scraper-bmkg/README.md) -- Contains scrapers [BMKG](https://www.bmkg.go.id/) website
-- [Downloader Scraper](./packages/scraper-downloader/README.md) -- Contains scrapers from downloader sites
-- [Games data Scraper](./packages/scraper-games/README.md) -- Fetcher data from [games databases](https://github.com/BochilTeam/database/tree/master/games)
-- [Images Scraper](./packages/scraper-images/README.md) -- Scraper to find pictures/images 
-- [News Scraper](./packages/scraper-news/README.md) -- News scraper from Indonesian news sites
-- [Primbon Scraper](./packages/scraper-primbon/README.md) -- Primbon Scraper
-- [Religions Scraper](./packages/scraper-religions/README.md) -- Data scraper for a religion
-- [Social media Scraper](./packages/scraper-sosmed/README.md) -- Scraper social media data
-- [Text Scraper](./packages/scraper-texts/README.md) -- Texts scraper or Fetcher texts data from [texts databases](https://github.com/BochilTeam/database/tree/master/kata-kata)
-- [Others Scraper](./packages/scraper-news/README.md) -- Others
+- [BMKG Scraper](./packages/scraper-bmkg/) -- Contains scrapers [BMKG](https://www.bmkg.go.id/) website
+- [Downloader Scraper](./packages/scraper-downloader/) -- Contains scrapers from downloader sites
+- [Games data Scraper](./packages/scraper-games/) -- Fetcher data from [games databases](https://github.com/BochilTeam/database/tree/master/games)
+- [Images Scraper](./packages/scraper-images/) -- Scraper to find pictures/images 
+- [News Scraper](./packages/scraper-news/) -- News scraper from Indonesian news sites
+- [Primbon Scraper](./packages/scraper-primbon/) -- Primbon Scraper
+- [Religions Scraper](./packages/scraper-religions/) -- Data scraper for a religion
+- [Social media Scraper](./packages/scraper-sosmed/) -- Scraper social media data
+- [Text Scraper](./packages/scraper-texts/) -- Texts scraper or Fetcher texts data from [texts databases](https://github.com/BochilTeam/database/tree/master/kata-kata)
+- [Others Scraper](./packages/scraper-news/) -- Others
 - [Scraper](#scraper) -- All In One Scraper
 
 ## Contributing

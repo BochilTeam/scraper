@@ -2,6 +2,6 @@
 News scraper from Indonesian news sites
 
 ## Installation
-``sh
+```sh
 npm i @bochilteam/scraper-news
 ```

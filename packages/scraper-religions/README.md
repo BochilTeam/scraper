@@ -2,6 +2,6 @@
 Data scraper for a religion
 
 ## Installation
-``sh
+```sh
 npm i @bochilteam/scraper-religions
 ```

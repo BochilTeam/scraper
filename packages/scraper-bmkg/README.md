@@ -2,6 +2,6 @@
 Contains scrapers [BMKG](https://www.bmkg.go.id/) website
 
 ## Installation
-``sh
+```sh
 npm i @bochilteam/scraper-bmkg
 ```

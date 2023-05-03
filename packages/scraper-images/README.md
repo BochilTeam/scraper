@@ -2,6 +2,6 @@
 Scraper to find pictures/images 
 
 ## Installation
-``sh
+```sh
 npm i @bochilteam/scraper-images
 ```

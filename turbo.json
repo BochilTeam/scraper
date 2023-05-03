@@ -50,7 +50,6 @@
             ]
         },
         "write:package": {
-            "persistent": true,
             "dependsOn": [
                 "^build:esm",
                 "^build:cjs"
@@ -63,13 +62,11 @@
         },
         "test:esm": {
             "dependsOn": [
-                "build:esm",
                 "write:package"
             ]
         },
         "test:cjs": {
             "dependsOn": [
-                "build:cjs",
                 "write:package"
             ]
         }

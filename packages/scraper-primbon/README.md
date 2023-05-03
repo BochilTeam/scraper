@@ -2,6 +2,6 @@
 Primbon Scraper
 
 ## Installation
-``sh
+```sh
 npm i @bochilteam/scraper-primbon
 ```

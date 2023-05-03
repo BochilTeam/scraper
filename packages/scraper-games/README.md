@@ -2,6 +2,6 @@
 Fetcher data from [games databases](https://github.com/BochilTeam/database/tree/master/games)
 
 ## Installation
-``sh
+```sh
 npm i @bochilteam/scraper-games
 ```

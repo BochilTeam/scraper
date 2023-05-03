@@ -2,6 +2,6 @@
 Contains scrapers from downloader sitesContains scrapers from downloader sites
 
 ## Installation
-``sh
+```sh
 npm i @bochilteam/scraper-downloader
 ```
