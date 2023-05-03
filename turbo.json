@@ -7,6 +7,12 @@
         "build:types": {},
         "test": {
             "dependsOn": ["compile"]
+        },
+        "test:esm": {
+            "dependsOn": ["build:esm"]
+        },
+        "test:cjs":  {
+            "dependsOn": ["build:cjs"]
         }
     }
 }

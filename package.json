@@ -6,7 +6,13 @@
         "url": "git+https://github.com/BochilTeam/scraper.git"
     },
     "scripts": {
-        "compile": "turbo run compile --parallel --color --filter=!@bochilteam/scraper && turbo run compile --color --filter=@bochilteam/scraper"
+        "compile": "turbo run compile --parallel --color --filter=!@bochilteam/scraper && turbo run compile --color --filter=@bochilteam/scraper",
+        "build:esm": "turbo run build:esm --parallel --color --filter=!@bochilteam/scraper && turbo run build:esm --color --filter=@bochilteam/scraper",
+        "build:cjs": "turbo run build:cjs --parallel --color --filter=!@bochilteam/scraper && turbo run build:cjs --color --filter=@bochilteam/scraper",
+        "build:types": "turbo run build:types --parallel --color --filter=!@bochilteam/scraper && turbo run build:types --color --filter=@bochilteam/scraper",
+        "test": "turbo run test --color",
+        "test:esm": "turbo run test:esm",
+        "test:cjs": "turbo run test:cjs"
     },
     "devDependencies": {
         "turbo": "^1.6.3"
