@@ -32,26 +32,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20
-
-      - name: Retrieve 'node_modules' caches
-        id: node-cache
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: node_modules-${{ runner.os }}-v${{ steps.node-setup.outputs.node-version }}-${{ hashFiles('package.json') }}
       
       - name: Install dependencies 
-        if: steps.node-cache.outputs.cache-hit != 'true'
-        run: npm install
+        run: npm install && npm install typedoc
       
       - name: Compile TypeScript files
         run: npm run compile
 
       - name: Generation docs files
-        uses: TypeStrong/typedoc-action@v1
-        with:
-          args: --out docs --entrypoints packages/scraper/src/index.ts
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+        run: npx typedoc --out docs --entrypoints packages/scraper/src/index.ts
 
       - name: Deploy to GitHub Pages
         id: deployment
