@@ -22,8 +22,6 @@ concurrency:
 
 jobs:
   deploy:
-    environment:
-      node-version: 20
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -33,14 +31,14 @@ jobs:
         id: node-setup
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ env.node-version }}
+          node-version: 20
 
       - name: Retrieve 'node_modules' caches
         id: node-cache
         uses: actions/cache@v3
         with:
           path: node_modules
-          key: node_modules-${{ runner.os }}-v${{ env.node-version }}-${{ hashFiles('package.json') }}
+          key: node_modules-${{ runner.os }}-v${{ steps.node-setup.outputs.node-version }}-${{ hashFiles('package.json') }}
       
       - name: Install dependencies 
         if: steps.node-cache.outputs.cache-hit != 'true'
