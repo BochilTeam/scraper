@@ -1,0 +1,64 @@
+name: Build TypeDoc documentation
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["master"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      node-version: 20
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        id: node-setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.node-version }}
+
+      - name: Retrieve 'node_modules' caches
+        id: node-cache
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: node_modules-${{ runner.os }}-v${{ env.node-version }}-${{ hashFiles('package.json') }}
+      
+      - name: Install dependencies 
+        if: steps.node-cache.outputs.cache-hit != 'true'
+        run: npm install
+      
+      - name: Compile TypeScript files
+        run: npm run compile
+
+      - name: Generation docs files
+        uses: TypeStrong/typedoc-action@v1
+        with:
+          args: --out docs --entrypoints packages/scraper/src/index.ts
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: peaceiris/actions-gh-pages@v3
+        with: 
+          publish_branch: gh-pages
+          publish_dir: ./docs
+          github_token: ${{ secrets.GITHUB_TOKEN }}
