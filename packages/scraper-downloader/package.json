@@ -1,6 +1,6 @@
 {
   "name": "@bochilteam/scraper-downloader",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Downloader scraper module",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",

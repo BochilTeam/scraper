@@ -1,6 +1,6 @@
 {
   "name": "@bochilteam/scraper-games",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Games data's scraper module",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",

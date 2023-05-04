@@ -1,6 +1,6 @@
 {
   "name": "@bochilteam/scraper",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "description": "Browserless scraper module",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
@@ -42,15 +42,15 @@
     "lib/**/package.json"
   ],
   "dependencies": {
-    "@bochilteam/scraper-bmkg": "^1.0.1",
-    "@bochilteam/scraper-downloader": "^1.0.1",
-    "@bochilteam/scraper-games": "^1.0.1",
-    "@bochilteam/scraper-images": "^1.0.1",
-    "@bochilteam/scraper-news": "^1.0.1",
-    "@bochilteam/scraper-others": "^1.0.1",
-    "@bochilteam/scraper-primbon": "^1.0.1",
-    "@bochilteam/scraper-religions": "^1.0.1",
-    "@bochilteam/scraper-sosmed": "^1.0.1",
-    "@bochilteam/scraper-texts": "^1.0.1"
+    "@bochilteam/scraper-bmkg": "^1.0.2",
+    "@bochilteam/scraper-downloader": "^1.0.2",
+    "@bochilteam/scraper-games": "^1.0.2",
+    "@bochilteam/scraper-images": "^1.0.2",
+    "@bochilteam/scraper-news": "^1.0.2",
+    "@bochilteam/scraper-others": "^1.0.2",
+    "@bochilteam/scraper-primbon": "^1.0.2",
+    "@bochilteam/scraper-religions": "^1.0.2",
+    "@bochilteam/scraper-sosmed": "^1.0.2",
+    "@bochilteam/scraper-texts": "^1.0.2"
   }
 }
