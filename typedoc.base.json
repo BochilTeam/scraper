@@ -2,6 +2,8 @@
     "$schema": "https://typedoc.org/schema.json",
     "includeVersion": true,
     "plugin": [
-        "typedoc-plugin-zod"
-    ]
+        "typedoc-plugin-zod", 
+        "typedoc-plugin-google-ads"
+    ],
+    "googleAdsId": "1034628294027462"
 }

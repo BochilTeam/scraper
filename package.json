@@ -19,6 +19,7 @@
     "devDependencies": {
         "turbo": "^1.6.3",
         "typedoc": "^0.24.6",
+        "typedoc-plugin-google-ads": "^1.4.0",
         "typedoc-plugin-zod": "^1.0.2"
     },
     "workspaces": [
