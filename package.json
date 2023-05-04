@@ -10,6 +10,7 @@
         "build:esm": "turbo run build:esm --parallel --color --filter=!@bochilteam/scraper && turbo run build:esm --color --filter=@bochilteam/scraper && npm run write:package",
         "build:cjs": "turbo run build:cjs --parallel --color --filter=!@bochilteam/scraper && turbo run build:cjs --color --filter=@bochilteam/scraper && npm run write:package",
         "build:types": "turbo run build:types --parallel --color --filter=!@bochilteam/scraper && turbo run build:types --color --filter=@bochilteam/scraper",
+        "build:pages": "typedoc --tsconfig tsconfig.base.json",
         "write:package": "turbo run write:package",
         "test": "turbo run test --color",
         "test:esm": "turbo run test:esm",

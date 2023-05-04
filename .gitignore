@@ -109,6 +109,7 @@ lib/
 # TurboRepo
 .turbo
 
+# Lock file
 package-lock.json
 pnpm-lock.yaml
 
