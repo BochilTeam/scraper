@@ -9,5 +9,6 @@
         "strict": true,
         "resolveJsonModule": true,
         "skipLibCheck": true
-    }
+    },
+    "exclude": ["**/node_modules/*", "**/lib/*", "**/docs/*", "**/scripts/**/*.js"]
 }
