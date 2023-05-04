@@ -32,9 +32,11 @@
     "bugs": {
         "url": "https://github.com/BochilTeam/scraper/issues"
     },
-    "homepage": "https://github.com/BochilTeam/scraper#readme",
+    "homepage": "https://github.com/BochilTeam/scraper/tree/master/packages/scraper-others#readme",
     "files": [
-        "./lib/**/*.js"
+        "lib/**/*.js",
+        "lib/**/**.d.ts",
+        "lib/**/package.json"
     ],
     "dependencies": {
         "cheerio": "^1.0.0-rc.12",

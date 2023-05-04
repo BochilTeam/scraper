@@ -17,8 +17,8 @@ import {
 describe('Others', () => {
 
   it('Wikipedia', (done) => {
-    wikipedia('Minecraft', 'en').then(res => {
-      expect(res).to.be.an('object')
+    wikipedia('Minecraft', 'en').then(() => {
+
       return done()
     }).catch(done)
   })

@@ -5,10 +5,10 @@ import {
     GempaRealtimeSchema, GempaSchema 
 } from '../types/index.js'
 
-export async function gempa (): Promise<Gempa> {
+export async function gempa (): Promise<Gempa[]> {
     const html = await got('https://www.bmkg.go.id/gempabumi/gempabumi-dirasakan.bmkg').text()
     const $ = cheerio.load(html)
-    const results: Gempa = []
+    const results: Gempa[] = []
     $('div.table-responsive > table.table > tbody > tr').each(function () {
         const el = $(this).find('td')
         const when = el.eq(1).text().split(' ')
@@ -35,13 +35,13 @@ export async function gempa (): Promise<Gempa> {
         })
     })
 
-    return GempaSchema.parse(results)
+    return results.map((v) => GempaSchema.parse(v))
 }
 
-export async function gempaNow() {
+export async function gempaNow(): Promise<GempaNow[]> {
     const html = await got('https://www.bmkg.go.id/gempabumi/gempabumi-terkini.bmkg').text()
     const $ = cheerio.load(html)
-    const results: GempaNow = []
+    const results: GempaNow[] = []
     $('div.table-responsive > table.table > tbody > tr').each(function () {
       const el = $(this).find('td')
       const when = el.eq(1).text().split(' ')
@@ -63,13 +63,13 @@ export async function gempaNow() {
       })
     })
 
-    return GempaNowSchema.parse(results)
+    return results.map((v) => GempaNowSchema.parse(v))
 }
 
-export async function gempaRealtime (): Promise<GempaRealtime> {
+export async function gempaRealtime (): Promise<GempaRealtime[]> {
     const html = await got('https://www.bmkg.go.id/gempabumi/gempabumi-realtime.bmkg').text()
     const $ = cheerio.load(html)
-    const results: GempaRealtime = []
+    const results: GempaRealtime[] = []
     $('table.table tbody tr').each(function () {
         const $td = $(this).find('td')
         const when = $td.eq(1).text().split(' ')
@@ -93,5 +93,5 @@ export async function gempaRealtime (): Promise<GempaRealtime> {
             isConfirmed
         })
     })
-    return GempaRealtimeSchema.parse(results)
+    return results.map((v) => GempaRealtimeSchema.parse(v))
 }

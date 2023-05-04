@@ -29,16 +29,16 @@ console.log(data) // JSON
 
 
 ## Packages
-- [BMKG Scraper](./packages/scraper-bmkg/) -- Contains scrapers [BMKG](https://www.bmkg.go.id/) website
-- [Downloader Scraper](./packages/scraper-downloader/) -- Contains scrapers from downloader sites
-- [Games data Scraper](./packages/scraper-games/) -- Fetcher data from [games databases](https://github.com/BochilTeam/database/tree/master/games)
-- [Images Scraper](./packages/scraper-images/) -- Scraper to find pictures/images 
-- [News Scraper](./packages/scraper-news/) -- News scraper from Indonesian news sites
-- [Primbon Scraper](./packages/scraper-primbon/) -- Primbon Scraper
-- [Religions Scraper](./packages/scraper-religions/) -- Data scraper for a religion
-- [Social media Scraper](./packages/scraper-sosmed/) -- Scraper social media data
-- [Text Scraper](./packages/scraper-texts/) -- Texts scraper or Fetcher texts data from [texts databases](https://github.com/BochilTeam/database/tree/master/kata-kata)
-- [Others Scraper](./packages/scraper-news/) -- Others
+- [BMKG Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-bmkg/) -- Contains scrapers [BMKG](https://www.bmkg.go.id/) website
+- [Downloader Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-downloader/) -- Contains scrapers from downloader sites
+- [Games data Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-games/) -- Fetcher data from [games databases](https://github.com/BochilTeam/database/tree/master/games)
+- [Images Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-images/) -- Scraper to find pictures/images 
+- [News Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-news/) -- News scraper from Indonesian news sites
+- [Primbon Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-primbon/) -- Primbon Scraper
+- [Religions Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-religions/) -- Data scraper for a religion
+- [Social media Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-sosmed/) -- Scraper social media data
+- [Text Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-texts/) -- Texts scraper or Fetcher texts data from [texts databases](https://github.com/BochilTeam/database/tree/master/kata-kata)
+- [Others Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-news/) -- Others
 - [Scraper](#scraper) -- All In One Scraper
 
 ## Contributing

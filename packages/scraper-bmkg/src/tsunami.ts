@@ -2,10 +2,10 @@ import got from 'got'
 import cheerio from 'cheerio'
 import { Tsunami, TsunamiSchema } from '../types/index.js'
 
-export default async function tsunami (): Promise<Tsunami> {
+export default async function tsunami (): Promise<Tsunami[]> {
     const html = await got('https://www.bmkg.go.id/tsunami/').text()
     const $ = cheerio.load(html)
-    const results: Tsunami = []
+    const results: Tsunami[] = []
     $('table.table > tbody > tr').each(function () {
         const el = $(this).find('td')
         const when = el.eq(1).text().split(' ')
@@ -29,5 +29,5 @@ export default async function tsunami (): Promise<Tsunami> {
         })
     })
 
-    return TsunamiSchema.parse(results)
+    return results.map((v) => TsunamiSchema.parse(v))
 }
