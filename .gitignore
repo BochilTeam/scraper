@@ -111,3 +111,9 @@ lib/
 
 package-lock.json
 pnpm-lock.yaml
+
+# Github pages
+docs
+
+# Changeset
+.changeset/

@@ -1,5 +1,5 @@
 # Scraper 
-Scraper is a Nodejs library with many built-in features that can get data from websites using only HTTP. It is designed to be simple, and easy to use.
+Scraper is a Nodejs library with many built-in features that can get data from websites using only HTTP. It is designed to be simple, and easy to use. 
 
 ## Installation
 Install stable version of Scraper:
@@ -20,6 +20,7 @@ import { savefrom } from '@bochilteam/scraper'
 const data = await savefrom('https://fb.watch/9WktuN9j-z/')
 console.log(data) // JSON
 ```
+[Documentation](https://bochilteam.github.io/scraper/)
 
 ## Features
 - Simple and easy to use

@@ -1,6 +1,6 @@
 {
     "name": "@bochilteam/scraper-bmkg",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "BMKG scraper module",
     "main": "lib/cjs/index.js",
     "module": "lib/esm/index.js",
