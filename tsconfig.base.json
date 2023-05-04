@@ -5,10 +5,18 @@
         "checkJs": true,
         "target": "ES2019",
         "moduleResolution": "node",
+        "lib": [
+            "es2020.string"
+        ],
         "declaration": false,
         "strict": true,
         "resolveJsonModule": true,
         "skipLibCheck": true
     },
-    "exclude": ["**/node_modules/*", "**/lib/*", "**/docs/*", "**/scripts/**/*.js"]
+    "exclude": [
+        "**/node_modules/*",
+        "**/lib/*",
+        "**/docs/*",
+        "**/scripts/**/*.js"
+    ]
 }
