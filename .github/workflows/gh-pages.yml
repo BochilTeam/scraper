@@ -34,13 +34,10 @@ jobs:
           node-version: 20
       
       - name: Install dependencies 
-        run: npm install && npm install typedoc
-      
-      - name: Compile TypeScript files
-        run: npm run compile
+        run: npm install
 
       - name: Generation docs files
-        run: npx typedoc --out docs --entrypoints packages/scraper/src/index.ts
+        run: npx typedoc
 
       - name: Deploy to GitHub Pages
         id: deployment
