@@ -1,0 +1,10 @@
+{
+    "extends": [
+        "./typedoc.base.json"
+    ],
+    "entryPoints": [
+        "./packages/*"
+    ],
+    "out": "./docs",
+    "entryPointStrategy": "packages"
+}
