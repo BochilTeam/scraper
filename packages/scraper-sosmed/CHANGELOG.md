@@ -1,5 +1,14 @@
 # @bochilteam/scraper-sosmed
 
+## 1.0.3
+
+### Patch Changes
+
+- - Fix youtubedl
+  - Fix aiovideodl
+  - Delete youtubedlv3
+  - Delete 'v_id' in youtubedl and youtubedlv2 output
+
 ## 1.0.2
 
 ### Patch Changes

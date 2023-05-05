@@ -1,5 +1,13 @@
 # @bochilteam/scraper
 
+## 4.2.2
+
+### Patch Changes
+
+- Update @bochilteam/scraper-sosmed depedency
+- Updated dependencies
+  - @bochilteam/scraper-sosmed@1.0.3
+
 ## 4.2.1
 
 ### Patch Changes
