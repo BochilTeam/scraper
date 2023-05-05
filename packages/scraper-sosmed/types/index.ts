@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { TypeOf, z } from 'zod'
 
 export const FacebookDownloaderArgsSchema = z.object({
   0: z.string().url()
@@ -193,9 +193,8 @@ export const YoutubeVideoOrAudioSchema = z.record(z.object({
   fileSize: z.number(),
   download: z.function().returns(z.promise(z.string().url()))
 }))
-export const YoutubeDonwloaderSchema = z.object({
+export const YoutubeDownloaderSchema = z.object({
   id: z.string(),
-  v_id: z.string().optional(),
   thumbnail: z.string().url(),
   title: z.string(),
   video: YoutubeVideoOrAudioSchema,
@@ -204,30 +203,13 @@ export const YoutubeDonwloaderSchema = z.object({
 export const YoutubeDownloaderV2ArgsSchema = z.object({
   0: z.string().url()
 })
-export const YoutubeDownloaderV3ArgsSchema = z.object({
-  0: z.string().url()
-})
-export const YoutubeVideoOrAudioV3Schema = z.record(z.object({
-  quality: z.string(),
-  fileSizeH: z.string().optional(),
-  fileSize: z.number().optional(),
-  download: z.function().returns(z.promise(z.string().url()))
-}))
-export const YoutubeDonwloaderV3Schema = z.object({
-  id: z.string(),
-  thumbnail: z.string().url(),
-  title: z.string(),
-  video: YoutubeVideoOrAudioV3Schema,
-  audio: YoutubeVideoOrAudioV3Schema
-})
+export const YoutubeConvertSchema = z.string().url()
 
 export type YoutubeDownloaderArgs = z.infer<typeof YoutubeDownloaderArgsSchema>
 export type YoutubeVideoOrAudio = z.infer<typeof YoutubeVideoOrAudioSchema>
-export type YoutubeDownloader = z.infer<typeof YoutubeDonwloaderSchema>
+export type YoutubeDownloader = z.infer<typeof YoutubeDownloaderSchema>
 export type YoutubeDownloaderV2Args = z.infer<typeof YoutubeDownloaderV2ArgsSchema>
-export type YoutubeDownloaderV3Args = z.infer<typeof YoutubeDownloaderV3ArgsSchema>
-export type YoutubeVideoOrAudioV3 = z.infer<typeof YoutubeVideoOrAudioV3Schema>
-export type YoutubeDownloaderV3 = z.infer<typeof YoutubeDonwloaderV3Schema>
+export type YoutubeConvert = z.infer<typeof YoutubeConvertSchema>
 
 export const GroupWAArgsSchema = z.object({
   0: z.string()

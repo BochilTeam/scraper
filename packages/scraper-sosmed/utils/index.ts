@@ -107,28 +107,28 @@ export function generateTokenYoutube4kdownloader (url: string) {
     return _url
   }
 
-  function convert(decoded: string, type: string, len: number) {
+  function convert (decoded: string, type: string, len: number) {
     decoded += ''
     let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz'
     let enc_str = ''
     for (let c = 1; c <= len;) {
-        enc_str = ''
-        for (let i = 0; i < decoded.length; i++) {
-            let char = decoded[i]
-            let pos = chars.indexOf(char)
-            if (pos === -1) enc_str += char
-            else {
-                let enc_pos = 'enc' === type ? 'undefined' == typeof chars[pos + 5] ? 5 - (chars.length - pos) : pos + 5 : 'undefined' == typeof chars[pos - 5] ? chars['length'] + pos - 5 : pos - 5
-                let enc_char = chars[enc_pos]
-                enc_str += enc_char
-            }
+      enc_str = ''
+      for (let i = 0; i < decoded.length; i++) {
+        let char = decoded[i]
+        let pos = chars.indexOf(char)
+        if (pos === -1) enc_str += char
+        else {
+          let enc_pos = 'enc' === type ? 'undefined' == typeof chars[pos + 5] ? 5 - (chars.length - pos) : pos + 5 : 'undefined' == typeof chars[pos - 5] ? chars['length'] + pos - 5 : pos - 5
+          let enc_char = chars[enc_pos]
+          enc_str += enc_char
         }
-        enc_str = enc_str.split('').reverse().join('')
-        decoded = enc_str
-        c++
+      }
+      enc_str = enc_str.split('').reverse().join('')
+      decoded = enc_str
+      c++
     }
     return enc_str;
-}
+  }
 
   let decodedMax = decode_max(url)
   let token = convert(decodedMax, 'dec', 3);
@@ -137,4 +137,23 @@ export function generateTokenYoutube4kdownloader (url: string) {
   return token
 }
 
+/**
+ * @returns is a kilobit
+ */
+export function parseFileSize (size: string): number {
+  const sized = parseFloat(size)
+  return (isNaN(sized) ? 0 : sized) * (
+    /GB/i.test(size)
+      ? 1000000
+      : /MB/i.test(size)
+        ? 1000
+        : /KB/i.test(size)
+          ? 1
+          : /bytes?/i.test(size)
+            ? 0.001
+            : /B/i.test(size)
+              ? 0.1
+              : 0
+  )
+}
 

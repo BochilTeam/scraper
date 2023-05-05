@@ -10,7 +10,6 @@ import {
     twitterdl,
     youtubedl,
     youtubedlv2,
-    youtubedlv3,
     youtubeSearch,
     groupWA,
     aiovideodl,
@@ -74,32 +73,26 @@ describe('Social media', () => {
     })
 
     describe('Youtube', function () {
+        this.timeout(100000)
         it('Youtube downloader', done => {
             youtubedl('https://youtu.be/iik25wqIuFo').then((res) => {
-                res.video['360p'].download().catch(done)
-
-                return done()
+                res.video['360p'].download().then(() => {
+                    return done()
+                }).catch(done)
             }).catch(done)
         })
 
         it('Youtube downloader v2', done => {
             youtubedlv2('https://youtu.be/iik25wqIuFo').then((res) => {
-                res.video['240p'].download().catch(done)
+                res.video['240p'].download().then(() => {
 
-                return done()
-            }).catch(done)
-        })
-
-        it('Youtube downloader v3', done => {
-            youtubedlv3('https://youtu.be/iik25wqIuFo').then((res) => {
-                res.video['360'].download().catch(done)
-
-                return done()
+                    return done()
+                }).catch(done)
             }).catch(done)
         })
 
         it('Youtube search', done => {
-            youtubeSearch('Mr Beast').then((res) => {
+            youtubeSearch('Mr Bean funfair').then((res) => {
                 expect(res.video).to.have.lengthOf.at.least(1)
 
                 return done()
@@ -124,7 +117,7 @@ describe('Social media', () => {
         }).catch(done)
     })
 
-    describe('aiovideodl', function ()  {
+    describe('aiovideodl', function () {
         this.timeout(10000)
         it('Tiktok download', done => {
             aiovideodl('https://www.tiktok.com/@omagadsus/video/7025456384175017243').then((res) => {

@@ -1,17 +1,16 @@
 import cheerio from 'cheerio'
 import got from 'got'
+import FormData from 'form-data'
 import {
   YoutubeDownloader,
   YoutubeVideoOrAudio,
-  YoutubeDownloaderV3,
-  YoutubeVideoOrAudioV3,
   YoutubeDownloaderArgsSchema,
-  YoutubeDonwloaderSchema,
+  YoutubeDownloaderSchema,
   YoutubeDownloaderV2ArgsSchema,
-  YoutubeDownloaderV3ArgsSchema,
-  YoutubeDonwloaderV3Schema
+  YoutubeConvertSchema
 } from '../types/index.js'
 import { sizeFormatter } from 'human-readable'
+import { parseFileSize } from '../utils/index.js'
 
 const toFormat = sizeFormatter({
   std: 'JEDEC', // 'SI' (default) | 'IEC' | 'JEDEC'
@@ -20,98 +19,106 @@ const toFormat = sizeFormatter({
   render: (literal, symbol) => `${literal} ${symbol}B`
 })
 
-interface IresFetch {
-  status: string;
-  result: string;
-}
 
-// TODO: Fix "Refresh to try again.  (code 02)", example link have that error: https://youtu.be/JFC3tYYW_UI
 // https://github.com/BochilGaming/games-wabot/blob/main/lib/y2mate.js
-const servers = ['en163', 'id90', 'en172']
+const servers = ['en', 'id', 'es']
+/**
+ * Scrape from https://www.y2mate.com/
+ */
 export async function youtubedl (
   url: string,
-  server: string = 'en163'
+  server: string = servers[0]
 ): Promise<YoutubeDownloader> {
   YoutubeDownloaderArgsSchema.parse(arguments)
 
   if (!servers.includes(server)) server = servers[0]
-  const params: { url: string; q_auto: number; ajax: number } = {
-    url: url,
-    q_auto: 0,
-    ajax: 1
-  }
-  const json: IresFetch = await got
-    .post(`https://www.y2mate.com/mates/${server}/analyze/ajax`, {
-      headers: {
-        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        cookie:
-          '_ga=GA1.2.1405332118.1641699259; _gid=GA1.2.70284915.1642387108; _gat_gtag_UA_84863187_23=1',
-        origin: 'https://www.y2mate.com'
-      },
-      form: params
-    })
-    .json()
-  const $ = cheerio.load(json.result)
-  const id = (/var k__id = "(.*?)"/.exec($.html()) || ['', ''])[1]
-  const v_id = (/var k_data_vid = "(.*?)"/.exec($.html()) || ['', ''])[1]
-  const thumbnail = $('.video-thumbnail > img').attr('src') as string
-  const title = $('div.caption > b').text().trim()
-  const video: YoutubeVideoOrAudio = {}
-  const audio: YoutubeVideoOrAudio = {}
-  $('#mp4 > table > tbody > tr').each(function () {
-    const el = $(this).find('td')
-    const _quality = el.eq(0).text()
-    const quality = _quality.split('(')?.[0]?.trim()?.toLowerCase()
-    const fileSizeH = el.eq(1).text()
-    const fileSize = parseFloat(fileSizeH) * (/MB$/.test(fileSizeH) ? 1000 : 1)
-    if (!/\.3gp/i.test(_quality)) {
-      video[quality] = {
-        quality,
-        fileSizeH,
-        fileSize: isNaN(fileSize) ? 0 : fileSize,
-        download: convert.bind(
-          null,
-          id,
-          v_id,
-          'mp4',
-          quality.replace(/p/i, '')
-        )
+  const json: {
+    status: string
+    mess: string
+    page: string
+    vid: string
+    extractor: string
+    title: string
+    t: number
+    a: string
+    links: {
+      [Type: string]: {
+        [Key: string]: {
+          size: string
+          f: string
+          q: string
+          q_text: string
+          k: string
+        }
       }
     }
-  })
-  $('#mp3 > table > tbody > tr').each(function () {
-    const el = $(this).find('td')
-    const _quality = el.eq(0).text()
-    const quality = _quality
-      .split('(')?.[1]
-      ?.replace(')', '')
-      ?.trim()
-      ?.toLowerCase()
-    const fileSizeH = el.eq(1).text()
-    const fileSize = parseFloat(fileSizeH) * (/MB$/.test(fileSizeH) ? 1000 : 1)
+    related: {
+      title: string
+      contents: {
+        v: string
+        t: string
+      }[]
+    }[]
+  } = await got
+    .post(`https://www.y2mate.com/mates/analyzeV2/ajax`, {
+      headers: {
+        accept: '*/*',
+        'accept-encoding': 'gzip, deflate, br',
+        'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        cookie:
+          '_gid=GA1.2.2055666962.1683248123; _gat_gtag_UA_84863187_21=1; _ga_K8CD7CY0TZ=GS1.1.1683248122.1.1.1683249010.0.0.0; _ga=GA1.1.1570308475.1683248122',
+        origin: 'https://www.y2mate.com',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36',
+      },
+      form: {
+        k_query: url,
+        k_page: 'home',
+        hl: server,
+        q_auto: 0 // maybe in the future this will cause an error?
+      }
+    })
+    .json()
+
+  const vid = json.vid
+
+  const video: YoutubeVideoOrAudio = {}
+  const audio: YoutubeVideoOrAudio = {}
+  for (const videoKey in json.links['mp4']) {
+    const _video = json.links['mp4'][videoKey]
+    const quality = _video.q
+    if (_video.f !== 'mp4') continue
+    const fileSizeH = _video.size
+    const fileSize = parseFileSize(fileSizeH)
+    video[quality] = {
+      quality,
+      fileSizeH,
+      fileSize,
+      download: convert.bind(convert, vid, _video.k)
+    }
+  }
+  for (const audioKey in json.links['mp3']) {
+    const _audio = json.links['mp3'][audioKey]
+    const quality = _audio.q
+    if (_audio.f !== 'mp3') continue
+    const fileSizeH = _audio.size
+    const fileSize = parseFileSize(fileSizeH)
     audio[quality] = {
       quality,
       fileSizeH,
-      fileSize: isNaN(fileSize) ? 0 : fileSize,
-      download: convert.bind(
-        null,
-        id,
-        v_id,
-        'mp3',
-        quality.replace(/kbps/i, '')
-      )
+      fileSize,
+      download: convert.bind(convert, vid, _audio.k)
     }
-  })
+  }
 
   const res = {
-    id,
-    v_id,
-    thumbnail,
-    title,
+    id: vid,
+    thumbnail: `https://i.ytimg.com/vi/${vid}/0.jpg`,
+    title: json.title,
+    duration: json.t,
     video,
     audio
   }
-  return YoutubeDonwloaderSchema.parse(res)
+  return YoutubeDownloaderSchema.parse(res)
 }
 
 interface IresLinks {
@@ -203,122 +210,39 @@ export async function youtubedlv2 (url: string): Promise<YoutubeDownloader> {
     video,
     audio
   }
-  return YoutubeDonwloaderSchema.parse(res)
-}
-
-export async function youtubedlv3 (url: string): Promise<YoutubeDownloaderV3> {
-  YoutubeDownloaderV3ArgsSchema.parse(arguments)
-
-  const payload = {
-    url
-  }
-  const {
-    id,
-    meta: {
-      title
-    },
-    thumb,
-    url: results
-  } = await got.post('https://api.onlinevideoconverter.pro/api/convert', {
-    headers: {
-      accept: 'application/json, text/plain, */*',
-      'accept-encoding': 'gzip, deflate, br',
-      'accept-language': 'en-US,en;q=0.9',
-      'content-type': 'application/json',
-      origin: 'https://onlinevideoconverter.pro',
-      referer: 'https://onlinevideoconverter.pro/',
-      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36'
-    },
-    body: JSON.stringify(payload)
-  }).json<{ [key: string]: any }>()
-  const video: YoutubeVideoOrAudioV3 = {}; const audioArray: YoutubeVideoOrAudioV3 = {}
-  results.forEach(
-    ({
-      url,
-      info_url,
-      attr,
-      quality,
-      audio,
-      no_audio,
-      filesize,
-      ext
-    }: {
-      url: string;
-      name: string;
-      subname: string;
-      info_url: string;
-      type: string;
-      ext: string;
-      downloadable: boolean;
-      quality: string;
-      audio: boolean;
-      no_audio: boolean;
-      itag: string;
-      filesize: number;
-      attr: {
-        title: string;
-        class: string;
-      },
-    }) => {
-      if (!no_audio && ext === 'mp4') {
-        video[quality] = {
-          quality,
-          fileSizeH: (filesize && toFormat(filesize)) || undefined,
-          fileSize: filesize,
-          download: async () => (url || info_url)
-        }
-      }
-      if (audio && !no_audio) {
-        audioArray[quality] = {
-          quality,
-          fileSizeH: (filesize && toFormat(filesize)) || undefined,
-          fileSize: filesize,
-          download: async () => (url || info_url)
-        }
-      }
-    })
-  const res = {
-    id,
-    title,
-    thumbnail: thumb,
-    video,
-    audio: audioArray
-  }
-
-  return YoutubeDonwloaderV3Schema.parse(res)
+  return YoutubeDownloaderSchema.parse(res)
 }
 
 async function convert (
-  _id: string,
-  v_id: string,
-  ftype: string,
-  fquality: string
+  vid: string,
+  k: string
 ): Promise<string> {
-  const params: { [Key: string]: string | number; fquality: string } = {
-    type: 'youtube',
-    _id,
-    v_id,
-    ajax: '1',
-    token: '',
-    ftype,
-    fquality
-  }
-
-  const json: IresFetch = await got('https://www.y2mate.com/mates/convert', {
+  const json: {
+    status: string
+    mess: string
+    c_status: string
+    vid: string
+    title: string
+    ftype: string
+    fquality: string
+    dlink: string
+  } = await got('https://www.y2mate.com/mates/convertV2/index', {
     method: 'POST',
     headers: {
+      accept: '*/*',
+      'accept-encoding': 'gzip, deflate, br',
       'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
       cookie:
-        '_ga=GA1.2.1405332118.1641699259; _gid=GA1.2.1117783105.1641699259; MarketGidStorage=%7B%220%22%3A%7B%7D%2C%22C702514%22%3A%7B%22page%22%3A2%2C%22time%22%3A1641701743540%7D%7D; _PN_SBSCRBR_FALLBACK_DENIED=1641701744162',
-      'user-agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36'
+        '_gid=GA1.2.2055666962.1683248123; _ga=GA1.1.1570308475.1683248122; _ga_K8CD7CY0TZ=GS1.1.1683248122.1.1.1683248164.0.0.0; prefetchAd_3381349=true',
+      origin: 'https://www.y2mate.com',
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36'
     },
-    form: params
+    form: {
+      vid,
+      k
+    }
   }).json()
-  const $ = cheerio.load(json.result)
-  const link = $('a[href]').attr('href')
-  if (link === 'https://app.y2mate.com/download') throw new Error(JSON.stringify({ link, json: json }, null, 2))
-  return link as string
+  return YoutubeConvertSchema.parse(json.dlink)
 }
 
 function convertv2 (
