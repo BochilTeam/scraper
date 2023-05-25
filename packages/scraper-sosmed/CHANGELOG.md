@@ -1,5 +1,11 @@
 # @bochilteam/scraper-sosmed
 
+## 1.0.4
+
+### Patch Changes
+
+- Fix youtube search if description is empty
+
 ## 1.0.3
 
 ### Patch Changes

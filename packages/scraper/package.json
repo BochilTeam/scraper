@@ -1,6 +1,6 @@
 {
   "name": "@bochilteam/scraper",
-  "version": "4.2.2",
+  "version": "4.2.3",
   "description": "Browserless scraper module",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
@@ -50,7 +50,7 @@
     "@bochilteam/scraper-others": "^1.0.2",
     "@bochilteam/scraper-primbon": "^1.0.2",
     "@bochilteam/scraper-religions": "^1.0.2",
-    "@bochilteam/scraper-sosmed": "^1.0.3",
+    "@bochilteam/scraper-sosmed": "^1.0.4",
     "@bochilteam/scraper-texts": "^1.0.2"
   }
 }
