@@ -213,7 +213,7 @@ export async function youtubedlv2 (url: string): Promise<YoutubeDownloader> {
   return YoutubeDownloaderSchema.parse(res)
 }
 
-async function convert (
+export async function convert (
   vid: string,
   k: string
 ): Promise<string> {
@@ -245,7 +245,7 @@ async function convert (
   return YoutubeConvertSchema.parse(json.dlink)
 }
 
-function convertv2 (
+export function convertv2 (
   url: string,
   v_id: string,
   ftype: string,

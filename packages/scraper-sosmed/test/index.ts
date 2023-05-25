@@ -76,7 +76,11 @@ describe('Social media', () => {
         this.timeout(100000)
         it('Youtube downloader', done => {
             youtubedl('https://youtu.be/iik25wqIuFo').then((res) => {
-                res.video['360p'].download().then(() => {
+                Promise.all([
+                    res.video['360p'].download(),
+                    res.audio['128kbps'].download()
+                ]).then(([video, audio]) => {
+
                     return done()
                 }).catch(done)
             }).catch(done)
@@ -84,9 +88,14 @@ describe('Social media', () => {
 
         it('Youtube downloader v2', done => {
             youtubedlv2('https://youtu.be/iik25wqIuFo').then((res) => {
-                res.video['240p'].download().then(() => {
+                console.log(res)
 
-                    return done()
+                // idk, why error if process in parallel
+                res.video['360p'].download().then((video) => {
+                    res.audio['128kbps'].download().then((audio) => {
+
+                        return done()
+                    }).catch(done)
                 }).catch(done)
             }).catch(done)
         })
@@ -184,6 +193,13 @@ describe('Social media', () => {
                 for (const { hosting } of res) {
                     expect(hosting).to.be.eq('instagram.com')
                 }
+
+                return done()
+            }).catch(done)
+        })
+
+        it('Instagram download #63', done => {
+            savefrom('https://www.instagram.com/p/CrvIUf8omdg/').then((res) => {
 
                 return done()
             }).catch(done)

@@ -56,10 +56,11 @@ export default async function youtubeSearch (
       const thumbnail: string = result.thumbnail.thumbnails.pop().url
       const title: string = result.title.runs.find((obj: Object) => 'text' in obj && typeof obj.text === 'string')?.text
         || result.title.accessibility?.accessibilityData.label
-      const description: string = result.detailedMetadataSnippets.find((obj: Object) => 'snippetText' in obj && obj.snippetText && typeof obj.snippetText === 'object' && 'runs' in obj.snippetText && Array.isArray(obj.snippetText.runs))?.snippetText.runs
+      const description: string = result.detailedMetadataSnippets?.find((obj: Object) => 'snippetText' in obj && obj.snippetText && typeof obj.snippetText === 'object' && 'runs' in obj.snippetText && Array.isArray(obj.snippetText.runs))?.snippetText.runs
         .filter((run: Object) => 'text' in run && typeof run.text === 'string')
         .map((run: { text: string }) => run.text)
         .join('')
+        || ''
 
 
       const viewH: string =
