@@ -148,7 +148,7 @@ export const YoutubeSearchSchema = z.object({
     thumbnail: z.string().url(),
     title: z.string(),
     description: z.string(),
-    publishedTime: z.string(),
+    publishedTime: z.string().optional(),
     durationH: z.string(),
     durationS: z.number(),
     duration: z.string(),

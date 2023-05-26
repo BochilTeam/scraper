@@ -90,7 +90,7 @@ export default async function youtubeSearch (
           return prev
         }, 0)
 
-      const publishedTime = result.publishedTimeText.simpleText
+      const publishedTime = result.publishedTimeText?.simpleText
       results.video.push({
         authorName,
         authorAvatar,
