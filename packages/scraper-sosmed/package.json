@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@types/mocha": "^10.0.1",
-    "@types/node": "^18.11.17",
+    "@types/node": "^20.3.0",
     "mocha": "^10.2.0"
   },
   "peerDependencies": {
