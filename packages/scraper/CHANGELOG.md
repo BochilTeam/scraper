@@ -1,5 +1,11 @@
 # @bochilteam/scraper
 
+## 4.2.4
+
+### Patch Changes
+
+- Update depdency @bochilteam/scrcaper-sosmed
+
 ## 4.2.3
 
 ### Patch Changes
