@@ -88,11 +88,12 @@ describe('Social media', () => {
 
         it('Youtube downloader v2', done => {
             youtubedlv2('https://youtu.be/iik25wqIuFo').then((res) => {
-                console.log(res)
 
                 // idk, why error if process in parallel
                 res.video['360p'].download().then((video) => {
+                    console.log({ video })
                     res.audio['128kbps'].download().then((audio) => {
+                        console.log({ audio })
 
                         return done()
                     }).catch(done)
@@ -157,7 +158,7 @@ describe('Social media', () => {
     })
 
     describe('Savefrom', function () {
-        this.timeout(5000)
+        this.timeout(10000)
         it('Tiktok download', done => {
             savefrom('https://www.tiktok.com/@omagadsus/video/7025456384175017243?is_from_webapp=1&sender_device=pc&web_id6982004129280116226').then((res) => {
                 for (const { hosting } of res) {
@@ -189,7 +190,7 @@ describe('Social media', () => {
         })
 
         it('Instagram download', done => {
-            savefrom('https://www.instagram.com/reel/CXK49yFLtJ_/?utm_source=ig_web_copy_link').then((res) => {
+            savefrom('https://www.instagram.com/reel/CulHiusJQE3/?igshid=MzRlODBiNWFlZA==').then((res) => {
                 for (const { hosting } of res) {
                     expect(hosting).to.be.eq('instagram.com')
                 }
@@ -199,7 +200,10 @@ describe('Social media', () => {
         })
 
         it('Instagram download #63', done => {
-            savefrom('https://www.instagram.com/p/CrvIUf8omdg/').then((res) => {
+            savefrom('https://www.instagram.com/p/CvFbwPqRxd3').then((res) => {
+                for (const { hosting } of res) {
+                    expect(hosting).to.be.eq('instagram.com')
+                }
 
                 return done()
             }).catch(done)

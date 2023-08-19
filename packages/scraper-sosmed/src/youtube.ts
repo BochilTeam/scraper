@@ -133,13 +133,10 @@ interface IresLinks {
 export async function youtubedlv2 (url: string): Promise<YoutubeDownloader> {
   YoutubeDownloaderV2ArgsSchema.parse(arguments)
 
-  const html = await got('https://yt5s.com/en32').text()
+  const html = await got('https://yt5s.io/').text()
   const urlAjax = (/k_url_search="(.*?)"/.exec(html) || ['', ''])[1]
+  const vt = (/k_page='(.*?)'/.exec(html) || ['', ''])[1]
   const urlConvert = (/k_url_convert="(.*?)"/.exec(html) || ['', ''])[1]
-  const params: { [Key: string]: string } = {
-    q: url,
-    vt: 'home'
-  }
   const json: {
     vid: string;
     title: string;
@@ -156,14 +153,16 @@ export async function youtubedlv2 (url: string): Promise<YoutubeDownloader> {
     method: 'POST',
     headers: {
       'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-      cookie:
-        '__cflb=04dToSoFRg9oqH9pYF2En9gKJK4fe8D9TcYtUD6tYu; _ga=GA1.2.1350132744.1641709803; _gid=GA1.2.1492233267.1641709803; _gat_gtag_UA_122831834_4=1',
-      origin: 'https://yt5s.com',
+      origin: 'https://yt5s.io',
       'user-agent':
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36'
     },
-    searchParams: new URLSearchParams(Object.entries(params) as [string, string][])
+    form: {
+      q: url,
+      vt
+    }
   }).json()
+  console.log(json)
   const video: YoutubeVideoOrAudio = {}
   Object.values(json.links.mp4).forEach(({ k, size }: IresLinks) => {
     video[k] = {
@@ -245,7 +244,7 @@ export async function convert (
   return YoutubeConvertSchema.parse(json.dlink)
 }
 
-export function convertv2 (
+export async function convertv2 (
   url: string,
   v_id: string,
   ftype: string,
@@ -253,32 +252,59 @@ export function convertv2 (
   token: string,
   timeExpire: number,
   fname: string
-): Promise<string> {
-  return new Promise<string>(async (resolve, reject) => {
-    const params: { [Key: string]: string | number } = {
-      v_id,
-      ftype,
-      fquality,
-      token,
-      timeExpire,
-      client: 'yt5s.com'
-    }
-    const resServer: { c_server?: string; d_url?: string; c_status: string } =
-      await got(url, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-          origin: 'https://yt5s.com',
-          referer: 'https://yt5s.com/',
-          'user-agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36',
-          'X-Requested-Key': 'de0cfuirtgf67a'
-        },
-        form: params
-      }).json()
-    const server = resServer.c_server
-    if (!server && ftype === 'mp3') return resolve(server || resServer.d_url || '')
-    const payload: { [Key: string]: string | number } = {
+) {
+  console.log({
+    v_id,
+    ftype,
+    fquality,
+    token,
+    timeExpire,
+    client: 'yt5s.io'
+  })
+
+  const form = new FormData()
+  form.append('v_id', v_id)
+  form.append('ftype', ftype)
+  form.append('fquality', fquality)
+  form.append('token', token)
+  form.append('timeExpire', timeExpire)
+  form.append('client', 'yt5s.io')
+
+  const json = await got.post(url, {
+    headers: {
+      Accept: '*/*',
+      'Accept-Encoding': 'gzip, deflate, br',
+      'Accept-Language': 'en-US,en;q=0.9',
+      'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      origin: 'https://yt5s.io',
+      referer: 'https://yt5s.io/',
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
+      'X-Requested-Key': 'de0cfuirtgf67a'
+    },
+   json: {
+    v_id,
+    ftype,
+    fquality,
+    token,
+    timeExpire,
+    client: 'yt5s.io'
+  }
+  }).json<{
+    c_server: string
+    c_status: string
+  }>()
+  console.log({ json })
+  if (json.c_status !== 'ok') {
+    throw new Error(`Error in converting!. Got ${JSON.stringify(json)}`)
+  }
+  const json2 = await got.post(`${json.c_server}/api/json/convert`, {
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      origin: 'https://yt5s.io',
+      referer: 'https://yt5s.io/',
+      'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
+    },
+    form: {
       v_id,
       ftype,
       fquality,
@@ -286,48 +312,7 @@ export function convertv2 (
       token,
       timeExpire
     }
-    const results: {
-      status: string;
-      jobId?: string;
-      statusCode: number;
-      result: string;
-    } = await got(`${server}/api/json/convert`, {
-      method: 'POST',
-      form: payload
-    }).json()
-    if (results.statusCode === 200) return resolve(results.result)
-    else if (results.statusCode === 300) {
-      try {
-        // @ts-ignore
-        const WebSocket = (await import('ws')).default
-        const Url = new URL(server as string)
-        const WSUrl = `${/https/i.test(Url.protocol) ? 'wss:' : 'ws:'}//${Url.host
-          }/sub/${results.jobId}?fname=yt5s.com`
-        const ws = new WebSocket(WSUrl, undefined, {
-          headers: {
-            'Accept-Encoding': 'gzip, deflate, br',
-            Host: Url.host,
-            Origin: 'https://yt5s.com',
-            'Sec-WebSocket-Extensions':
-              'permessage-deflate; client_max_window_bits',
-            'User-Agent':
-              'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36'
-          }
-        })
-        ws.on('message', function incoming (message: Buffer) {
-          const msg: { action: string; url: string } = JSON.parse(
-            message.toString()
-          )
-          if (msg.action === 'success') {
-            try { ws.close() } catch (e) { console.error(e) }
-            ws.removeAllListeners('message')
-            return resolve(msg.url)
-          } else if (msg.action === 'error') return reject(msg)
-        })
-      } catch (e) {
-        console.error(e)
-        return reject(e)
-      }
-    } else return reject(results)
   })
+  console.log({ json2 })
+  return json2
 }

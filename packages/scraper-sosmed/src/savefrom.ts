@@ -1,11 +1,12 @@
 import got from 'got'
 import vm from 'vm'
 import { SaveFromArgsSchema, Savefrom, SaveFromSchema } from '../types/index.js'
+import { generateSavefromParams } from '../utils/savefrom.js'
 
 export default async function savefrom (url: string): Promise<Savefrom[]> {
   SaveFromArgsSchema.parse(arguments)
 
-  let scriptJS = await got('https://worker.sf-tools.com/savefrom.php', {
+  let scriptJS = await got('https://worker.savefrom.net/savefrom.php', {
     method: 'POST',
     headers: {
       'content-type': 'application/x-www-form-urlencoded',
@@ -22,12 +23,14 @@ export default async function savefrom (url: string): Promise<Savefrom[]> {
       country: 'id',
       os: 'Windows',
       browser: 'Chrome',
-      channel: ' main',
-      'sf-nomad': 1
+      channel: 'main',
+      'sf-nomad': 1,
+      url,
+      ...generateSavefromParams(url)
     }
   }).text()
   const executeCode = '[]["filter"]["constructor"](b).call(a);'
-  if (scriptJS.indexOf(executeCode) === -1) throw new Error(`Cannot find execute code\n${scriptJS}`)
+  if (scriptJS.indexOf(executeCode) === -1) throw new Error(`Cannot find executable code\n${scriptJS}`)
   scriptJS = scriptJS.replace(executeCode, `
 try {const script = ${executeCode.split('.call')[0]}.toString();if (script.includes('function showResult')) scriptResult = script;else (${executeCode.replace(/;/, '')});} catch {}
 `)
@@ -50,8 +53,8 @@ try {const script = ${executeCode.split('.call')[0]}.toString();if (script.inclu
       json = [JSON.parse(data.split(');')[0])]
     }
   } catch (e) {
-    json = null
+    console.error(e)
   }
-  if (!json?.length) throw new Error(`Cannot parse data ("${data}") from\n"${context.scriptResult}"`)
+  if (!json! || !json.length) throw new Error(`Cannot parse data ("${data}") from\n"${context.scriptResult}"`)
   return json.map(v => SaveFromSchema.parse(v))
 }
