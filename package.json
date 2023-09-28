@@ -34,6 +34,7 @@
         "packages/scraper-primbon",
         "packages/scraper-religions",
         "packages/scraper-sosmed",
-        "packages/scraper-texts"
+        "packages/scraper-texts",
+        "packages/scraper-youtube"
     ]
 }

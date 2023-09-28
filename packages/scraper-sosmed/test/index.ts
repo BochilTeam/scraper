@@ -8,8 +8,6 @@ import {
     facebookdl,
     facebookdlv2,
     twitterdl,
-    youtubedl,
-    youtubedlv2,
     youtubeSearch,
     groupWA,
     aiovideodl,
@@ -74,32 +72,6 @@ describe('Social media', () => {
 
     describe('Youtube', function () {
         this.timeout(100000)
-        it('Youtube downloader', done => {
-            youtubedl('https://youtu.be/iik25wqIuFo').then((res) => {
-                Promise.all([
-                    res.video['360p'].download(),
-                    res.audio['128kbps'].download()
-                ]).then(([video, audio]) => {
-
-                    return done()
-                }).catch(done)
-            }).catch(done)
-        })
-
-        it('Youtube downloader v2', done => {
-            youtubedlv2('https://youtu.be/iik25wqIuFo').then((res) => {
-
-                // idk, why error if process in parallel
-                res.video['360p'].download().then((video) => {
-                    console.log({ video })
-                    res.audio['128kbps'].download().then((audio) => {
-                        console.log({ audio })
-
-                        return done()
-                    }).catch(done)
-                }).catch(done)
-            }).catch(done)
-        })
 
         it('Youtube search', done => {
             youtubeSearch('Mr Bean funfair').then((res) => {

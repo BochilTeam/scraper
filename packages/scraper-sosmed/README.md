@@ -20,14 +20,4 @@ console.log(data) // JSON
 const result = await savefrom(url)
 console.log(result) // JSON
 ```
-Example download youtube video
-```ts
-import { youtubedl } from '@bochilteam/scraper-sosmed'
-
-const data = await youtubedl('https://youtu.be/iik25wqIuFo')
-console.log(data) // JSON
-console.log(Object.keys(data.video)) // List of resolution/quality
-const url = await data.video['720p'].download() // Download '720p' video
-console.log(url) // string
-```
 [Documentation](https://bochilteam.github.io/scraper/modules/_bochilteam_scraper_sosmed.html)
