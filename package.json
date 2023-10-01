@@ -17,11 +17,11 @@
         "test:cjs": "turbo run test:cjs"
     },
     "devDependencies": {
-        "@changesets/cli": "^2.26.1",
-        "turbo": "^1.6.3",
-        "typedoc": "^0.24.6",
-        "typedoc-plugin-google-ads": "^1.4.0",
-        "typedoc-plugin-zod": "^1.0.2"
+        "@changesets/cli": "^2.26.2",
+        "turbo": "^1.10.14",
+        "typedoc": "^0.25.0",
+        "typedoc-plugin-google-ads": "^1.5.0",
+        "typedoc-plugin-zod": "^1.1.0"
     },
     "workspaces": [
         "packages/scraper",
@@ -29,6 +29,7 @@
         "packages/scraper-downloader",
         "packages/scraper-games",
         "packages/scraper-images",
+        "packages/scraper-instagram",
         "packages/scraper-news",
         "packages/scraper-others",
         "packages/scraper-primbon",

@@ -30,7 +30,7 @@ describe('Social media', () => {
         this.timeout(15000)
         it('Instagram downloader', (done) => {
             // https://www.instagram.com/p/CaHpoweBjmx/?utm_source=ig_web_copy_link
-            instagramdl('https://www.instagram.com/reel/CXK49yFLtJ_/?utm_source=ig_web_copy_link').then(() => {
+            instagramdl('https://www.instagram.com/reel/CxSEjxfyJtN/?utm_source=ig_web_copy_link').then(() => {
 
                 return done()
             }).catch(done)

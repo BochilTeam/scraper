@@ -17,14 +17,6 @@ export function parseFileSize (size: string): number {
   )
 }
 
-export function stringifyCookies (cookies: string[]): string {
-  return cookies.map(cookie => {
-    const [name, _value] = cookie.split('=')
-    const [value] = _value.split(';')
-    return `${name}=${value}`
-  }).join('; ')
-}
-
 const SUFFIX = 'e7dfa86d37f6e7cdf9c52d939d144713551e1f5638a04f06783223f81f556692'
 export function generateHash (url: string) {
   const hash = crypto.createHash('sha256')

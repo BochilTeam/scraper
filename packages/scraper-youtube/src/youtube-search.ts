@@ -9,7 +9,7 @@ import {
     YoutubeSearchSchema
 } from '../types/youtube-search/index.js'
 import { time2Number } from './util.js'
-import fs from 'fs'
+
 export default async function youtubeSearch (query: string) {
     YoutubeSearchArgsSchema.parse(arguments)
 
