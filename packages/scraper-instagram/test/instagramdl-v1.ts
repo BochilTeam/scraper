@@ -32,7 +32,6 @@ test('Instagram Downloader', async (t) => {
 
     let photos: Instagramdl
     await t.test('Getting Metadata Photos', async () => {
-
         photos = await instagramdl(IG_P_URL)
         assert.strictEqual(photos.length > 5, true)
     })

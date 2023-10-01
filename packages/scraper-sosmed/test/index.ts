@@ -3,8 +3,6 @@ import { expect } from 'chai'
 import {
     googleIt,
     tiktokdl,
-    instagramdl,
-    instagramStory,
     facebookdl,
     facebookdlv2,
     twitterdl,
@@ -20,24 +18,6 @@ describe('Social media', () => {
         this.timeout(5000)
         it('Tiktok video downloader', (done) => {
             tiktokdl('https://www.tiktok.com/@omagadsus/video/7025456384175017243?is_from_webapp=1&sender_device=pc&web_id6982004129280116226').then(() => {
-
-                return done()
-            }).catch(done)
-        })
-    })
-
-    describe('Instagram', function () {
-        this.timeout(15000)
-        it('Instagram downloader', (done) => {
-            // https://www.instagram.com/p/CaHpoweBjmx/?utm_source=ig_web_copy_link
-            instagramdl('https://www.instagram.com/reel/CxSEjxfyJtN/?utm_source=ig_web_copy_link').then(() => {
-
-                return done()
-            }).catch(done)
-        })
-
-        it('Instagram story', (done) => {
-            instagramStory('raffinagita1717').then(() => {
 
                 return done()
             }).catch(done)
