@@ -6,10 +6,8 @@ import {
     facebookdl,
     facebookdlv2,
     twitterdl,
-    youtubeSearch,
     groupWA,
     aiovideodl,
-    savefrom,
     snapsave
 } from '../index.js'
 
@@ -44,18 +42,6 @@ describe('Social media', () => {
     describe('Twitter', () => {
         it('Twitter downloader', done => {
             twitterdl('https://twitter.com/jen_degen/status/1458167531869458440?s=20').then(() => {
-
-                return done()
-            }).catch(done)
-        })
-    })
-
-    describe('Youtube', function () {
-        this.timeout(100000)
-
-        it('Youtube search', done => {
-            youtubeSearch('Mr Bean funfair').then((res) => {
-                expect(res.video).to.have.lengthOf.at.least(1)
 
                 return done()
             }).catch(done)
@@ -103,59 +89,6 @@ describe('Social media', () => {
             aiovideodl('https://twitter.com/jen_degen/status/1458167531869458440?s=20').then((res) => {
                 expect(res.medias).to.have.lengthOf.at.least(1)
                 expect(res.source).to.be.eq('twitter')
-
-                return done()
-            }).catch(done)
-        })
-    })
-
-    describe('Savefrom', function () {
-        this.timeout(10000)
-        it('Tiktok download', done => {
-            savefrom('https://www.tiktok.com/@omagadsus/video/7025456384175017243?is_from_webapp=1&sender_device=pc&web_id6982004129280116226').then((res) => {
-                for (const { hosting } of res) {
-                    expect(hosting).to.be.eq('tiktok.com')
-                }
-
-                return done()
-            }).catch(done)
-        })
-
-        it('Facebook download', done => {
-            savefrom('https://fb.watch/9WktuN9j-z/').then((res) => {
-                for (const { hosting } of res) {
-                    expect(hosting).to.be.eq('facebook.com')
-                }
-
-                return done()
-            }).catch(done)
-        })
-
-        it('Twitter download', done => {
-            savefrom('https://twitter.com/jen_degen/status/1458167531869458440?s=20').then((res) => {
-                for (const { hosting } of res) {
-                    expect(hosting).to.be.eq('twitter.com')
-                }
-
-                return done()
-            }).catch(done)
-        })
-
-        it('Instagram download', done => {
-            savefrom('https://www.instagram.com/reel/CulHiusJQE3/?igshid=MzRlODBiNWFlZA==').then((res) => {
-                for (const { hosting } of res) {
-                    expect(hosting).to.be.eq('instagram.com')
-                }
-
-                return done()
-            }).catch(done)
-        })
-
-        it('Instagram download #63', done => {
-            savefrom('https://www.instagram.com/p/CvFbwPqRxd3').then((res) => {
-                for (const { hosting } of res) {
-                    expect(hosting).to.be.eq('instagram.com')
-                }
 
                 return done()
             }).catch(done)

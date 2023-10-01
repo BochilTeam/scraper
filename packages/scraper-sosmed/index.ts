@@ -1,5 +1,4 @@
 export { default as aiovideodl } from './src/aiovideodl.js'
-export { default as savefrom } from './src/savefrom.js'
 export { default as snapsave } from './src/snapsave.js'
 
 export { groupWA } from './src/groupWA.js'

@@ -1,7 +1,7 @@
 {
-  "name": "@bochilteam/scraper-instagram",
+  "name": "@bochilteam/scraper-savefrom",
   "version": "0.0.1",
-  "description": "Instagram scraper module",
+  "description": "SaveFrom scraper module",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
   "types": "lib/@types/index.d.ts",
@@ -32,14 +32,13 @@
   "bugs": {
     "url": "https://github.com/BochilTeam/scraper/issues"
   },
-  "homepage": "https://github.com/BochilTeam/scraper/tree/master/packages/scraper-instagram#readme",
+  "homepage": "https://github.com/BochilTeam/scraper/tree/master/packages/scraper-savefrom#readme",
   "files": [
     "lib/**/*.js",
     "lib/**/**.d.ts",
     "lib/**/package.json"
   ],
   "dependencies": {
-    "cheerio": "^1.0.0-rc.12",
     "got": "^11.8.6",
     "zod": "^3.20.2"
   }

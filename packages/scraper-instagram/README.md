@@ -1,22 +1,18 @@
 # Youtube Scraper
-Scraper Youtube data like download video Youtube
+Module to download content from Instagram
 
 ## Installation
 ```sh
-npm i @bochilteam/scraper-youtube
+npm i @bochilteam/scraper-instagram
 ```
 
 ## Usage 
-Example download youtube video
+Example download Instagram video
 ```ts
 // import module
-import { youtubedl } from '@bochilteam/scraper-youtube'
+import { instagramdl } from '@bochilteam/scraper-instagram'
 
-const data = await youtubedl('https://youtu.be/iik25wqIuFo')
+const data = await instagramdl('https://www.instagram.com/reel/CxSEjxfyJtN')
 console.log(data) // JSON
-const resolutions = Object.keys(data.video) // List of resolution/quality
-console.log(resolutions) 
-const url = await data.video[resolutions[0]].download() // Download '720p' video
-console.log(url) // string
 ```
-[Documentation](https://bochilteam.github.io/scraper/modules/_bochilteam_scraper_youtube.html)
+[Documentation](https://bochilteam.github.io/scraper/modules/_bochilteam_scraper_instagram.html)
