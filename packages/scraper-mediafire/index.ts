@@ -1,0 +1,1 @@
+export { default as mediafiredl } from './src/mediafire-dl.js'

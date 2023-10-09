@@ -30,6 +30,7 @@
         "packages/scraper-games",
         "packages/scraper-images",
         "packages/scraper-instagram",
+        "packages/scraper-mediafire",
         "packages/scraper-news",
         "packages/scraper-others",
         "packages/scraper-primbon",
