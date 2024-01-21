@@ -1,7 +1,7 @@
 {
-  "name": "@bochilteam/scraper-downloader",
-  "version": "1.0.2",
-  "description": "Downloader scraper module",
+  "name": "@bochilteam/scraper-sfilemobi",
+  "version": "0.0.1",
+  "description": "sfilemobi scraper module",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
   "types": "lib/@types/index.d.ts",
@@ -14,8 +14,8 @@
   },
   "scripts": {
     "test": "npm run test:cjs & npm run test:esm",
-    "test:cjs": "mocha ./lib/cjs/test/*.js",
-    "test:esm": "mocha ./lib/esm/test/*.js",
+    "test:cjs": "node --test ./lib/cjs/test",
+    "test:esm": "node --test ./lib/esm/test",
     "build": "npm run build:cjs && npm run build:esm && npm run build:types",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json",
@@ -32,7 +32,7 @@
   "bugs": {
     "url": "https://github.com/BochilTeam/scraper/issues"
   },
-  "homepage": "https://github.com/BochilTeam/scraper/tree/master/packages/scraper-downloader#readme",
+  "homepage": "https://github.com/BochilTeam/scraper/tree/master/packages/scraper-mediafire#readme",
   "files": [
     "lib/**/*.js",
     "lib/**/**.d.ts",
@@ -40,11 +40,7 @@
   ],
   "dependencies": {
     "got": "^11.8.6",
+    "human-readable": "^0.2.1",
     "zod": "^3.20.2"
-  },
-  "devDependencies": {
-    "@types/mocha": "^10.0.1",
-    "@types/node": "^18.11.17",
-    "mocha": "^10.2.0"
   }
 }

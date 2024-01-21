@@ -1,5 +1,5 @@
 /**
- * @returns is a kilobit
+ * @returns as a kilobit
  */
 export function parseFileSize (size: string): number {
     return parseFloat(size) * (

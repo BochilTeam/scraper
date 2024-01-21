@@ -4,10 +4,11 @@
         "allowJs": true,
         "checkJs": true,
         "target": "ES2019",
-        "moduleResolution": "node",
+        "moduleResolution": "Node10",
         "lib": [
             "es2020.string"
         ],
+        "types": ["node"],
         "declaration": false,
         "strict": true,
         "resolveJsonModule": true,
