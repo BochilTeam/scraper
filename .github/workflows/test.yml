@@ -11,7 +11,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -30,7 +29,19 @@ jobs:
       run: npm install
     - name: 'Compile TypeScript files'
       run: npm run compile
+
+  esm-test:
+    needs: [build]
+    runs-on: ubuntu-latest
+
+    steps: 
     - name: 'Test ESM'
       run: npm run test:esm
+      
+  cjs-test:
+    needs: [build]
+    runs-on: ubuntu-latest
+
+    steps: 
     - name: 'Test CJS'
       run: npm run test:cjs

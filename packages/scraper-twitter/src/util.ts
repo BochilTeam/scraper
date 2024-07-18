@@ -42,17 +42,21 @@ export function generateTokenId(id: string) {
         , i = 0
         , buffer = new Uint8Array(46)
         , l = "";
-
+    // @ts-ignore
     buffer[32 + 4] = id[look(138)];
     const k = function (a: string, b: number, c: number) {
+        // @ts-ignore
         for (let i = 0; i < Math[look(144)](c, a[look(138)]); ++i) {
             h = parseInt(a[i])
             buffer[i + b] = h
+            // @ts-ignore
             g += Math[look(150)](h, 8)
         }
     }
     for (k(id, 8 / 2, 32 - buffer[32 + 4]),
+        // @ts-ignore
         i = id[look(138)] - 1; i >= 0; l += id[i--]);
+    // @ts-ignore
     k(l, 32 + 4 - l.length, l[look(138)]),
         g >>>= 0;
 
@@ -84,6 +88,7 @@ export function generateTokenId(id: string) {
 
     return m(n >>> 0, 32 + 5),
         m(o >>> 0, 48 - 7),
+        // @ts-ignore
         buffer[buffer[look(138)] - 1] = 1,
         toBase64(buffer)
 }
@@ -116,8 +121,8 @@ function _btoa(input: string) {
 
         // Add the encoded characters to the output
         output += chars.charAt(enc1) + chars.charAt(enc2) +
-                  (i > input.length + 1 ? '=' : chars.charAt(enc3)) +
-                  (i > input.length ? '=' : chars.charAt(enc4));
+            (i > input.length + 1 ? '=' : chars.charAt(enc3)) +
+            (i > input.length ? '=' : chars.charAt(enc4));
     }
 
     return output;
