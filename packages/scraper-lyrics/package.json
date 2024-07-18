@@ -1,6 +1,6 @@
 {
     "name": "@bochilteam/scraper-lyrics",
-    "version": "1.0.0",
+    "version": "5.0.0",
     "description": "Lyrics scraper module",
     "main": "lib/cjs/index.js",
     "module": "lib/esm/index.js",

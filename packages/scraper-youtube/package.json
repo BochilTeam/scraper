@@ -1,6 +1,6 @@
 {
   "name": "@bochilteam/scraper-youtube",
-  "version": "0.0.1",
+  "version": "5.0.0",
   "description": "Youtube scraper module",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",

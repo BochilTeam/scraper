@@ -1,6 +1,6 @@
 {
     "name": "@bochilteam/scraper-wikipedia",
-    "version": "1.0.0",
+    "version": "5.0.0",
     "description": "Wikipedia scraper module",
     "main": "lib/cjs/index.js",
     "module": "lib/esm/index.js",

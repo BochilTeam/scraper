@@ -1,6 +1,6 @@
 {
     "name": "@bochilteam/scraper-religions",
-    "version": "1.0.2",
+    "version": "5.0.0",
     "description": "Religions scraper module",
     "main": "lib/cjs/index.js",
     "module": "lib/esm/index.js",

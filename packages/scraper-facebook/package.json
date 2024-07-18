@@ -1,6 +1,6 @@
 {
   "name": "@bochilteam/scraper-facebook",
-  "version": "1.0.0",
+  "version": "5.0.0",
   "description": "Facebook scraper module",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",

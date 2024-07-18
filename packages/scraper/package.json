@@ -1,6 +1,6 @@
 {
   "name": "@bochilteam/scraper",
-  "version": "4.2.4",
+  "version": "5.0.0",
   "description": "Browserless scraper module",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
@@ -42,14 +42,25 @@
     "lib/**/package.json"
   ],
   "dependencies": {
-    "@bochilteam/scraper-bmkg": "^1.0.2",
-    "@bochilteam/scraper-downloader": "^1.0.2",
-    "@bochilteam/scraper-games": "^1.0.2",
-    "@bochilteam/scraper-images": "^1.0.2",
-    "@bochilteam/scraper-news": "^1.0.2",
-    "@bochilteam/scraper-others": "^1.0.2",
-    "@bochilteam/scraper-primbon": "^1.0.2",
-    "@bochilteam/scraper-religions": "^1.0.2",
-    "@bochilteam/scraper-texts": "^1.0.2"
+    "@bochilteam/scraper-bmkg": "^5.0.0",
+    "@bochilteam/scraper-facebook": "^5.0.0",
+    "@bochilteam/scraper-games": "^5.0.0",
+    "@bochilteam/scraper-googleit": "^5.0.0",
+    "@bochilteam/scraper-images": "^5.0.0",
+    "@bochilteam/scraper-instagram": "^5.0.0",
+    "@bochilteam/scraper-lyrics": "^5.0.0",
+    "@bochilteam/scraper-mediafire": "^5.0.0",
+    "@bochilteam/scraper-news": "^5.0.0",
+    "@bochilteam/scraper-others": "^5.0.0",
+    "@bochilteam/scraper-primbon": "^5.0.0",
+    "@bochilteam/scraper-religions": "^5.0.0",
+    "@bochilteam/scraper-savefrom": "^5.0.0",
+    "@bochilteam/scraper-sfilemobi": "^5.0.0",
+    "@bochilteam/scraper-snapsave": "^5.0.0",
+    "@bochilteam/scraper-texts": "^5.0.0",
+    "@bochilteam/scraper-tiktok": "^5.0.0",
+    "@bochilteam/scraper-twitter": "^5.0.0",
+    "@bochilteam/scraper-wikipedia": "^5.0.0",
+    "@bochilteam/scraper-youtube": "^5.0.0"
   }
 }

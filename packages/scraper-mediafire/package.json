@@ -1,6 +1,6 @@
 {
   "name": "@bochilteam/scraper-mediafire",
-  "version": "0.0.1",
+  "version": "5.0.0",
   "description": "Mediafire scraper module",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",

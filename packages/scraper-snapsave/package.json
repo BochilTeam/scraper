@@ -1,6 +1,6 @@
 {
   "name": "@bochilteam/scraper-snapsave",
-  "version": "1.0.0",
+  "version": "5.0.0",
   "description": "SnapSave scraper module",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
