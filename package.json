@@ -32,7 +32,7 @@
         "packages/scraper-googleit",
         "packages/scraper-images",
         "packages/scraper-instagram",
-        "packages/scraper-lyric",
+        "packages/scraper-lyrics",
         "packages/scraper-mediafire",
         "packages/scraper-news",
         "packages/scraper-others",

@@ -1,5 +1,11 @@
 # @bochilteam/scraper
 
+## 5.0.1
+
+### Patch Changes
+
+- Fix lyrics package
+
 ## 4.2.4
 
 ### Patch Changes
