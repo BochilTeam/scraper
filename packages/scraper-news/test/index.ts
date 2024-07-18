@@ -1,4 +1,5 @@
-import { describe, it } from 'mocha'
+import { describe, it } from 'node:test'
+import assert from 'node:assert'
 import {
     cnbcindonesia,
     antaranews,
@@ -9,41 +10,29 @@ import {
 } from '../index.js'
 
 describe('News', () => {
-    it('CNBC Indonesia', (done) => {
-        cnbcindonesia().then(() => {
-
-            return done()
-        }).catch(done)
+    it('CNBC Indonesia', async () => {
+        const data = await cnbcindonesia()
+        assert.ok(data)
     })
-    it('Antara News', (done) => {
-        antaranews().then(() => {
-
-            return done()
-        }).catch(done)
+    it('Antara News', async () => {
+        const data = await antaranews()
+        assert.ok(data)
     })
-    it('Kompas', (done) => {
-        kompas().then(() => {
-
-            return done()
-        }).catch(done)
+    it('Kompas', async () => {
+        const data = await kompas()
+        assert.ok(data)
     })
-    it('Suara.com', (done) => {
-        suaracom().then(() => {
-
-            return done()
-        }).catch(done)
+    it('Suara.com', async () => {
+        const data = await suaracom()
+        assert.ok(data)
     })
-    it('Liputan6', (done) => {
-        liputan6().then(() => {
-
-            return done()
-        }).catch(done)
+    it('Liputan6', async () => {
+        const data = await liputan6()
+        assert.ok(data)
     })
 
-    it('Merdeka', (done) => {
-        merdeka().then(() => {
-
-            return done()
-        }).catch(done)
+    it('Merdeka', async () => {
+        const data = await merdeka()
+        assert.ok(data)
     })
 })

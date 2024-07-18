@@ -42,5 +42,8 @@
     "got": "^11.8.6",
     "human-readable": "^0.2.1",
     "zod": "^3.20.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.9"
   }
 }

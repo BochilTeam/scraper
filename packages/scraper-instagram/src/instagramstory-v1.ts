@@ -7,32 +7,33 @@ import {
     InstagramStoryItem,
     InstagramStorySchema
 } from '../types/instagramstory-v1.js'
+import crypto from 'crypto'
 
-export default async function instagramStory (username: string) {
+export default async function instagramStory(username: string) {
     InstagramStoryArgsSchema.parse(arguments)
 
     const form = {
-        url: `https://www.instagram.com/${username}/`,
-        lang_code: 'en',
-        token: ''
+        'g-recaptcha-response': crypto.randomBytes(16).toString('hex'), // captcha is not checked on the backend 
+        text_username: username,
+        user_data: ''
     }
-    const data = await got.post('https://fastdl.app/c/', {
+    const data = await got.post('https://www.storysaver.net/storyProcesst.php?c=1', {
         headers: {
             ...DEFAULT_HEADERS,
             'content-type': 'application/x-www-form-urlencoded',
-            origin: 'https://fastdl.app',
-            'referer': 'https://fastdl.app/en/story-saver'
+            origin: 'https://www.storysaver.net',
+            referer: 'https://www.storysaver.net/'
         },
         form
     }).text()
     const $ = cheerio.load(data)
     const results: InstagramStory = []
-    $('div.max-w-md').each(function () {
+    $('.stylestory').each(function () {
         const $el = $(this)
-        const thumbnail = $el.find('img.w-full').attr('src')!
+        const thumbnail = ($el.find('video').attr('poster') || $el.find('img').attr('src'))!
         const $a = $el.find('a')
         const url = $a.attr('href')!
-        const type = $a.attr('data-mediatype')!.toLowerCase() as InstagramStoryItem['type']
+        const type = /video/i.test($a.text()) ? 'video' : 'image'
         results.push({
             thumbnail,
             url,

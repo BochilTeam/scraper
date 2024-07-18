@@ -9,8 +9,12 @@ import {
   JadwalSholatSchema
 } from '../types/index.js'
 
-export const listJadwalSholat: Promise<JadwalSholatItem[]> = (async () => got('https://raw.githubusercontent.com/BochilTeam/scraper/master/data/jadwal-sholat.json').json<JadwalSholatItem[]>())()
-export default async function jadwalsholat (
+export const listJadwalSholat = (async () => got('https://github.com/BochilTeam/scraper/raw/master/data/jadwal-sholat.json').json<JadwalSholatItem[]>())()
+
+/**
+ * Scrape from https://www.jadwalsholat.org/
+ */
+export default async function jadwalsholat(
   kota: string
 ): Promise<JadwalSholat> {
   JadwalSholatArgsSchema.parse(arguments)
@@ -27,28 +31,18 @@ export default async function jadwalsholat (
   const jadwal = listJadwal[precisionPredection.index]
   JadwalSholatItemSchema.parse(jadwal)
 
-  const today = await got(
-    `https://www.jadwalsholat.org/adzan/ajax/ajax.daily1.php?id=${jadwal.value}`
-  ).text()
-  const sholatToday: JadwalSholat['today'] = {}
-  const $ = cheerio.load(today)
-  $('table > tbody > tr')
-    .filter('.table_light, .table_dark')
-    .each(function () {
-      const el = $(this).find('td')
-      const sholat = el.eq(0).text()
-      const time = el.eq(1).text()
-      sholatToday[sholat] = time
-    })
   const data = await got(
     `https://jadwalsholat.org/jadwal-sholat/monthly.php?id=${jadwal.value}`
   ).text()
-  const list: JadwalSholat['list'] = []
-  const $$ = cheerio.load(data)
-  $$('table.table_adzan > tbody > tr')
-    .filter('.table_light, .table_dark')
-    .each(function () {
-      const el = $$(this).find('td')
+  const $ = cheerio.load(data)
+  const date = $('tr.table_title > td > h2.h2_edit').text().trim()
+  const location = $('tr.table_block_content > td[colspan=7]').html()!.split('</b>')[1].trim()
+  const direction = $('tr.table_block_content > td[colspan=5]').eq(0).text()!.split('ke')[0].trim()
+  const distance = $('tr.table_block_content > td[colspan=5]').eq(1).text()!.split('ke')[0].trim()
+  const schedules = $('tbody > tr[align=center]')
+    .filter('.table_highlight, .table_light, .table_dark')
+    .map(function () {
+      const el = $(this).find('td')
       const date = el.eq(0).text().trim()
       const imsyak = el.eq(1).text().trim()
       const shubuh = el.eq(2).text().trim()
@@ -56,9 +50,9 @@ export default async function jadwalsholat (
       const dhuha = el.eq(4).text().trim()
       const dzuhur = el.eq(5).text().trim()
       const ashr = el.eq(6).text().trim()
-      const magrib = el.eq(7).text().trim()
-      const isyak = el.eq(8).text().trim()
-      list.push({
+      const maghrib = el.eq(7).text().trim()
+      const isya = el.eq(8).text().trim()
+      return {
         date,
         imsyak,
         shubuh,
@@ -66,15 +60,17 @@ export default async function jadwalsholat (
         dhuha,
         dzuhur,
         ashr,
-        magrib,
-        isyak
-      })
-    })
+        maghrib,
+        isya
+      }
+    }).toArray()
 
   const result = {
-    date: $$('tr.table_title > td > h2.h2_edit').text().trim(),
-    today: sholatToday,
-    list
+    date,
+    location,
+    direction,
+    distance,
+    schedules
   }
   return JadwalSholatSchema.parse(result)
 }

@@ -19,6 +19,6 @@ export const TextProListSchema = z.object({
     title: z.string(),
     parameters: z.array(z.boolean())
 })
-export const TextProSchema = z.string()
+export const TextProSchema = z.string().url()
 export type TextProList = z.infer<typeof TextProListSchema>
 export type TextPro = z.infer<typeof TextProSchema>

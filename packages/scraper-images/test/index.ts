@@ -1,4 +1,5 @@
-import { describe, it } from 'mocha'
+import { describe, it } from 'node:test'
+import assert from 'node:assert'
 import {
     googleImage,
     pinterest,
@@ -8,40 +9,28 @@ import {
 } from '../index.js'
 
 describe('Images', () => {
-    it('google-image', function (done)  {
-        this.timeout(5000)
-        googleImage('Minecraft').then(() => {
-
-            return done()
-        }).catch(done)
+    it('Google Image', async function() {
+        const data = await googleImage('Minecraft')
+        assert.ok(data)
     })
 
-    it('pinterest', (done) => {
-        pinterest('Minecraft').then(() => {
-
-            return done()
-        }).catch(done)
+    it('Pinterest', async () => {
+        const data = await pinterest('Minecraft')
+        assert.ok(data)
     })
 
-    describe('Wallpaper', () => {
-        it('wallpaper', (done) => {
-            wallpaper('Minecraft').then(() => {
-
-                return done()
-            }).catch(done)
-        })
+   it('Wallpaper', async () => {
+        const data = await wallpaper('Minecraft')
+        assert.ok(data)
     })
 
-    it('Sticker Telegram', (done) => {
-        stickerTelegram('Minecraft').then(() => {
-
-            return done()
-        }).catch(done)
+    it('sticker Telegram', async () => {
+        const data = await stickerTelegram('Minecraft')
+        assert.ok(data)
     })
 
-    it('Sticker Line', (done) => {
-        stickerLine('Anime').then(() => {
-            return done()
-        }).catch(done)
+    it('Sticker Line', async () => {
+        const data = await stickerLine('Anime')
+        assert.ok(data)
     })
 })

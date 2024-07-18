@@ -1,6 +1,6 @@
-import { describe, it } from 'mocha'
-import { expect } from 'chai'
-import { 
+import { describe, it } from 'node:test'
+import assert from 'node:assert'
+import {
     gempa,
     gempaNow,
     gempaRealtime,
@@ -9,36 +9,24 @@ import {
 
 describe('BMKG', () => {
     describe('Gempabumi', () => {
-        it('Gempa dirasakan', (done) => {
-            gempa().then((res) => {
-                expect(res).to.have.length.at.least(1)
-
-                return done()
-            }).catch(done)
+        it('Gempa dirasakan', async () => {
+            const data = await gempa()
+            assert.ok(data.length > 1)
         })
 
-        it('Gempabumi Terkini (M ≥ 5.0)', (done) => {
-            gempaNow().then((res) => {
-                expect(res).to.have.length.at.least(1)
-
-                return done()
-            }).catch(done)
+        it('Gempabumi Terkini (M ≥ 5.0)', async () => {
+            const data = await gempaNow()
+            assert.ok(data.length > 1)
         })
-        
-        it('Gempabumi realtime', (done) => {
-            gempaRealtime().then((res) => {
-                expect(res).to.have.length.at.least(1)
 
-                return done()
-            }).catch(done)
+        it('Gempabumi realtime', async () => {
+            const data = await gempaRealtime()
+            assert.ok(data.length > 1)
         })
     })
 
-    it ('Tsunami', (done) => {
-        tsunami().then((res) => {
-            expect(res).to.have.length.at.least(1)
-
-            return done()
-        }).catch(done)
+    it('Tsunami', async () => {
+        const data = await tsunami()
+        assert.ok(data.length > 1)
     })
 })

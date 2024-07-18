@@ -7,7 +7,7 @@ import {
     SavefromSchema
 } from '../types/savefrom.js'
 
-export default async function savefrom (url: string) {
+export default async function savefrom(url: string) {
     SavefromArgsSchema.parse(arguments)
 
     const form = {
@@ -23,10 +23,10 @@ export default async function savefrom (url: string) {
         'sf-nomad': '1',
         url,
         ts: Date.now(),
-        _ts: 1695977397919,
+        _ts: 1720433117117,
         _tsc: 0,
         _s: generateHash(url),
-        _x: 0
+        _x: 1
     }
     const data = await got.post('https://worker.savefrom.net/savefrom.php', {
         headers: {
@@ -37,27 +37,37 @@ export default async function savefrom (url: string) {
         },
         form
     }).text()
-    const executeCode = '[]["filter"]["constructor"](b).call(a);'
-    if (data.indexOf(executeCode) === -1) {
-        console.error(data)
-        throw new Error('Cannot find executable code!')
-    }
-    const script = data.replace(executeCode, `
-try {const script = ${executeCode.split('.call')[0]}.toString();if (script.includes('function showResult')) results = script;else (${executeCode.replace(/;/, '')});} catch {}
-`.trim())
-    const context: { results: string | null } = {
+
+    const context: {
+        results: string | null,
+        [_: string]: any
+    } = {
         results: null,
+        parent: {
+            document: {
+                location: {}
+            }
+        },
+        frameElement: {},
+        atob: (base64: string) => Buffer.from(base64, 'base64').toString(),
+        _decodeURIComponent: (uri: string) => {
+            const decoded = decodeURIComponent(uri)
+            if (/showResult/.test(decoded)) {
+                context.results = decoded
+                return "true"
+            }
+            return decoded
+        }
     }
     vm.createContext(context)
-    new vm.Script(script).runInContext(context)
+    new vm.Script(`decodeURIComponent=_decodeURIComponent;${data}`).runInContext(context)
     const executed = context.results!.split('window.parent.sf.videoResult.show(')?.[1]
         || context.results!.split('window.parent.sf.videoResult.showRows(')?.[1]
     if (!executed) {
-        console.error(executed, script)
-        throw new Error('Cannot find result data from evaluation!')
+        // console.error(executed, data)
+        throw new Error('Cannot find result from evaluation!')
     }
-
-    let json
+    let json: object | null = null
     try {
         if (context.results!.includes('showRows')) {
             const splits = executed.split('],"')
@@ -67,8 +77,9 @@ try {const script = ${executeCode.split('.call')[0]}.toString();if (script.inclu
             json = [JSON.parse(executed.split(');')[0])]
         }
     } catch (e) {
-        console.error(e, executed)
-        throw new Error('Cannot parse results data from evaluation!')
+        // console.error(e, executed)
+        throw new Error('Cannot parse json results data from evaluation!')
     }
+
     return SavefromSchema.parse(json)
 }

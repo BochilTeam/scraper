@@ -19,18 +19,20 @@
     "devDependencies": {
         "@changesets/cli": "^2.26.2",
         "@types/node": "^20.11.5",
-        "turbo": "^1.10.14",
-        "typedoc": "^0.25.0",
-        "typedoc-plugin-google-ads": "^1.5.0",
-        "typedoc-plugin-zod": "^1.1.0"
+        "turbo": "^1.11.3",
+        "typedoc": "^0.25.7",
+        "typedoc-plugin-google-ads": "^1.6.0",
+        "typedoc-plugin-zod": "^1.1.2"
     },
     "workspaces": [
         "packages/scraper",
         "packages/scraper-bmkg",
-        "packages/scraper-downloader",
+        "packages/scraper-facebook",
         "packages/scraper-games",
+        "packages/scraper-googleit",
         "packages/scraper-images",
         "packages/scraper-instagram",
+        "packages/scraper-lyric",
         "packages/scraper-mediafire",
         "packages/scraper-news",
         "packages/scraper-others",
@@ -38,8 +40,11 @@
         "packages/scraper-religions",
         "packages/scraper-savefrom",
         "packages/scraper-sfilemobi",
-        "packages/scraper-sosmed",
+        "packages/scraper-snapsave",
         "packages/scraper-texts",
+        "packages/scraper-tiktok",
+        "packages/scraper-twitter",
+        "packages/scraper-wikipedia",
         "packages/scraper-youtube"
     ]
 }

@@ -1,12 +1,9 @@
-/* eslint-disable no-undef */
-import { expect } from 'chai'
+import { describe, it } from 'node:test'
+import assert from 'node:assert'
 import {
-  wikipedia,
   jadwalTV,
   jadwalTVNow,
   listJadwalTV,
-  lyrics,
-  lyricsv2,
   kbbi,
   nameFreeFire,
   bioskopNow,
@@ -15,97 +12,52 @@ import {
 } from '../index.js'
 
 describe('Others', () => {
-
-  it('Wikipedia', (done) => {
-    wikipedia('Minecraft', 'en').then(() => {
-
-      return done()
-    }).catch(done)
-  })
   describe('Jadwal TV', () => {
-    it('Jadwal TV', done => {
-      jadwalTV('RCTI').then(res => {
-        expect(res.result).to.have.lengthOf.at.least(1)
-
-        return done()
-      }).catch(done)
+    it('Jadwal TV', async () => {
+      const result = await jadwalTV('RCTI')
+      assert.ok(result.result.length > 1)
     })
 
-    it('Jadwal TV NOW', done => {
-      jadwalTVNow().then(res => {
-        Object.keys(res).forEach(key => {
-          expect(res[key]).to.have.lengthOf.at.least(2)
-        })
-
-        return done()
-      }).catch(done)
+    it('Jadwal TV NOW', async () => {
+      const result = await jadwalTVNow()
+      Object.entries(result).forEach(([key, data]) => {
+        assert.ok(data.length > 1)
+      })
     })
 
-    it("List Jadwal TV", done => {
-      Promise.resolve(listJadwalTV).then((res) => {
-        expect(res).to.have.length.at.least(123)
-
-        return done()
-      }).catch(done)
+    it('List Jadwal TV', async () => {
+      const result = await listJadwalTV
+      assert.ok(result.length >= 123)
     })
   })
 
-  describe('Lyrics', () => {
-    it('Lyrics', done => {
-      lyrics('rick astley never gonna give you up').then(() => {
-
-        return done()
-      }).catch(done)
-    })
-
-    it('Lyrics V2', done => {
-        lyricsv2('never gonna give you up').then(() => {
-
-            return done()
-        }).catch(done)
-    })
+  it('KBBI', async () => {
+    const data = await kbbi('halo')
+    assert.ok(data)
   })
 
-  it('KBBI', done => {
-    kbbi('halo').then(() => {
-
-      return done()
-    }).catch(done)
-  })
-
-  it('ID Free Fire', done => {
-    nameFreeFire('821587717').then(() => {
-      
-      return done()
-    }).catch(done)
+  it('ID Free Fire', async () => {
+    const data = await nameFreeFire('821587717')
+    assert.ok(data)
   })
 
   describe('Bioskop', () => {
-    it('Bioskop now', done => {
-      bioskopNow().then(res => {
-        expect(res).to.have.lengthOf.at.least(1)
-
-        return done()
-      }).catch(done)
+    it('Bioskop now', async () => {
+      const result = await bioskopNow()
+      assert.ok(result.length > 1)
     })
 
-    it('Bioskop', done => {
-      bioskop().then(res => {
-        expect(res).to.have.lengthOf.at.least(1)
-
-        return done()
-      }).catch(done)
+    it('Bioskop', async () => {
+      const result = await bioskop()
+      assert.ok(result.length > 1)
     })
   })
 
   describe('Chord', function () {
-    this.timeout(10000)
-    it('Chord', done => {
-      chord('Until i found you').then(res => {
-        // console.log(res)
-
-        return done()
-      }).catch(done)
+    it('Chord', async () => {
+      const result = await chord('Until i found you')
+      assert.ok(result)
     })
   })
 })
+

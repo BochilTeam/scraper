@@ -5,7 +5,8 @@ export const InstagramdlArgsSchema = z.object({
 })
 export const InstagramdlItemSchema = z.object({
     thumbnail: z.string().url(),
-    url: z.string().url()
+    url: z.string().url(),
+    type: z.literal('video').or(z.literal('image'))
 })
 export type InstagramdlItem = z.infer<typeof InstagramdlItemSchema>
 export const InstagramdlSchema = z.array(InstagramdlItemSchema)

@@ -30,7 +30,7 @@ export default async function youtubedlv2 (
         ts: Date.now(),
         url,
         _s: generateHash(url),
-        _ts: 1695816959140,
+        _ts: 1720429578286,
         _tsc: 0
     }
     const data = await got.post('https://api.ssyoutube.com/api/convert', {

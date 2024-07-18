@@ -61,6 +61,6 @@ export const VideoRendererSchema = z.object({
     channelThumbnailSupportedRenderers: ChannelThumbnailSupportedRenderersSchema,
     thumbnailOverlays: z.array(ThumbnailOverlaySchema),
     richThumbnail: RichThumbnailSchema.optional(),
-    detailedMetadataSnippets: z.array(DetailedMetadataSnippetSchema),
+    detailedMetadataSnippets: z.array(DetailedMetadataSnippetSchema).optional(),
 })
 export type VideoRenderer = z.infer<typeof VideoRendererSchema>

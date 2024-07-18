@@ -10,7 +10,7 @@ import {
 } from '../types/youtube-search/index.js'
 import { time2Number } from './util.js'
 
-export default async function youtubeSearch (query: string) {
+export default async function youtubeSearch(query: string) {
     YoutubeSearchArgsSchema.parse(arguments)
 
     const html = await got('https://www.youtube.com/results', {
@@ -39,7 +39,7 @@ export default async function youtubeSearch (query: string) {
             const url = encodeURI('https://www.youtube.com/watch?v=' + videoId)
             const title = data.title.runs.pop()!.text
             const thumbnail = data.thumbnail.thumbnails.pop()!.url
-            const description = data.detailedMetadataSnippets.pop()!.snippetText.runs.map(({ text }) => text).join('')
+            const description = data.detailedMetadataSnippets?.pop()!.snippetText.runs.map(({ text }) => text).join('') || ''
             const movingThumbnail = data.richThumbnail?.movingThumbnailRenderer.movingThumbnailDetails.thumbnails.pop()!.url
                 ?? thumbnail
             const channelName = data.longBylineText.runs[0].text
@@ -63,8 +63,9 @@ export default async function youtubeSearch (query: string) {
             })?.thumbnailOverlayTimeStatusRenderer
             const durationH = data.lengthText?.accessibility.accessibilityData.label!
                 ?? thumbnailOverlayTimeStatusRenderer?.text.accessibility?.accessibilityData.label!
-            const durationTime = thumbnailOverlayTimeStatusRenderer?.text.simpleText
-            const duration = time2Number(durationTime ?? '00:00')
+            const durationTime = thumbnailOverlayTimeStatusRenderer?.text.simpleText ?? '00:00'
+            const isShort = durationTime === 'SHORTS'
+            const duration = time2Number(isShort ? '00:60' : durationTime)
 
             video.push({
                 videoId,

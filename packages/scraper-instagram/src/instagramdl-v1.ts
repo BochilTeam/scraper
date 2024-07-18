@@ -7,31 +7,40 @@ import {
     InstagramdlSchema
 } from '../types/instagramdl-v1.js'
 
-export default async function instagramdl (url: string) {
+export default async function instagramdl(url: string) {
     InstagramdlArgsSchema.parse(arguments)
 
     const form = {
-        url,
-        host: 'instagram'
+        recaptchaToken: '',
+        q: url,
+        t: 'media',
+        lang: 'id'
     }
-    const data = await got.post('https://www.w3toys.com/core/ajax.php', {
+    const data = await got.post('https://v3.igdownloader.app/api/ajaxSearch', {
         headers: {
             ...DEFAULT_HEADERS,
             'content-type': 'application/x-www-form-urlencoded',
-            'origin': 'https://www.w3toys.com'
+            'origin': 'https://igdownloader.app',
+            'referer': 'https://igdownloader.app/'
         },
         form
-    }).text()
-    const $ = cheerio.load(data)
+    }).json<{ status: string, p: 'instagram', data: string }>()
+    if (data.status !== 'ok') {
+        throw data
+    }
+    const $ = cheerio.load(data.data)
     const results: Instagramdl = []
-    $('.row > div').find('div.row').each(function () {
+    $('.download-items').each(function () {
         const $el = $(this)
-        const thumbnail = $el.find('img').attr('src')!
-        const url = 'https://www.w3toys.com/' + $el.find('a').attr('href')
+        const $img = $el.find('.download-items__thumb > img')
+        const thumbnail = $img.attr('data-src') || $img.attr('src')!
+        const $a = $el.find('.download-items__btn > a')
+        const url = $a.attr('href')!
+        const type = /video/i.test($a.find('span').text()) ? 'video' : 'image'
         results.push({
             thumbnail,
             url,
-            // TODO: Add type 'image' or 'video'
+            type
         })
     })
     return InstagramdlSchema.parse(results)

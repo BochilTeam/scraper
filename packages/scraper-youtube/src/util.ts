@@ -17,7 +17,7 @@ export function parseFileSize (size: string): number {
   )
 }
 
-const SUFFIX = 'e7dfa86d37f6e7cdf9c52d939d144713551e1f5638a04f06783223f81f556692'
+const SUFFIX = 'f24c8c73d48b7686ed11a3bf97983f6f7eb6395f19268184aae742e93683c00c'
 export function generateHash (url: string) {
   const hash = crypto.createHash('sha256')
   const data = url + Date.now() + SUFFIX

@@ -50,7 +50,6 @@
     "@bochilteam/scraper-others": "^1.0.2",
     "@bochilteam/scraper-primbon": "^1.0.2",
     "@bochilteam/scraper-religions": "^1.0.2",
-    "@bochilteam/scraper-sosmed": "^1.0.5",
     "@bochilteam/scraper-texts": "^1.0.2"
   }
 }

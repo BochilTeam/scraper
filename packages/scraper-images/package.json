@@ -14,8 +14,8 @@
     },
     "scripts": {
         "test": "npm run test:cjs & npm run test:esm",
-        "test:cjs": "mocha ./lib/cjs/test/*.js",
-        "test:esm": "mocha ./lib/esm/test/*.js",
+        "test:cjs": "node --test ./lib/cjs/test/",
+        "test:esm": "node --test ./lib/esm/test/",
         "build": "npm run build:cjs && npm run build:esm && npm run build:types",
         "build:cjs": "tsc -p tsconfig.cjs.json",
         "build:esm": "tsc -p tsconfig.esm.json",
@@ -44,8 +44,6 @@
         "zod": "^3.20.2"
     },
     "devDependencies": {
-        "@types/mocha": "^10.0.1",
-        "@types/node": "^18.11.17",
-        "mocha": "^10.2.0"
+        "@types/node": "^20.14.9"
     }
 }

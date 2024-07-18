@@ -80,8 +80,10 @@ export const JadwalSholatItemSchema = z.object({
 })
 export const JadwalSholatSchema = z.object({
   date: z.string(),
-  today: z.record(z.string()),
-  list: z.object({
+  location: z.string(),
+  direction: z.string(),
+  distance: z.string(),
+  schedules: z.object({
     date: z.string(),
     imsyak: z.string(),
     shubuh: z.string(),
@@ -89,8 +91,8 @@ export const JadwalSholatSchema = z.object({
     dhuha: z.string(),
     dzuhur: z.string(),
     ashr: z.string(),
-    magrib: z.string(),
-    isyak: z.string()
+    maghrib: z.string(),
+    isya: z.string()
   }).array()
 })
 

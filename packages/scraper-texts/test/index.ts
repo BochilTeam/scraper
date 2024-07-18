@@ -1,4 +1,5 @@
-import { expect } from 'chai'
+import { describe, it } from 'node:test'
+import assert from 'node:assert'
 import {
   latinToAksara,
   aksaraToLatin,
@@ -7,97 +8,65 @@ import {
   truth, truthjson,
   textpro, textproList
 } from '../index.js'
+
 describe('Texts', () => {
   describe('Aksara Jawa', () => {
-    it('Latin to Aksara', done => {
-      try {
-        const res = latinToAksara('hallo rek')
-        expect(res).equal('ꦲꦭ꧀ꦭꦺꦴ​ꦫꦺꦏ꧀')
-
-        return done()
-      } catch (e) {
-        return done(e)
-      }
+    it('Latin to Aksara', () => {
+      const result = latinToAksara('hallo rek')
+      assert.strictEqual(result, 'ꦲꦭ꧀ꦭꦺꦴ​ꦫꦺꦏ꧀')
     })
 
-    it('Aksara to Latin', done => {
-      try {
-        const res = aksaraToLatin('ꦲꦭ꧀ꦭꦺꦴ​ꦫꦺꦏ꧀', { HVokal: false })
-        expect(res).equal('hal​lo rek​')
-
-        return done()
-      } catch (e) {
-        return done(e)
-      }
+    it('Aksara to Latin', () => {
+      const result = aksaraToLatin('ꦲꦭ꧀ꦭꦺꦴ​ꦫꦺꦏ꧀', { HVokal: false })
+      assert.strictEqual(result, 'hal​lo rek​')
     })
   })
   describe('Bucin', () => {
-    it('Bucin', done => {
-      bucin().then(res => {
-        expect(res).to.be.a('string')
-
-        return done()
-      }).catch(done)
+    it('Bucin', async () => {
+      const result = await bucin()
+      assert.ok(result)
     })
-    it('Bucin JSON', done => {
-      const res = bucinjson
-      expect(res).to.be.an('array')
-      expect(res).to.have.lengthOf.at.least(365)
-
-      return done()
+    it('Bucin JSON', () => {
+      const result = bucinjson
+      assert.ok(Array.isArray(result))
+      assert.ok(result.length >= 365)
     })
   })
 
   describe('Dare', () => {
-    it('Dare', done => {
-      dare().then(res => {
-        expect(res).to.be.a('string')
-
-        return done()
-      }).catch(done)
+    it('Dare', async () => {
+      const result = await dare()
+      assert.ok(result)
     })
-    it('Dare JSON', done => {
-      const res = darejson
-      expect(res).to.be.an('array')
-      expect(res).to.have.lengthOf.at.least(63)
-
-      return done()
+    it('Dare JSON', () => {
+      const result = darejson
+      assert.ok(Array.isArray(result))
+      assert.ok(result.length >= 63)
     })
   })
 
   describe('Truth', () => {
-    it('Truth', done => {
-      truth().then(res => {
-        expect(res).to.be.a('string')
-
-        return done()
-      }).catch(done)
+    it('Truth', async () => {
+      const result = await truth()
+      assert.ok(result)
     })
-    it('Truth JSON', done => {
-      const res = truthjson
-      expect(res).to.be.an('array')
-      expect(res).to.have.lengthOf.at.least(61)
-
-      return done()
+    it('Truth JSON', () => {
+      const result = truthjson
+      assert.ok(Array.isArray(result))
+      assert.ok(result.length >= 61)
     })
   })
 
   describe('TextPro', () => {
-    it('TextPro', done => {
-      textpro('neon', ['Hallo']).then(res => {
-        expect(res).to.be.a('string')
-
-        return done()
-      }).catch(done)
+    it('TextPro', async () => {
+      const result = await textpro('neon', ['Hallo'])
+      assert.ok(result)
     })
 
-    it('TextPro List', done => {
-      Promise.resolve(textproList).then(res => {
-        expect(res).to.be.an('array')
-        expect(res).to.have.lengthOf.at.least(1)
-
-        return done()
-      }).catch(done)
+    it('TextPro List', async () => {
+      const result = await textproList
+      assert.ok(Array.isArray(result))
+      assert.ok(result.length > 1)
     })
   })
 })

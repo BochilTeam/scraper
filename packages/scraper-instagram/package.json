@@ -42,5 +42,8 @@
     "cheerio": "^1.0.0-rc.12",
     "got": "^11.8.6",
     "zod": "^3.20.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.9"
   }
 }

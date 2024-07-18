@@ -22,15 +22,15 @@ export default async function youtubedl (
     const form = {
         k_query: url,
         k_page: 'home',
-        hl: server || 'id',
+        hl: server || 'en',
         q_auto: 0
     }
     const data = await got.post('https://www.y2mate.com/mates/analyzeV2/ajax', {
         headers: {
             ...DEFAULT_HEADERS,
             'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            'cookie': '_gid=GA1.2.1661642241.1695862299; _ga=GA1.1.27702254.1695862299; _ga_K8CD7CY0TZ=GS1.1.1695862298.1.1.1695864422.0.0.0; prefetchAd_3381349=true',
-            'origin': 'https://www.y2mate.com'
+            cookie: '_ga=GA1.1.1058493269.1720585210; _ga_PSRPB96YVC=GS1.1.1720585209.1.1.1720585486.0.0.0',
+            origin: 'https://www.y2mate.com'
         },
         form
     }).json()
@@ -76,8 +76,8 @@ export async function convert (vid: string, k: string) {
         headers: {
             ...DEFAULT_HEADERS,
             'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            'cookie': '_gid=GA1.2.1661642241.1695862299; _ga=GA1.1.27702254.1695862299; _ga_K8CD7CY0TZ=GS1.1.1695862298.1.1.1695864422.0.0.0; prefetchAd_3381349=true',
-            'origin': 'https://www.y2mate.com'
+            cookie: '_ga=GA1.1.1058493269.1720585210; _ga_PSRPB96YVC=GS1.1.1720585209.1.1.1720585486.0.0.0',
+            origin: 'https://www.y2mate.com'
         },
         form
     }).json()
