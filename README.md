@@ -30,15 +30,25 @@ console.log(data) // JSON
 
 ## Packages
 - [BMKG Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-bmkg/) -- Contains scrapers [BMKG](https://www.bmkg.go.id/) website
-- [Downloader Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-downloader/) -- Contains scrapers from downloader sites
+- [Facebook Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-facebook/) -- To download [Facebook](https://www.facebook.com/) video
 - [Games data Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-games/) -- Fetcher data from [games databases](https://github.com/BochilTeam/database/tree/master/games)
+- [GoogleIt Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-googleit/) -- Scraper to get search data from [Google](https://www.google.com) Search
 - [Images Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-images/) -- Scraper to find pictures/images 
+- [Instagram Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-instagram/) -- To download [Instagram](https://www.instagram.com/) video and story
+- [Lyric Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-lyric/) -- Scraper to find lyric from the song
+- [Mediafire Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-mediafire/) -- To download [Mediafire](https://www.mediafire.com/) aplouded content
 - [News Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-news/) -- News scraper from Indonesian news sites
 - [Primbon Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-primbon/) -- Primbon Scraper
 - [Religions Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-religions/) -- Data scraper for a religion
-- [Social media Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-sosmed/) -- Scraper social media data
+- [Savefrom Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-savefrom/) -- Scraper to get data from [Savefrom](https://savefrom.net/)
+- [Sfile.mobi Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-sfilemobi/) -- To download [Sfile.mobi](https://sfile.mobi/) aplouded content
+- [Snapsave Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-snapsave/) -- Scraper to get data from [Snapsave](https://snapsave.app/)
 - [Text Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-texts/) -- Texts scraper or Fetcher texts data from [texts databases](https://github.com/BochilTeam/database/tree/master/kata-kata)
-- [Others Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-news/) -- Others
+- [Tiktok Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-tiktok/) -- To download [Tiktok](https://www.tiktok.com/) video
+- [Twitter Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-twitter/) -- To download [X](https://x.com/) video
+- [Wikipedia Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-wikipedia/) -- Scraper to get data from [Wikipedia](https://www.wikipedia.org/)
+- [Youtube Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-youtube/) -- To download [Youtube](https://www.youtube.com/) video
+- [Others Scraper](https://github.com/BochilTeam/scraper/tree/master/packages/scraper-others/) -- Others, like Bioskop, Chord, Id Free Fire, Jadwal TV, KBBI, Kodepos
 - [Scraper](#scraper) -- All In One Scraper
 
 ## Contributing
