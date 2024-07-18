@@ -39,7 +39,7 @@
         "lib/**/package.json"
     ],
     "dependencies": {
-        "got": "^11.8.6",
+        "got": "^14.4.1",
         "zod": "^3.20.2"
     },
     "devDependencies": {
