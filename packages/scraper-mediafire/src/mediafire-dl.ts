@@ -1,5 +1,5 @@
 import got from 'got'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import { DEFAULT_HEADERS } from './constant.js'
 import { parseFileSize } from './util.js'
 import { MediafiredlArgsSchema, MediafiredlSchema } from '../types/mediafire-dl.js'

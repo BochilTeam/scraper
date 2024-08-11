@@ -1,4 +1,4 @@
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import got from 'got'
 import { StickerTelegram, StickerTelegramSchema } from '../types/index.js'
 import { DEFAULT_HEADERS } from './constant.js'

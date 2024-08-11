@@ -1,5 +1,5 @@
 import got from 'got'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import { ChordArgsSchema, Chord, ChordSchema } from '../types/index.js'
 
 export async function chord (query: string): Promise<Chord> {

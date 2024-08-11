@@ -1,4 +1,4 @@
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import got from 'got'
 import { didyoumean } from '../utils/index.js'
 import {

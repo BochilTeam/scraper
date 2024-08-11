@@ -1,5 +1,5 @@
 import got from 'got'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import { GoogleItArgsSchema, GoogleItSchema, GoogleIt } from '../types/google-it.js'
 import { DEFAULT_HEADERS } from './constant.js'
 

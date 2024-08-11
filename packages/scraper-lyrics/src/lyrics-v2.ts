@@ -1,5 +1,5 @@
 import got from 'got'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import { LyricsArgsSchema } from '../types/index.js'
 import {
     LyricsV2MetadataResponseSchema,

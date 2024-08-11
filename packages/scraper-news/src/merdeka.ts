@@ -1,5 +1,5 @@
 import got from 'got'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import  { Merdeka, MerdekaSchema } from '../types/index.js'
 
 export default async function merdeka (): Promise<Merdeka[]> {

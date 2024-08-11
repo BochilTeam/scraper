@@ -1,5 +1,5 @@
 import got from 'got'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import { FacebookDlArgsSchema, FacebookDlMediaSchema, FacebookDlSchema } from '../types/facebook-v1.js'
 import { DEFAULT_HEADERS } from './constant.js'
 

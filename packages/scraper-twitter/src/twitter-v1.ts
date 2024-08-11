@@ -1,5 +1,5 @@
 import got from 'got'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import FormData from 'form-data'
 import { TwitterDlArgsSchema, TwitterDLResponseSchema, TwitterDlSchema } from '../types/twitter-v1.js'
 import { DEFAULT_HEADERS } from './constant.js'

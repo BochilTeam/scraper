@@ -1,5 +1,5 @@
 import got from 'got'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import { CNBCIndonesia, CNBCIndonesiaSchema } from '../types/index.js'
 
 export default async function cnbcindonesia (): Promise<CNBCIndonesia[]> {

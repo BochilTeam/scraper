@@ -1,5 +1,5 @@
 import got from 'got'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import { Liputan6, Liputan6Schema } from '../types/index.js'
 
 export default async function liputan6 (): Promise<Liputan6[]> {
