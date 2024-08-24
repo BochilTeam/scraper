@@ -1,5 +1,5 @@
 import got from 'got'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import { AntaraNewsSchema, AntaraNews } from '../types/index.js'
 
 export default async function antaranews (): Promise<AntaraNews[]> {

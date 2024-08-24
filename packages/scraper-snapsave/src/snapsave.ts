@@ -1,5 +1,5 @@
 import got from 'got'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import FormData from 'form-data'
 import { SnapSave, SnapSaveArgsSchema, SnapSaveSchema } from '../types/snapsave.js'
 import { DEFAULT_HEADERS } from './constant.js'

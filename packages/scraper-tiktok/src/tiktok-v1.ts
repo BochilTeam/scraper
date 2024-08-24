@@ -1,5 +1,5 @@
 import got from 'got'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import { TiktokDlArgsSchema, TiktokDlSchema } from '../types/tiktok-v1.js'
 import { DEFAULT_HEADERS } from './constant.js'
 

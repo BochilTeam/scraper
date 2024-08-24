@@ -1,5 +1,5 @@
 import got from 'got'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import { Kompas, KompasSchema } from '../types/index.js'
 
 export default async function kompas (): Promise<Kompas[]> {

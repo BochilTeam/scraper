@@ -1,5 +1,5 @@
 import got from 'got'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import { generateMusixmatchHash } from './util.js'
 import { LyricsArgsSchema } from '../types/index.js'
 import {

@@ -1,5 +1,5 @@
 import got from 'got'
-import cheerio from 'cheerio'
+import * as cheerio from 'cheerio'
 import { parseFileSize } from './util.js'
 import { DEFAULT_HEADERS } from './constant.js'
 import { SfilemobiSearch, SfilemobiSearchArgsSchema, SfilemobiSearchSchema } from '../types/sfilemobi-search.js'
