@@ -55,7 +55,7 @@ export default async function youtubedlv2 (
             type,
             fileSizeH,
             fileSize,
-            download: async () => url
+            download: async () => item.url
         }
     }
     const duration = time2Number(json.meta.duration)
