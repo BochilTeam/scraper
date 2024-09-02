@@ -45,7 +45,7 @@
         "zod": "^3.20.2"
     },
     "devDependencies": {
-        "@types/node": "^20.14.9",
+        "@types/node": "^22.5.2",
         "@types/similarity": "^1.2.1"
     }
 }
